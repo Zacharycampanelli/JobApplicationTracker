@@ -12,3 +12,22 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  applications JobApplication[]
+}
+
+model JobApplication {
+  id        Int      @id @default(autoincrement())
+  title     String
+  company   String
+  status    String
+  appliedAt DateTime @default(now())
+  notes     String?
+  link      String?
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
