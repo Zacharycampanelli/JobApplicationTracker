@@ -1,7 +1,9 @@
+import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
-import bcrypt from "bcrypt";
+import { comparePassword, hashPassword } from "../utils/hash";
+import { generateToken } from "../utils/generateToken";
 
-export const register = async (req, res) => {
+export const register = async (req: Request, res: Response) => {
     try {const { email, password } = req.body;
 
     if (!email || !password) {
@@ -18,7 +20,7 @@ export const register = async (req, res) => {
         return res.status(400).json({ error: "User already exists" });
     }   
     
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hashPassword(password);
 
     const user = await prisma.user.create({
         data: {
@@ -40,3 +42,72 @@ export const register = async (req, res) => {
 }
     
 }
+
+export const login = async (req: Request, res: Response) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ error: "Email and password are required" });
+        }
+
+        const user = await prisma.user.findUnique({ where: { email } });
+
+        if (!user) {
+            return res.status(401).json({ error: "Invalid credentials" });
+        }
+
+       const isPasswordCorrect = await comparePassword(password, user.password);
+
+       if (!isPasswordCorrect) {
+        return res.status(401).json({ error: "Invalid credentials" });
+       }
+
+       const token = generateToken(user.id);
+
+       res.status(200).json({
+        message: 'Login successful',
+        token,
+        user: {
+            id: user.id,
+            email: user.email,
+            createdAt: user.createdAt
+        }
+       })
+    } catch (error) {
+        console.error("Error logging in:", error);
+        return res.status(500).json({ error: "Failed to login" });
+    }
+}
+            
+            
+export const getMe = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ error: "Not authorized" });
+      return;
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.userId },
+      select: {
+        id: true,
+        email: true,
+        createdAt: true,
+      },
+    });
+
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching current user:", error);
+    res.status(500).json({ error: "Failed to fetch user" });
+  }
+};
