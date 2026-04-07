@@ -17,14 +17,22 @@ model User {
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   applications JobApplication[]
+}
+
+enum JobStatus {
+  APPLIED
+  INTERVIEW
+  OFFER
+  REJECTED
 }
 
 model JobApplication {
   id        Int      @id @default(autoincrement())
   title     String
   company   String
-  status    String
+  status    JobStatus
   appliedAt DateTime @default(now())
   notes     String?
   link      String?
