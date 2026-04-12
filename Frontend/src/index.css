@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand */
+  --color-primary: #4c56af;
+  --color-primary-container: #e0e0ff;
+  --color-primary-dim: #404a99;
+
+  /* Surfaces */
+  --color-surface: #f8f9fb;
+  --color-surface-container-low: #f0f4f7;
+  --color-surface-container: #e8eff3;
+  --color-surface-container-high: #e6edf1;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-bright: #fdfdff;
+
+  /* Text */
+  --color-on-surface: #2a3439;
+  --color-on-surface-variant: #66757d;
+
+  /* Utility */
+  --color-outline-variant: #a9b4b9;
+  --color-error: #9f403d;
+  --color-error-container: #fe8983;
+
+  /* Fonts */
+  --font-headline: "Manrope", sans-serif;
+  --font-body: "Inter", sans-serif;
+
+  /* Breakpoints  */
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-body;
+  }
+}
+
+@layer components {
+  .btn-gradient {
+    background: linear-gradient(
+      135deg,
+      var(--color-primary),
+      var(--color-primary-dim)
+    );
+  }
+}
