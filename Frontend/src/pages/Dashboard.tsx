@@ -3,12 +3,13 @@ import Button from "../components/ui/Button"
 const Dashboard = () => {
   return (
     <>
-    <div>Dashboard</div>
-    <Button variant="primary">Button</Button> 
-    <Button variant="secondary">Button</Button> 
-    <Button variant="danger">Button</Button> 
-    <Button variant="ghost">Button</Button> 
-
+<Button>Primary</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="danger">Delete</Button>
+<Button size="sm">Small</Button>
+<Button size="lg">Large</Button>
+<Button disabled>Disabled</Button>
       </>
   )
 }
