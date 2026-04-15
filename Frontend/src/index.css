@@ -24,8 +24,33 @@
   --color-error-container: #fe8983;
 
   /* Fonts */
-  --font-headline: "Manrope", sans-serif;
-  --font-body: "Inter", sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Manrope", "Inter", system-ui, sans-serif;
+
+  --text-display-lg-size: 3.5rem;
+  --text-display-lg-line: 1;
+  --text-display-lg-weight: 700;
+
+  --text-headline-lg-size: 2rem;
+  --text-headline-lg-line: 1.1;
+  --text-headline-lg-weight: 600;
+
+  --text-title-lg-size: 1.375rem;
+  --text-title-lg-line: 1.2;
+  --text-title-lg-weight: 600;
+
+  --text-body-lg-size: 1rem;
+  --text-body-lg-line: 1.5;
+  --text-body-lg-weight: 400;
+
+  --text-body-md-size: 0.875rem;
+  --text-body-md-line: 1.5;
+  --text-body-md-weight: 400;
+
+  --text-label-md-size: 0.75rem;
+  --text-label-md-line: 1.2;
+  --text-label-md-weight: 500;
+  --text-label-md-tracking: 0.02em;
 
   /* Breakpoints  */
   --breakpoint-sm: 40rem;
@@ -33,9 +58,68 @@
   --breakpoint-lg: 64rem;
 }
 
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-sans);
+}
+
+.text-display-lg {
+  font-family: var(--font-display);
+  font-size: var(--text-display-lg-size);
+  line-height: var(--text-display-lg-line);
+  font-weight: var(--text-display-lg-weight);
+}
+
+.text-headline-lg {
+  font-family: var(--font-display);
+  font-size: var(--text-headline-lg-size);
+  line-height: var(--text-headline-lg-line);
+  font-weight: var(--text-headline-lg-weight);
+}
+
+.text-title-lg {
+  font-family: var(--font-display);
+  font-size: var(--text-title-lg-size);
+  line-height: var(--text-title-lg-line);
+  font-weight: var(--text-title-lg-weight);
+}
+
+.text-body-lg {
+  font-family: var(--font-sans);
+  font-size: var(--text-body-lg-size);
+  line-height: var(--text-body-lg-line);
+  font-weight: var(--text-body-lg-weight);
+}
+
+.text-body-md {
+  font-family: var(--font-sans);
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-line);
+  font-weight: var(--text-body-md-weight);
+}
+
+.text-label-md {
+  font-family: var(--font-sans);
+  font-size: var(--text-label-md-size);
+  line-height: var(--text-label-md-line);
+  font-weight: var(--text-label-md-weight);
+  letter-spacing: var(--text-label-md-tracking);
+}
+
 @layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
   body {
-    @apply bg-surface text-on-surface font-body;
+    @apply bg-surface text-on-surface;
+    font-family: var(--font-sans);
+    min-height: 100vh;
   }
 }
 

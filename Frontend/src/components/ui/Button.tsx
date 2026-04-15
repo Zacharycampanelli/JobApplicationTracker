@@ -31,7 +31,7 @@ const Button = ({
 }: ButtonProps) => {
   const isPrimary = variant === "primary";
   const classes = [
-    "inline-flex items-center justify-center gap-2 font-medium transition",
+    "inline-flex items-center justify-center gap-2 text-label-md transition",
     "disabled:opacity-50 disabled:cursor-not-allowed",
     variantStyles[variant],
     sizeStyles[size],

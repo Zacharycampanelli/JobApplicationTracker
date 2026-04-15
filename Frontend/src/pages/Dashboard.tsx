@@ -1,4 +1,5 @@
 import Button from "../components/ui/Button"
+import TestInputs from "../components/ui/TestInputs"
 
 const Dashboard = () => {
   return (
@@ -10,6 +11,7 @@ const Dashboard = () => {
 <Button size="sm">Small</Button>
 <Button size="lg">Large</Button>
 <Button disabled>Disabled</Button>
+<TestInputs />
       </>
   )
 }
