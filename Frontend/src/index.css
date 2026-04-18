@@ -22,6 +22,8 @@
   --color-outline-variant: #a9b4b9;
   --color-error: #9f403d;
   --color-error-container: #fe8983;
+  --color-success: #186d54;
+  --color-success-container: #d1fae5;
 
   /* Fonts */
   --font-sans: "Inter", system-ui, sans-serif;
@@ -51,6 +53,11 @@
   --text-label-md-line: 1.2;
   --text-label-md-weight: 500;
   --text-label-md-tracking: 0.02em;
+
+  --text-label-sm-size: 0.6875rem;
+  --text-label-sm-line: 1.1;
+  --text-label-sm-weight: 500;
+  --text-label-sm-tracking: 0.04em;
 
   /* Breakpoints  */
   --breakpoint-sm: 40rem;
@@ -107,6 +114,14 @@
   line-height: var(--text-label-md-line);
   font-weight: var(--text-label-md-weight);
   letter-spacing: var(--text-label-md-tracking);
+}
+
+.text-label-sm {
+  font-family: var(--font-sans);
+  font-size: var(--text-label-sm-size);
+  line-height: var(--text-label-sm-line);
+  font-weight: var(--text-label-sm-weight);
+  letter-spacing: var(--text-label-sm-tracking);
 }
 
 @layer base {

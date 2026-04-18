@@ -1,4 +1,5 @@
 import Button from "../components/ui/Button"
+import TestBadges from "../components/ui/TestBadges"
 import TestInputs from "../components/ui/TestInputs"
 
 const Dashboard = () => {
@@ -12,6 +13,7 @@ const Dashboard = () => {
 <Button size="lg">Large</Button>
 <Button disabled>Disabled</Button>
 <TestInputs />
+<TestBadges />
       </>
   )
 }
