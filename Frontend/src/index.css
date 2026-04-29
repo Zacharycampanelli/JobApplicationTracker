@@ -17,6 +17,7 @@
   /* Text */
   --color-on-surface: #2a3439;
   --color-on-surface-variant: #66757d;
+  --color-on-surface-secondary: #566166;
 
   /* Utility */
   --color-outline-variant: #a9b4b9;
@@ -33,13 +34,13 @@
   --text-display-lg-line: 1;
   --text-display-lg-weight: 700;
 
-  --text-headline-lg-size: 2rem;
+  --text-headline-lg-size: 1.75rem;
   --text-headline-lg-line: 1.1;
   --text-headline-lg-weight: 600;
 
   --text-title-lg-size: 1.375rem;
   --text-title-lg-line: 1.2;
-  --text-title-lg-weight: 600;
+  --text-title-lg-weight: 700;
 
   --text-body-lg-size: 1rem;
   --text-body-lg-line: 1.5;
@@ -63,6 +64,10 @@
   --breakpoint-sm: 40rem;
   --breakpoint-md: 48rem;
   --breakpoint-lg: 64rem;
+
+  /* Shadows */
+   --shadow-card: 0px 25px 50px -12px rgba(0, 0, 0, 0.25); 
+
 }
 
 .font-display {
@@ -88,7 +93,7 @@
 }
 
 .text-title-lg {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: var(--text-title-lg-size);
   line-height: var(--text-title-lg-line);
   font-weight: var(--text-title-lg-weight);

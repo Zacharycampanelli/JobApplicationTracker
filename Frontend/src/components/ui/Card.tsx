@@ -17,7 +17,7 @@ const Card = <T extends ElementType = "div">({
   return (
     <Component
     className={[
-        "rounded-2xl bg-surface-container-lowest p-6",
+        "rounded-2xl bg-surface-container-lowest p-6 shadow-card",
         className,
     ].join(" ")}
     {...props}
