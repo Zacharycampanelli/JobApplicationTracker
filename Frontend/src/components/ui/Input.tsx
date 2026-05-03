@@ -1,4 +1,6 @@
 import { useState, type InputHTMLAttributes, type ReactElement } from "react";
+import Unlock from "../../assets/images/unlock.svg?react";
+import Lock from "../../assets/images/lock.svg?react";
 
 const sizeStyles = {
   sm: "h-9 text-sm rounded-md",
@@ -58,7 +60,7 @@ const Input = ({
         className="absolute right-3 top-1/2 -translate-y-1/2 text-label-md text-on-surface-variant"
         aria-label={showPassword ? "Hide password" : "Show password"}
       >
-        {showPassword ? "Hide" : "Show"}
+        {showPassword ? <Lock /> : <Unlock />}
       </button>
     );
   } else if (endIcon) {
