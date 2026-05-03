@@ -8,7 +8,7 @@ const sizeStyles = {
   lg: "h-12 text-base rounded-xl"
 };
 
-type InputProps = InputHTMLAttributes<HTMLInputElement> & {
+type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size"> & {
   label?: string;
   error?: string;
   type?: "text" | "password" | "email" | "number" | "search";

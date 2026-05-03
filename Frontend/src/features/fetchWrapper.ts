@@ -1,11 +1,11 @@
-export const fetchWrapper = async (url: string, options: RequestInit = {}): Promise<T> => {
+export const fetchWrapper = async <T>(url: string, options: RequestInit = {}): Promise<T> => {
     const token = localStorage.getItem("token")
 
     const res = await fetch(url, {
         ...options,
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
             ...options.headers,
         },
     })

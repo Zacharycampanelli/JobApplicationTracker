@@ -5,6 +5,7 @@ import ColorOverlay from "../components/ui/ColorOverlay";
 
 import background from "../assets/images/background.png";
 import RegistrationForm from "../components/ui/RegistrationForm";
+import { Link } from "react-router";
 
 const Register = () => {
   return (
@@ -20,11 +21,17 @@ const Register = () => {
           </div>
 
           <div className="p-6 md:col-span-7 md:p-10">
-            <h2 className="mb-2 text-headline-lg">Create Account</h2>
-            <p className="text-body-md text-on-surface-secondary">
+            <h2 className="mb-4 text-headline-lg">Create Account</h2>
+            <p className="text-body-md text-on-surface-secondary mb-10">
               Begin your structured application journey today.
             </p>
             <RegistrationForm />
+            <p className="text-body-md text-on-surface-secondary mt-10 text-center">
+              Already have an account?{" "}
+              <Link to="/login" className="text-primary hover:underline">
+                Log in here
+              </Link>
+            </p>
           </div>
         </Card>
       </main>
