@@ -4,12 +4,17 @@ import { comparePassword, hashPassword } from "../utils/hash";
 import { generateToken } from "../utils/generateToken";
 
 export const register = async (req: Request, res: Response) => {
-    try {const { email, password } = req.body;
+    try {const { name, email, password } = req.body;
 
-    if (!email || !password) {
-        return res.status(400).json({ error: "Email and password are required" });
+    
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: "Name, email and password are required" });
     }
-
+    
+    if (name.trim().length < 2) {
+        return res.status(400).json({ error: "Name must be at least 2 characters long" });
+    }
+    
     if (password.length < 6) {
         return res.status(400).json({ error: "Password must be at least 6 characters long" });
     } 
@@ -24,11 +29,13 @@ export const register = async (req: Request, res: Response) => {
 
     const user = await prisma.user.create({
         data: {
+            name: name.trim(),
             email,
             password: hashedPassword,
         },
         select: {
             id: true,
+            name: true,
             email: true,
             createdAt: true
         }, 

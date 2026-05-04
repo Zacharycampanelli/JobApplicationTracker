@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "./Input";
 import Button from "./Button";
 
+import { register as registerUser } from "../../features/authApi";
+
 import Person from "../../assets/images/person.svg?react";
 import Email from "../../assets/images/email.svg?react";
 import SideArrow from "../../assets/images/sidearrow.svg?react";
@@ -20,7 +22,7 @@ const registrationSchema = z
     path: ["confirmPassword"]
   });
 
-type RegistrationValues = z.infer<typeof registrationSchema>;
+export type RegistrationValues = z.infer<typeof registrationSchema>;
 
 const RegistrationForm = () => {
   const {
@@ -37,9 +39,14 @@ const RegistrationForm = () => {
     }
   });
 
-  const onSubmit = (data: RegistrationValues) => {
-    console.log(data);
-  };
+  const onSubmit = async (data: RegistrationValues) => {
+    try {
+      const res = await registerUser(data);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+}
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
