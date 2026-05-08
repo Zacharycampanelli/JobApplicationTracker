@@ -1,9 +1,15 @@
 import Icon from "../../assets/svg/Icon";
+import { twMerge } from "tailwind-merge";
 
-const Header = () => {
+type HeaderProps = {
+  inverted? : boolean
+}
+
+const Header = ({ inverted = false }: HeaderProps) => {
+  const textColor = inverted ? "text-white" : "text-on-surface";
   return (
-     <div className="flex w-full justify-start items-center gap-2 mb-4 md:col-span-12">
-        <Icon />
+     <div className={twMerge("flex w-full justify-start items-center gap-2 mb-4 md:col-span-12", textColor)}>
+        <Icon fill={inverted ? "#f8f9fb" : undefined} />
         <h1 className="text-title-lg ml-2">Architectural Ledger</h1>
       </div>
   )

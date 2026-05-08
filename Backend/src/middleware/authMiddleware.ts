@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { fdatasync } from "node:fs";
 
 interface JwtPayload {
     userId: number;

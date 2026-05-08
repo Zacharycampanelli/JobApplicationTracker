@@ -1,12 +1,13 @@
-export interface User {
+export type User = {
   id: number;
+  name: string;
   email: string;
   applications: JobApplication[];
   createdAt: string;
   updatedAt: string;
 }
 
-export interface JobApplication {
+export type JobApplication = {
   id: number;
   title: string;
   company: string;

@@ -77,6 +77,7 @@ export const login = async (req: Request, res: Response) => {
         token,
         user: {
             id: user.id,
+            name: user.name,
             email: user.email,
             createdAt: user.createdAt
         }
@@ -102,6 +103,7 @@ export const getMe = async (
       where: { id: req.user.userId },
       select: {
         id: true,
+        name: true,
         email: true,
         createdAt: true,
       },

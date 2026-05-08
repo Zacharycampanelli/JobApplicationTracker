@@ -1,4 +1,5 @@
 import type { ReactElement, ButtonHTMLAttributes } from "react";
+import { twMerge } from "tailwind-merge";
 
 const variantStyles = {
   primary: "text-white enabled:hover:opacity-90",
@@ -30,16 +31,16 @@ const Button = ({
   ...props
 }: ButtonProps) => {
   const isPrimary = variant === "primary";
-  const classes = [
+
+  const classes = twMerge(
     "inline-flex items-center justify-center gap-2 text-label-md transition",
     "disabled:opacity-50 disabled:cursor-not-allowed",
     variantStyles[variant],
     sizeStyles[size],
     isPrimary && "btn-gradient",
     className
-  ]
-    .filter(Boolean)
-    .join(" ");
+  );
+
   return (
     <button className={classes} {...props} disabled={disabled}>
       {icon && <span className="flex items-center">{icon}</span>}

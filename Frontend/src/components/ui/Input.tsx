@@ -1,6 +1,7 @@
 import { useState, type InputHTMLAttributes, type ReactElement } from "react";
 import Unlock from "../../assets/images/unlock.svg?react";
 import Lock from "../../assets/images/lock.svg?react";
+import { twMerge } from "tailwind-merge";
 
 const sizeStyles = {
   sm: "h-9 text-sm rounded-md",
@@ -37,16 +38,14 @@ const Input = ({
   const hasEndIcon = Boolean(endIcon || isPassword);
   const baseInputStyles =
     "w-full bg-surface-container-low text-body-md text-on-surface placeholder:text-on-surface-variant transition-colors outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50 disabled:cursor-not-allowed px-3";
-  const classes = [
+  const classes = twMerge(
     baseInputStyles,
     startIcon ? "pl-10" : "",
     hasEndIcon ? "pr-10" : "",
     sizeStyles[size],
     error ? "bg-error-container text-on-error" : "",
     className
-  ]
-    .filter(Boolean)
-    .join(" ");
+  );
 
   const togglePassword = () => setShowPassword((prev) => !prev);
 

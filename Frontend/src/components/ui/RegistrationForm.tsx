@@ -46,7 +46,7 @@ const RegistrationForm = () => {
     } catch (error) {
       console.error(error);
     }
-}
+  };
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
@@ -85,7 +85,12 @@ const RegistrationForm = () => {
       />
 
       <div className="mt-2 flex">
-        <Button className="w-full" size="lg" type="submit" disabled={isSubmitting}>
+        <Button
+          className="w-full"
+          size="lg"
+          type="submit"
+          disabled={isSubmitting}
+        >
           Create account <SideArrow />
         </Button>
       </div>

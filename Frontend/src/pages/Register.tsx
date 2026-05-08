@@ -6,17 +6,30 @@ import ColorOverlay from "../components/ui/ColorOverlay";
 import background from "../assets/images/background.png";
 import RegistrationForm from "../components/ui/RegistrationForm";
 import { Link } from "react-router";
+import { useBreakpoint } from "../utils/useBreakpoint";
 
 const Register = () => {
+  const isTabletUp = useBreakpoint("md");
+
+  const isMobile = !isTabletUp;
   return (
-    <div className="flex min-h-screen w-full flex-col bg-surface">
-      <Header />
+    <div className="flex w-full flex-col bg-surface">
+      {isMobile && <Header />}
 
       <main className="flex flex-1 items-center justify-center px-4 py-8">
-        <Card className="w-full max-w-5xl overflow-hidden md:grid md:min-h-[34rem] md:grid-cols-12 md:p-0">
-          <div className="hidden bg-primary md:col-span-5 md:block">
+        <Card className="w-full max-w-5xl overflow-hidden md:grid md:min-h-[34rem] md:grid-cols-12 p-0">
+          <div className="hidden bg-primary md:col-span-5 md:block ">
             <ColorOverlay imgSrc={background} className="h-full">
-              <div>content</div>
+              <div className="md:p-10">
+                <Header inverted />
+
+                <h2 className="text-headline-xl text-surface mt-6 ">Architecting your professional <br/> journey.</h2>
+                <p className="text-body-lg text-surface mt-6 pr-6" >
+                  Architectural Ledger is a precision tool for the modern
+                  professional. Organize every application with structural
+                  integrity.
+                </p>
+              </div>
             </ColorOverlay>
           </div>
 

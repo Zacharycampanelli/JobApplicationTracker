@@ -1,30 +1,31 @@
-import type { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
+import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
+import { twMerge } from "tailwind-merge";
 
 type CardProps<T extends ElementType = "div"> = {
-    as?: T;
-    children: ReactNode;
-    className?: string;
-} & Omit<ComponentPropsWithoutRef<T>, "as" | "children" | "className">
+  as?: T;
+  children: ReactNode;
+  className?: string;
+} & Omit<ComponentPropsWithoutRef<T>, "as" | "children" | "className">;
 
 const Card = <T extends ElementType = "div">({
-    as,
-    children, 
-    className = "",
-    ...props
+  as,
+  children,
+  className = "",
+  ...props
 }: CardProps<T>) => {
-    const Component = as || "div";
+  const Component = as || "div";
 
   return (
     <Component
-    className={[
+      className={twMerge(
         "rounded-2xl bg-surface-container-lowest p-6 shadow-card",
-        className,
-    ].join(" ")}
-    {...props}
+        className
+      )}
+      {...props}
     >
-        {children}
+      {children}
     </Component>
-  )
-}
+  );
+};
 
-export default Card
+export default Card;

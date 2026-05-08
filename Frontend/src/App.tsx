@@ -8,6 +8,7 @@ import Analytics from "./pages/Analytics";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 
 function App() {
@@ -15,11 +16,13 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Main app routes with navbar */}
+        <Route element={<ProtectedRoute />}>
         <Route element={<AppWrapper />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/applications" element={<Applications />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/profile" element={<Profile />} />
+        </Route>
         </Route>
 
         {/* Auth routes without navbar */}
