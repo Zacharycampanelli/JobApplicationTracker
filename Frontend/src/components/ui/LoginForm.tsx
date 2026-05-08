@@ -5,6 +5,7 @@ import Input from "./Input";
 import Button from "./Button";
 
 import { useState } from "react";
+import { login as loginUser } from "../../features/authApi";
 import { useAuthContext } from "../../context/AuthContext";
 import Email from "../../assets/images/email.svg?react";
 import { useNavigate } from "react-router";
