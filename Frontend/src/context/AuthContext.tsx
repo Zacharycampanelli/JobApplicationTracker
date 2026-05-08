@@ -6,11 +6,15 @@ import {
   useState
 } from "react";
 
-import { User } from "../types/types";
-import { fetchUserData } from "../utils/auth";
+import type { User } from "../types/types";
+import { useNavigate } from "react-router";
+import { getMe } from "../features/authApi";
 
 interface AuthContextType {
   user: User | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
   login: (userData: User, token: string) => void;
   logout: () => void;
 }
@@ -18,10 +22,12 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(() => {
+    return localStorage.getItem("token");
   });
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   // Token validation helper
   const isTokenValid = (token: string | null): boolean => {
@@ -43,13 +49,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         setUser(null);
+        setToken(null);
+        setIsLoading(false);
         return;
       }
 
       try {
-        const userData = await fetchUserData();
+        const userData = await getMe();
         if (userData) {
           setUser(userData);
+          setToken(token);
           localStorage.setItem("user", JSON.stringify(userData));
         } else {
           setUser(null);
@@ -61,6 +70,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(null);
         localStorage.removeItem("user");
         localStorage.removeItem("token");
+      } finally {
+        setIsLoading(false);
       }
     };
     loadUserData();
@@ -68,19 +79,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = (userData: User, token: string) => {
     setUser(userData);
+    setToken(token);
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", token);
   };
 
   const logout = () => {
     setUser(null);
+    setToken(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    window.location.href = "/";
+    navigate("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        isAuthenticated: Boolean(token && user),
+        isLoading,
+        login,
+        logout
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -5,8 +5,7 @@ import Input from "./Input";
 import Button from "./Button";
 
 import { useState } from "react";
-import { login as loginUser } from "../../features/authApi";
-
+import { useAuthContext } from "../../context/AuthContext";
 import Email from "../../assets/images/email.svg?react";
 import { useNavigate } from "react-router";
 
@@ -31,12 +30,13 @@ const LoginForm = () => {
   });
   const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuthContext();
 
   const onSubmit = async (data: LoginValues) => {
     setLoginError("");
     try {
       const res = await loginUser(data);
-      localStorage.setItem("token", res.token);
+      login(res.user, res.token);
       navigate("/", { replace: true });
     } catch (error) {
       setLoginError(

@@ -9,6 +9,8 @@ import { register as registerUser } from "../../features/authApi";
 import Person from "../../assets/images/person.svg?react";
 import Email from "../../assets/images/email.svg?react";
 import SideArrow from "../../assets/images/sidearrow.svg?react";
+import { useAuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router";
 
 const registrationSchema = z
   .object({
@@ -39,10 +41,14 @@ const RegistrationForm = () => {
     }
   });
 
+  const { login } = useAuthContext();
+const navigate = useNavigate();
+
   const onSubmit = async (data: RegistrationValues) => {
     try {
       const res = await registerUser(data);
-      console.log(res);
+      login(res.user, res.token);
+      navigate("/", { replace: true });
     } catch (error) {
       console.error(error);
     }

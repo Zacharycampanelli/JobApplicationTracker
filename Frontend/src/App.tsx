@@ -9,11 +9,14 @@ import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext";
 
 
 function App() {
   return (
     <BrowserRouter>
+    <AuthProvider>
+
       <Routes>
         {/* Main app routes with navbar */}
         <Route element={<ProtectedRoute />}>
@@ -31,6 +34,7 @@ function App() {
           <Route path="/register" element={<Register />} />
         </Route>
       </Routes>
+    </AuthProvider>
     </BrowserRouter>
   );
 }
