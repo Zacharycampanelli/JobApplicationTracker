@@ -13,12 +13,11 @@ const Register = () => {
 
   const isMobile = !isTabletUp;
   return (
-<div className="mx-auto grid min-h-dvh w-full max-w-7xl grid-rows-[auto_1fr_auto] bg-surface px-6 py-6">
-      {isMobile && <Header />}
+<div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col bg-surface px-6 py-6">
+  {isMobile && <Header />}
 
-      <main className="flex items-center justify-center">
-    <Card className="w-full max-w-6xl overflow-hidden p-0 md:grid md:min-h-[36rem]
- md:grid-cols-12">
+  <main className="flex flex-1 flex-col items-center justify-center gap-6">
+    <Card className="w-full overflow-hidden p-0 md:grid md:min-h-[34rem] md:grid-cols-12">
           <div className="hidden bg-primary md:col-span-5 md:block ">
             <ColorOverlay imgSrc={background} className="h-full">
               <div className="md:p-10">
@@ -48,9 +47,9 @@ const Register = () => {
             </p>
           </div>
         </Card>
+      <Footer />
       </main>
 
-      <Footer />
     </div>
   );
 };
