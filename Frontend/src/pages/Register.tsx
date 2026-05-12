@@ -13,18 +13,20 @@ const Register = () => {
 
   const isMobile = !isTabletUp;
   return (
-<div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col bg-surface px-6 py-6">
-  {isMobile && <Header />}
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-10">
+      {isMobile && <Header />}
 
-  <main className="flex flex-1 flex-col items-center justify-center gap-6">
-    <Card className="w-full overflow-hidden p-0 md:grid md:min-h-[34rem] md:grid-cols-12">
+      <main className="flex flex-1 flex-col items-center justify-center">
+        <Card className="w-full overflow-hidden p-0 md:grid md:min-h-[32rem] md:grid-cols-12">
           <div className="hidden bg-primary md:col-span-5 md:block ">
             <ColorOverlay imgSrc={background} className="h-full">
               <div className="md:p-10">
                 <Header inverted />
 
-                <h2 className="text-headline-xl text-surface mt-6 ">Architecting your professional <br/> journey.</h2>
-                <p className="text-body-lg text-surface mt-6 pr-6" >
+                <h2 className="text-headline-xl text-surface mt-6 ">
+                  Architecting your professional <br /> journey.
+                </h2>
+                <p className="text-body-lg text-surface mt-6 pr-6">
                   Architectural Ledger is a precision tool for the modern
                   professional. Organize every application with structural
                   integrity.
@@ -47,10 +49,12 @@ const Register = () => {
             </p>
           </div>
         </Card>
+     <div className="mt-8">
       <Footer />
-      </main>
-
     </div>
+  </main>
+</div>
+
   );
 };
 
