@@ -9,11 +9,12 @@ import LoginForm from "../components/ui/LoginForm";
 
 const Login = () => {
   return (
-    <div className="flex w-full flex-col bg-surface">
+<div className="mx-auto grid min-h-dvh w-full max-w-7xl grid-rows-[auto_1fr_auto] bg-surface px-6 py-6">
       <Header />
 
-      <main className="flex flex-1 items-center justify-center px-4 py-8">
-        <Card className="w-full max-w-5xl overflow-hidden md:grid md:min-h-[34rem] md:grid-cols-12 p-0">
+      <main className="flex items-center justify-center">
+        <Card className="w-full max-w-6xl overflow-hidden p-0 md:grid md:min-h-[36rem]
+ md:grid-cols-12 ">
           <div className="hidden bg-primary md:col-span-5 md:block">
             <ColorOverlay imgSrc={background} className="h-full">
               <div>content</div>
