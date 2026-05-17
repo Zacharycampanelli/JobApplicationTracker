@@ -7,7 +7,7 @@
     "server": "cd Backend && npm run dev",
     "client": "cd Frontend && npm run dev",
     "dev": "concurrently \"npm:server\" \"npm:client\"",
-    "install": "cd Backend && npm install && cd ../Frontend && npm install",
+    "installDeps": "npm install && cd Backend && npm install && cd ../Frontend && npm install",
     "prisma:generate": "cd Backend && npx prisma generate",
     "prisma:migrate": "cd Backend && npx prisma migrate dev",
     "prisma:studio": "cd Backend && npx prisma studio"
@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/Zacharycampanelli/JobApplicationTracker/issues"
   },
-  "homepage": "https://github.com/Zacharycampanelli/JobApplicationTracker#readme"
+  "homepage": "https://github.com/Zacharycampanelli/JobApplicationTracker#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }
