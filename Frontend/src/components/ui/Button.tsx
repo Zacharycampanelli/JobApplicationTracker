@@ -2,7 +2,8 @@ import type { ReactElement, ButtonHTMLAttributes } from "react";
 import { twMerge } from "tailwind-merge";
 
 const variantStyles = {
-  primary: "text-white enabled:hover:opacity-90",
+  primary:
+    "text-surface-container-lowest enabled:hover:opacity-90",
   secondary:
     "bg-surface-container-high text-on-surface enabled:hover:bg-surface-container-lowest",
   ghost: "text-on-surface-variant enabled:hover:bg-surface-container-high",
@@ -10,9 +11,9 @@ const variantStyles = {
 };
 
 const sizeStyles = {
-  sm: "h-9 px-3 text-sm rounded-md",
-  md: "h-10 px-4 text-sm rounded-xl",
-  lg: "h-12 px-5 text-base rounded-xl"
+  sm: "h-9 rounded-control px-3 text-label-sm",
+  md: "h-10 rounded-control px-4 text-action",
+  lg: "h-12 rounded-control px-5 text-action"
 };
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -33,10 +34,10 @@ const Button = ({
   const isPrimary = variant === "primary";
 
   const classes = twMerge(
-    "inline-flex items-center justify-center gap-2 text-label-md transition",
+    "inline-flex items-center justify-center gap-2 transition",
     "disabled:opacity-50 disabled:cursor-not-allowed",
-    variantStyles[variant],
     sizeStyles[size],
+    variantStyles[variant],
     isPrimary && "btn-gradient",
     className
   );

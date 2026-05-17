@@ -10,7 +10,7 @@ const Header = ({ inverted = false }: HeaderProps) => {
   return (
      <div className={twMerge("flex w-full justify-start items-center gap-2 mb-4 md:col-span-12", textColor)}>
         <Icon fill={inverted ? "#f8f9fb" : undefined} />
-        <h1 className="text-title-lg ml-2">Architectural Ledger</h1>
+        <h1 className="text-brand ml-2">Architectural Ledger</h1>
       </div>
   )
 }

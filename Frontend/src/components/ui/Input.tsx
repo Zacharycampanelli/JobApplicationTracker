@@ -4,9 +4,9 @@ import Lock from "../../assets/images/lock.svg?react";
 import { twMerge } from "tailwind-merge";
 
 const sizeStyles = {
-  sm: "h-9 text-sm rounded-md",
-  md: "h-10 text-sm rounded-xl",
-  lg: "h-12 text-base rounded-xl"
+  sm: "h-9 rounded-control text-body-md",
+  md: "h-10 rounded-control text-body-md",
+  lg: "h-12 rounded-control text-body-lg"
 };
 
 type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size"> & {
@@ -37,7 +37,7 @@ const Input = ({
 
   const hasEndIcon = Boolean(endIcon || isPassword);
   const baseInputStyles =
-    "w-full bg-surface-container-low text-body-md text-on-surface placeholder:text-on-surface-variant transition-colors outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50 disabled:cursor-not-allowed px-3";
+    "w-full bg-surface-container-low text-on-surface placeholder:text-on-surface-variant transition-colors outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50 disabled:cursor-not-allowed px-3";
   const classes = twMerge(
     baseInputStyles,
     startIcon ? "pl-10" : "",

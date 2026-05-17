@@ -18,7 +18,7 @@ const Card = <T extends ElementType = "div">({
   return (
     <Component
       className={twMerge(
-        "rounded-2xl bg-surface-container-lowest p-6 shadow-card",
+        "rounded-card bg-surface-container-lowest p-[var(--space-card)] shadow-raised",
         className
       )}
       {...props}

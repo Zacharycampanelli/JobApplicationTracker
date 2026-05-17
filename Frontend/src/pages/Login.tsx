@@ -9,16 +9,15 @@ import LoginForm from "../components/ui/LoginForm";
 import { useBreakpoint } from "../utils/useBreakpoint";
 
 const Login = () => {
+  const isTabletUp = useBreakpoint("md");
 
-   const isTabletUp = useBreakpoint("md");
-  
-    const isMobile = !isTabletUp;
+  const isMobile = !isTabletUp;
   return (
-<div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-10">
-  {isMobile && <Header />}
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-10">
+      {isMobile && <Header />}
 
-  <main className="flex flex-1 flex-col items-center justify-center">
-    <Card className="w-full overflow-hidden p-0 md:grid md:min-h-[36rem] md:grid-cols-12">
+      <main className="flex flex-1 flex-col items-center justify-center">
+        <Card className="w-full overflow-hidden p-0 md:grid md:min-h-[36rem] md:grid-cols-12">
           <div className="hidden bg-primary md:col-span-5 md:block">
             <ColorOverlay imgSrc={background} className="h-full">
               <div>content</div>
@@ -26,7 +25,7 @@ const Login = () => {
           </div>
 
           <div className="p-6 md:col-span-7 md:p-10">
-            <h2 className="mb-4 text-headline-lg">Welcome Back</h2>
+            <h2 className="mb-4 text-auth-title">Welcome Back</h2>
             <p className="text-body-md text-on-surface-secondary mb-12">
               Log in to manage your professional trajectory.
             </p>
@@ -39,12 +38,11 @@ const Login = () => {
             </p>
           </div>
         </Card>
-    <div className="mt-8">
-      <Footer />
+        <div className="mt-8">
+          <Footer />
+        </div>
+      </main>
     </div>
-  </main>
-</div>
-
   );
 };
 

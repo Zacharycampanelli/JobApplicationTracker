@@ -23,7 +23,7 @@ const Register = () => {
               <div className="md:p-10">
                 <Header inverted />
 
-                <h2 className="text-headline-xl text-surface mt-6 ">
+                <h2 className="text-auth-hero text-surface mt-6 ">
                   Architecting your professional <br /> journey.
                 </h2>
                 <p className="text-body-lg text-surface mt-6 pr-6">
@@ -36,7 +36,7 @@ const Register = () => {
           </div>
 
           <div className="p-6 md:col-span-7 md:p-10">
-            <h2 className="mb-4 text-headline-lg">Create Account</h2>
+            <h2 className="mb-4 text-auth-title">Create Account</h2>
             <p className="text-body-md text-on-surface-secondary mb-10">
               Begin your structured application journey today.
             </p>
@@ -49,12 +49,11 @@ const Register = () => {
             </p>
           </div>
         </Card>
-     <div className="mt-8">
-      <Footer />
+        <div className="mt-8">
+          <Footer />
+        </div>
+      </main>
     </div>
-  </main>
-</div>
-
   );
 };
 

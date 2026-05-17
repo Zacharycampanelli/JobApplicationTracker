@@ -8,7 +8,7 @@ const navItems = [
 ];
 
 const baseLinkClasses =
-  "flex items-center justify-center rounded-xl text-label-md transition-colors";
+  "flex items-center justify-center rounded-card text-nav-label uppercase transition-colors";
 
 const Navbar = () => {
   return (
@@ -40,7 +40,7 @@ const Navbar = () => {
       {/* Desktop / Tablet Side Navbar */}
       <aside className="hidden md:flex md:w-64 md:shrink-0 md:flex-col md:bg-surface-container-low md:px-4 md:py-6 lg:w-72">
         <div className="mb-8 px-3">
-          <h1 className="text-title-lg text-on-surface">Job Tracker</h1>
+          <h1 className="text-brand text-on-surface">Job Tracker</h1>
           <p className="mt-1 text-label-md text-on-surface-variant">
             Track your applications
           </p>
@@ -54,7 +54,7 @@ const Navbar = () => {
               end={item.to === "/"}
               className={({ isActive }) =>
                 [
-                  "rounded-xl px-4 py-3 text-left text-label-md transition-colors",
+                  "rounded-card px-4 py-3 text-left text-nav-label uppercase transition-colors",
                   isActive
                     ? "bg-primary text-white"
                     : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface",

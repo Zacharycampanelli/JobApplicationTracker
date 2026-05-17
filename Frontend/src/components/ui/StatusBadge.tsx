@@ -31,7 +31,7 @@ const StatusBadge = ({ status, variant = "soft" }: StatusBadgeProps) => {
   return (
     <span
       className={`
-    inline-flex items-center rounded-full px-3 py-1 text-label-sm w-fit ${isSoft ? "" : "uppercase tracking-wide"} ${styles[status]}`}
+    inline-flex w-fit items-center rounded-full px-3 py-1 text-status ${isSoft ? "" : "uppercase"} ${styles[status]}`}
     >
       {isSoft && (<span className="h-2 w-2 rounded-full bg-current opacity-70 mr-1.5" />)}
       {labels[status]}
