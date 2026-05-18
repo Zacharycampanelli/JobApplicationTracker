@@ -59,10 +59,10 @@ const Applications = () => {
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-body-lg font-bold text-on-surface">{app.title}</h3>
+                    <h3 className="text-card-title text-on-surface">{app.title}</h3>
                     <p className="text-body-md text-on-surface-secondary">{app.company}</p>
                   </div>
-                  <span className="rounded-full bg-primary/10 px-3 py-1 text-label-md font-semibold text-primary">
+                  <span className="rounded-full bg-primary/10 px-3 py-1 text-status text-primary">
                     {app.status}
                   </span>
                 </div>

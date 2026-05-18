@@ -4,7 +4,6 @@ import type { AuthRequest } from '../middleware/authMiddleware';
 
 export const getAllApplications = async (req: AuthRequest, res: Response) => {
   try {
-    console.log(req.user);
     if (!req.user) {
       return res.status(401).json({ error: 'Not authorized' });
     }
