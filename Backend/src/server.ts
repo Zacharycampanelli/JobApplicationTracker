@@ -26,15 +26,7 @@ app.get('/api/health', async (_req, res) => {
   }
 });
 
-app.get('/api/users', async (_req, res) => {
-  try {
-    const users = await prisma.user.findMany();
-    res.json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to fetch users' });
-  }
-});
+
 
 const PORT = process.env.PORT || 5001;
 
