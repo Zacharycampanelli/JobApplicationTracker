@@ -92,6 +92,7 @@
 
   /* Shadows */
   --shadow-raised: 0 18px 40px -28px rgba(42, 52, 57, 0.35);
+  --shadow-menu: 0 16px 32px -18px rgba(42, 52, 57, 0.45);
 }
 
 .text-brand {
@@ -178,6 +179,26 @@
   line-height: var(--text-card-title-line);
   font-weight: var(--text-card-title-weight);
   letter-spacing: 0;
+}
+
+.status-applied {
+  color: var(--color-on-surface-secondary);
+  background-color: var(--color-surface-container-high);
+}
+
+.status-interview {
+  color: var(--color-primary);
+  background-color: var(--color-primary-container);
+}
+
+.status-offer {
+  color: var(--color-success);
+  background-color: var(--color-success-container);
+}
+
+.status-rejected {
+  color: var(--color-error);
+  background-color: var(--color-error-container);
 }
 
 @layer base {
