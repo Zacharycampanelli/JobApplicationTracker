@@ -27,6 +27,8 @@ const Applications = () => {
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [sortBy, setSortBy] = useState<SortMethod>("Newest");
+  const [isLoading, setIsLoading] = useState(true);
+const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
 
@@ -37,10 +39,15 @@ const Applications = () => {
   useEffect(() => {
     const fetchApps = async () => {
       try {
+        setIsLoading(true)
+        setErrorMessage(null)
+
         const data = await getAllApplications();
         setApplications(data);
       } catch (error) {
-        console.error("Failed to fetch applications:", error);
+        setErrorMessage(error instanceof Error ? error.message : "Failed to load applications.");
+      } finally {
+        setIsLoading(false)
       }
     };
 
@@ -184,7 +191,15 @@ const Applications = () => {
         </div>
 
         <div className="mt-8 flex flex-col gap-4">
-          {sortedApplications.length === 0 ? (
+           { isLoading ? (
+            <p className="text-body-md text-on-surface-variant">
+              Loading Applications...
+            </p>
+           ) : errorMessage ? (
+            <p className="text-body-md text-error">
+              {errorMessage}
+            </p>
+           ) : sortedApplications.length === 0 ? (
             <p className="text-body-md text-on-surface-variant">
               No applications found.
             </p>
