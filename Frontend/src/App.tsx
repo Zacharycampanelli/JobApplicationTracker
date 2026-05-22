@@ -8,33 +8,35 @@ import Analytics from "./pages/Analytics";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import AddApplication from "./pages/AddApplication";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
-
 
 function App() {
   return (
     <BrowserRouter>
-    <AuthProvider>
+      <AuthProvider>
+        <Routes>
+          {/* Main app routes with navbar */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<AppWrapper />}>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/applications">
+                <Route index element={<Applications />} />
+                <Route path="add" element={<AddApplication />} />
+              </Route>
+              <Route path="/analytics" element={<Analytics />} />
+              <Route path="/profile" element={<Profile />} />
+            </Route>
+          </Route>
 
-      <Routes>
-        {/* Main app routes with navbar */}
-        <Route element={<ProtectedRoute />}>
-        <Route element={<AppWrapper />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/applications" element={<Applications />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/profile" element={<Profile />} />
-        </Route>
-        </Route>
-
-        {/* Auth routes without navbar */}
-        <Route element={<AuthWrapper />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Route>
-      </Routes>
-    </AuthProvider>
+          {/* Auth routes without navbar */}
+          <Route element={<AuthWrapper />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
