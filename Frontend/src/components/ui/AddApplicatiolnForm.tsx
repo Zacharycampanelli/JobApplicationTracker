@@ -1,108 +1,110 @@
+import Button from "./Button";
+import Input from "./Input";
+import Link from "../../assets/images/link.svg?react";
+import  Select from "./Select";
+import { useAuthContext } from "../../context/AuthContext";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Input from "./Input";
-import Button from "./Button";
-
-import { useAuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router";
 
 const addApplicationSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  company: z.string().min(1, "Company is required"),
-  status: z.enum(["APPLIED", "INTERVIEW", "REJECTED", "OFFER"]),
-  appliedAt: z.date().optional(),
-  notes: z.string().optional(),
-  link: z.string().url("Invalid URL").optional(),
+    title: z.string().min(1, "Title is required"),
+    company: z.string().min(1, "Company is required"),
+    status: z.enum(["APPLIED", "INTERVIEW", "REJECTED", "OFFER"]),
+    appliedAt: z.date().optional(),
+    notes: z.string().optional(),
+    link: z.string().url("Invalid URL").optional(),
 });
 
 export type AddApplicationValues = z.infer<typeof addApplicationSchema>;
 
 const AddApplicationForm = () => {
- const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting }
- } = useForm<AddApplicationValues>({
-    resolver: zodResolver(addApplicationSchema),
-    defaultValues: {
-        title: "",
-        company: "",
-        status: "",
-        appliedAt: new Date(),
-        notes: "",
-        link: "",
-    }
- }) 
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting }
+    } = useForm<AddApplicationValues>({
+        resolver: zodResolver(addApplicationSchema),
+        defaultValues: {
+            title: "",
+            company: "",
+            status: "",
+            appliedAt: new Date(),
+            notes: "",
+            link: "",
+        }
+    })
 
 
- return (
-    <form className="flex flex-col gap-4" onSubmit={()=>{}}>
+    return (
+        <form className="flex flex-col gap-4" onSubmit={() => { }}>
+            <Input
+                id="company"
+                {...register("company")}
+                label="COMPANY NAME"
+                placeholder="e.g. Google"
+                error={errors.company?.message}
+            />
 
-        <Input
-            id="title"
-            {...register("title")}
-            label="JOB TITLE"
-            placeholder="Software Engineer"
-            error={errors.title?.message}
-        />  
-        <Input 
-            id="company"
-            {...register("company")}
-            label="COMPANY"
-            placeholder="Google"
-            error={errors.company?.message}
-        />
-        <label htmlFor="status" className="text-label-md text-on-surface">
-          STATUS
-        </label>
-        <select 
-            id="status"
-            {...register("status")}
-            name="status"
-            required
-            className="w-full bg-surface-container-low text-on-surface placeholder:text-on-surface-variant transition-colors outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2"
-        >
-            <option value="">Select Status</option>
-            <option value="APPLIED">APPLIED</option>
-            <option value="INTERVIEW">INTERVIEW</option>
-            <option value="REJECTED">REJECTED</option>
-            <option value="OFFER">OFFER</option>
-        </select>
-        {errors.status && <p className="text-label-md text-error">{errors.status.message}</p>}
-        <Input
-            id="appliedAt"
-            {...register("appliedAt")}
-            label="APPLIED AT"
-            type="date"
-            placeholder="APPLIED AT"
-            error={errors.appliedAt?.message}
-        />
-        <Input
-            id="notes"
-            {...register("notes")}
-            label="NOTES"
-            placeholder="NOTES"
-            error={errors.notes?.message}
-        />
-        <Input
-            id="link"
-            {...register("link")}
-            label="LINK"
-            placeholder="LINK"
-            error={errors.link?.message}
-        />
-        <Button
-            type="submit"
-            disabled={isSubmitting}
-        >
-            Add Application
-        </Button>
+            <Input
+                id="title"
+                {...register("title")}
+                label="JOB TITLE"
+                placeholder="e.g. Software Engineer"
+                error={errors.title?.message}
+            />
         
- </form>
+           <Select 
+                id="status"
+                {...register("status")}
+                name="status"
+                required
+                placeholder="Select Status"
+                options={[
+                    { value: "APPLIED", label: "APPLIED" },
+                    { value: "INTERVIEW", label: "INTERVIEW" },
+                    { value: "REJECTED", label: "REJECTED" },
+                    { value: "OFFER", label: "OFFER" },
+                ]}
+                error={errors.status?.message}
+           >
 
- )
-    
+           </Select>
+            <Input
+                id="appliedAt"
+                {...register("appliedAt")}
+                label="APPLIED AT"
+                type="date"
+                placeholder="e.g. 2022-01-01"
+                error={errors.appliedAt?.message}
+            />
+            <Input
+                id="notes"
+                {...register("notes")}
+                label="NOTES"
+                placeholder="Document interview highlights, referral contacts, or preparation notes..."
+                error={errors.notes?.message}
+            />
+            <Input
+                id="link"
+                {...register("link")}
+                label="JOB LINK/ URL"
+                placeholder="LINK"
+                error={errors.link?.message}
+                startIcon={<Link />}
+            />
+            <Button
+                type="submit"
+                disabled={isSubmitting}
+            >
+                Add Application
+            </Button>
+
+        </form>
+
+    )
+
 }
 
 export default AddApplicationForm
