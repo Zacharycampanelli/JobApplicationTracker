@@ -2,7 +2,6 @@ import Button from "./Button";
 import Input from "./Input";
 import Link from "../../assets/images/link.svg?react";
 import  Select from "./Select";
-import { useAuthContext } from "../../context/AuthContext";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { z } from "zod";
@@ -12,33 +11,37 @@ const addApplicationSchema = z.object({
     title: z.string().min(1, "Title is required"),
     company: z.string().min(1, "Company is required"),
     status: z.enum(["APPLIED", "INTERVIEW", "REJECTED", "OFFER"]),
-    appliedAt: z.date().optional(),
+    appliedAt: z.coerce.date().optional(),
     notes: z.string().optional(),
-    link: z.string().url("Invalid URL").optional(),
-});
+    link: z.string().url("Invalid URL").optional().or(z.literal(""))
+})
 
-export type AddApplicationValues = z.infer<typeof addApplicationSchema>;
+type AddApplicationFormValues = z.input<typeof addApplicationSchema>;
+ export type AddApplicationValues = z.output<typeof addApplicationSchema>;
 
 const AddApplicationForm = () => {
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting }
-    } = useForm<AddApplicationValues>({
+    } = useForm<AddApplicationFormValues, unknown, AddApplicationValues>({
         resolver: zodResolver(addApplicationSchema),
         defaultValues: {
             title: "",
             company: "",
-            status: "",
+            status: "APPLIED",
             appliedAt: new Date(),
             notes: "",
             link: "",
         }
     })
 
+    const onSubmit = (values: AddApplicationValues) => {
+        console.log(values);
+    };
 
     return (
-        <form className="flex flex-col gap-4" onSubmit={() => { }}>
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
             <Input
                 id="company"
                 {...register("company")}
@@ -46,7 +49,6 @@ const AddApplicationForm = () => {
                 placeholder="e.g. Google"
                 error={errors.company?.message}
             />
-
             <Input
                 id="title"
                 {...register("title")}
@@ -54,13 +56,11 @@ const AddApplicationForm = () => {
                 placeholder="e.g. Software Engineer"
                 error={errors.title?.message}
             />
-        
            <Select 
                 id="status"
                 {...register("status")}
                 name="status"
-                required
-                placeholder="Select Status"
+               label="STATUS"
                 options={[
                     { value: "APPLIED", label: "APPLIED" },
                     { value: "INTERVIEW", label: "INTERVIEW" },
@@ -69,12 +69,11 @@ const AddApplicationForm = () => {
                 ]}
                 error={errors.status?.message}
            >
-
            </Select>
             <Input
                 id="appliedAt"
                 {...register("appliedAt")}
-                label="APPLIED AT"
+                label="STATUS"
                 type="date"
                 placeholder="e.g. 2022-01-01"
                 error={errors.appliedAt?.message}
@@ -100,11 +99,8 @@ const AddApplicationForm = () => {
             >
                 Add Application
             </Button>
-
         </form>
-
     )
-
 }
 
 export default AddApplicationForm

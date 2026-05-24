@@ -1,16 +1,14 @@
+import Button from "./Button";
+import Email from "../../assets/images/email.svg?react";
+import Input from "./Input";
+import Person from "../../assets/images/person.svg?react";
+import SideArrow from "../../assets/images/sidearrow.svg?react";
+import { register as registerUser } from "../../features/authApi";
+import { useAuthContext } from "../../context/AuthContext";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Input from "./Input";
-import Button from "./Button";
-
-import { register as registerUser } from "../../features/authApi";
-
-import Person from "../../assets/images/person.svg?react";
-import Email from "../../assets/images/email.svg?react";
-import SideArrow from "../../assets/images/sidearrow.svg?react";
-import { useAuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router";
 
 const registrationSchema = z
   .object({
@@ -42,7 +40,7 @@ const RegistrationForm = () => {
   });
 
   const { login } = useAuthContext();
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const onSubmit = async (data: RegistrationValues) => {
     try {

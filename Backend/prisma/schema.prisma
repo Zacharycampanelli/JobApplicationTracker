@@ -20,7 +20,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   applications JobApplication[]
-  resumes
+  resumes Resume[]
 }
 
 enum JobStatus {
@@ -38,6 +38,19 @@ model JobApplication {
   appliedAt DateTime @default(now())
   notes     String?
   link      String?
+  resumeId  Int?
+  resume    Resume?   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
   userId    Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Resume {
+  id Int @id @default(autoincrement())
+  name String
+  fileUrl String
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  applications JobApplication[]
+  createdAt DateTime @default(now())
+  
 }
