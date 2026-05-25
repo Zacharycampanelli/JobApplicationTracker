@@ -25,7 +25,7 @@ const Login = () => {
           </div>
 
           <div className="p-6 md:col-span-7 md:p-10">
-            <h2 className="mb-4 text-auth-title">Welcome Back</h2>
+            <h2 className="mb-4 text-page-title">Welcome Back</h2>
             <p className="text-body-md text-on-surface-secondary mb-12">
               Log in to manage your professional trajectory.
             </p>

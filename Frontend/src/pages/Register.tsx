@@ -36,7 +36,7 @@ const Register = () => {
           </div>
 
           <div className="p-6 md:col-span-7 md:p-10">
-            <h2 className="mb-4 text-auth-title">Create Account</h2>
+            <h2 className="mb-4 text-page-title">Create Account</h2>
             <p className="text-body-md text-on-surface-secondary mb-10">
               Begin your structured application journey today.
             </p>

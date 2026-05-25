@@ -100,7 +100,7 @@ const [errorMessage, setErrorMessage] = useState<string | null>(null);
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4">
       {isMobile && <Header />}
       <main className="flex flex-col">
-        <h2 className="mt-6 text-auth-title text-on-surface">
+        <h2 className="mt-6 text-page-title text-on-surface">
           Active Pursuits
         </h2>
         <p className="mt-4 text-body-lg text-on-surface-secondary">
@@ -214,7 +214,7 @@ const [errorMessage, setErrorMessage] = useState<string | null>(null);
                     <h3 className="text-card-title text-on-surface">
                       {app.title}
                     </h3>
-                    <p className="text-body-md text-on-surface-secondary">
+                    <p className="text-card-meta text-on-surface-secondary">
                       {app.company}
                     </p>
                   </div>
