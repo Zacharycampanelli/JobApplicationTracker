@@ -39,7 +39,7 @@ model JobApplication {
   notes     String?
   link      String?
   resumeId  Int?
-  resume    Resume?   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  resume    Resume?   @relation(fields: [resumeId], references: [id], onDelete: SetNull)
   userId    Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -48,9 +48,9 @@ model Resume {
   id Int @id @default(autoincrement())
   name String
   fileUrl String
+  mimeType String
   userId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   applications JobApplication[]
   createdAt DateTime @default(now())
-  
 }

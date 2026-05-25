@@ -43,8 +43,8 @@ const Select = ({
   return (
    <div className="flex w-full flex-col gap-2">
      {label && (
-            <label htmlFor="status" className="text-label-md text-on-surface">
-                STATUS
+            <label htmlFor={id} className="text-label-md text-on-surface">
+                {label}
             </label>
      )}
    <div className="relative">  
