@@ -1,15 +1,11 @@
 import AddApplicationForm from "../components/ui/AddApplicatiolnForm";
 import Header from "../components/layout/Header";
+import ResumeManager from "../components/ui/ResumeManager";
 import { useBreakpoint } from "../utils/useBreakpoint";
-import { getResumes, uploadResume } from "../features/resumeApi";
-import { useState } from "react";
-import type { Resume } from "../types/types";
+
 
 const AddApplication = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [empty, setEmpty] = useState(true);
-  const [resumes, setResumes] = useState<Resume[]>([]);
+
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
 
@@ -20,6 +16,7 @@ const AddApplication = () => {
         Add Application
       </h2>
       <AddApplicationForm />
+      <ResumeManager />
     </div>
   );
 };
