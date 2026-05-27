@@ -12,7 +12,7 @@ type SingleResumeProps = {
 const formatResumeDate = (createdAt: string) => {
   return new Intl.DateTimeFormat("en", {
     month: "short",
-    day: "numeric",
+    day: "numeric"
   }).format(new Date(createdAt));
 };
 

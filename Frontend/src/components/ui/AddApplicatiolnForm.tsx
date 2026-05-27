@@ -15,7 +15,7 @@ const addApplicationSchema = z.object({
   appliedAt: z.coerce.date().optional(),
   notes: z.string().optional(),
   link: z.string().url("Invalid URL").optional().or(z.literal("")),
-  resumeId: z.number().optional(),
+  resumeId: z.number().optional()
 });
 
 type AddApplicationFormValues = z.input<typeof addApplicationSchema>;
@@ -40,7 +40,7 @@ const AddApplicationForm = ({ resumes }: AddApplicationFormProps) => {
       status: "APPLIED",
       appliedAt: new Date(),
       notes: "",
-      link: "",
+      link: ""
     }
   });
 

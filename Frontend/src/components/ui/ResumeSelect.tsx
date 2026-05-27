@@ -13,7 +13,7 @@ type ResumeSelectProps = {
 const ResumeSelect = ({
   resumes,
   selectedResumeId,
-  onSelectResume,
+  onSelectResume
 }: ResumeSelectProps) => {
   return (
     <Card className="bg-surface-container shadow-none">
@@ -39,14 +39,6 @@ const ResumeSelect = ({
             ))
           )}
         </div>
-
-        <button
-          type="button"
-          className="flex items-center justify-center gap-3 rounded-card border border-dashed border-outline-variant px-4 py-5 text-body-md text-on-surface-secondary transition hover:bg-surface-container-high"
-        >
-          <Add />
-          <span className="max-w-36 text-center">Upload New Asset Version</span>
-        </button>
       </div>
     </Card>
   );

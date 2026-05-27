@@ -11,7 +11,12 @@ type ResumeManagerProps = {
   resumes: Resume[];
 };
 
-const ResumeManager = ({ isLoading, error, empty, resumes }: ResumeManagerProps) => {
+const ResumeManager = ({
+  isLoading,
+  error,
+  empty,
+  resumes
+}: ResumeManagerProps) => {
   return (
     <Card className="mt-8 bg-surface-container">
       <div className="flex flex-col gap-5">
@@ -24,17 +29,19 @@ const ResumeManager = ({ isLoading, error, empty, resumes }: ResumeManagerProps)
         ) : error ? (
           <p className="text-body-md text-error">Error: {error}</p>
         ) : empty ? (
-          <p className="text-body-md text-on-surface-secondary">No resumes uploaded</p>
+          <p className="text-body-md text-on-surface-secondary">
+            No resumes uploaded
+          </p>
         ) : (
           <div className="flex flex-col gap-4">
             {resumes &&
-          resumes.map((resume) => (
-            <SingleResume
-              key={resume.id}
-              resume={resume}
-              selected={false}
-            />
-          ))}
+              resumes.map((resume) => (
+                <SingleResume
+                  key={resume.id}
+                  resume={resume}
+                  selected={false}
+                />
+              ))}
           </div>
         )}
         <button
