@@ -2,12 +2,33 @@ import AddApplicationForm from "../components/ui/AddApplicatiolnForm";
 import Header from "../components/layout/Header";
 import ResumeManager from "../components/ui/ResumeManager";
 import { useBreakpoint } from "../utils/useBreakpoint";
-
+import { getAllResumes } from "../features/resumeApi";
+import { useEffect, useState } from "react";
+import type { Resume } from "../types/types";
 
 const AddApplication = () => {
-
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
+
+  // Resume state
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [empty, setEmpty] = useState(true);
+  const [resumes, setResumes] = useState<Resume[]>([]);
+
+  useEffect(() => {
+    getAllResumes()
+      .then((data) => {
+        setResumes(data);
+        setEmpty(data.length === 0);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError(err instanceof Error ? err.message : "Failed to load resumes");
+        setIsLoading(false);
+        setEmpty(true);
+      });
+  }, []);
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4">
@@ -15,8 +36,13 @@ const AddApplication = () => {
       <h2 className="mt-6 mb-6 text-page-title text-on-surface">
         Add Application
       </h2>
-      <AddApplicationForm />
-      <ResumeManager />
+      <AddApplicationForm resumes={resumes} />
+      <ResumeManager
+        isLoading={isLoading}
+        error={error}
+        empty={empty}
+        resumes={resumes}
+      />
     </div>
   );
 };

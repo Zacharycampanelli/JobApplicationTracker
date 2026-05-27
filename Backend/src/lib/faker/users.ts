@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker';
-import { createFakeApplication } from './applications';
 import { hashPassword } from '../../utils/hash';
 
 const DEV_PASSWORD = 'password1!';
@@ -11,8 +10,5 @@ export const createFakeUser = async () => {
     name: faker.person.fullName(),
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
-    applications: {
-      create: Array.from({ length: faker.number.int({ min: 0, max: 10 }) }, () => createFakeApplication()),
-    },
   };
 };

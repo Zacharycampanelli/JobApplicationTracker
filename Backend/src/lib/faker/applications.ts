@@ -12,3 +12,4 @@ export const createFakeApplication = () => {
     link: faker.internet.url(),
   };
 };
+

@@ -1,11 +1,12 @@
 import Button from "./Button";
 import Input from "./Input";
 import Link from "../../assets/images/link.svg?react";
+import ResumeSelect from "./ResumeSelect";
 import Select from "./Select";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { Resume } from "../../types/types";
 
 const addApplicationSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -13,16 +14,23 @@ const addApplicationSchema = z.object({
   status: z.enum(["APPLIED", "INTERVIEW", "REJECTED", "OFFER"]),
   appliedAt: z.coerce.date().optional(),
   notes: z.string().optional(),
-  link: z.string().url("Invalid URL").optional().or(z.literal(""))
+  link: z.string().url("Invalid URL").optional().or(z.literal("")),
+  resumeId: z.number().optional(),
 });
 
 type AddApplicationFormValues = z.input<typeof addApplicationSchema>;
 export type AddApplicationValues = z.output<typeof addApplicationSchema>;
 
-const AddApplicationForm = () => {
+type AddApplicationFormProps = {
+  resumes: Resume[];
+};
+
+const AddApplicationForm = ({ resumes }: AddApplicationFormProps) => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isSubmitting }
   } = useForm<AddApplicationFormValues, unknown, AddApplicationValues>({
     resolver: zodResolver(addApplicationSchema),
@@ -32,9 +40,11 @@ const AddApplicationForm = () => {
       status: "APPLIED",
       appliedAt: new Date(),
       notes: "",
-      link: ""
+      link: "",
     }
   });
+
+  const selectedResumeId = watch("resumeId");
 
   const onSubmit = (values: AddApplicationValues) => {
     console.log(values);
@@ -91,6 +101,11 @@ const AddApplicationForm = () => {
         placeholder="LINK"
         error={errors.link?.message}
         startIcon={<Link />}
+      />
+      <ResumeSelect
+        resumes={resumes}
+        selectedResumeId={selectedResumeId}
+        onSelectResume={(resumeId) => setValue("resumeId", resumeId)}
       />
       <Button type="submit" disabled={isSubmitting}>
         Add Application

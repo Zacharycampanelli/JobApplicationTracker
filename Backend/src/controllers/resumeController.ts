@@ -18,6 +18,7 @@ export const uploadResume = async (req: AuthRequest, res: Response) => {
         fileUrl: req.file.path,
         name: req.file.originalname,
         userId: req.user.userId,
+        mimeType: req.file.mimetype
       },
     });
     res.json(resume);
