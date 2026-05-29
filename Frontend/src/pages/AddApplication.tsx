@@ -18,18 +18,24 @@ const AddApplication = () => {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const loadResumes = async () => {
+    setIsLoading(true);
+
+    try {
+      const data = await getAllResumes();
+      setResumes(data);
+      setEmpty(data.length === 0);
+      setError("");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load resumes");
+      setEmpty(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    getAllResumes()
-      .then((data) => {
-        setResumes(data);
-        setEmpty(data.length === 0);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setError(err instanceof Error ? err.message : "Failed to load resumes");
-        setIsLoading(false);
-        setEmpty(true);
-      });
+    loadResumes();
   }, []);
 
   return (
@@ -47,6 +53,7 @@ const AddApplication = () => {
         error={error}
         empty={empty}
         resumes={resumes}
+        onUploadSuccess={loadResumes}
       />
       <Modal
         title="Success!"

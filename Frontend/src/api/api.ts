@@ -2,13 +2,15 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
 export const api = async (endpoint: string, options?: RequestInit) => {
   const token = localStorage.getItem("token");
+  const isFormData = options?.body instanceof FormData;
+
   const res = await fetch(`${API_URL}/${endpoint}`, {
+    ...options,
     headers: {
-      "Content-Type": "application/json",
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options?.headers
-    },
-    ...options
+    }
   });
 
   if (!res.ok) {

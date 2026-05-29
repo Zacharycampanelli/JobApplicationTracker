@@ -3,20 +3,39 @@ import ResumeIcon from "../../assets/images/resume.svg?react";
 import type { Resume } from "../../types/types";
 import SingleResume from "./SingleResume";
 import Add from "../../assets/images/add.svg?react";
+import { useRef } from "react";
+import { uploadResume } from "../../features/resumeApi";
 
 type ResumeManagerProps = {
   isLoading: boolean;
   error: string;
   empty: boolean;
   resumes: Resume[];
+  onUploadSuccess: () => void;
 };
 
 const ResumeManager = ({
   isLoading,
   error,
   empty,
-  resumes
+  resumes,
+  onUploadSuccess
 }: ResumeManagerProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append("resume", file);
+    await uploadResume(formData);
+    await onUploadSuccess();
+  };
+
   return (
     <Card className="mt-8 bg-surface-container">
       <div className="flex flex-col gap-5">
@@ -46,11 +65,19 @@ const ResumeManager = ({
         )}
         <button
           type="button"
+          onClick={() => fileInputRef.current?.click()}
           className="flex items-center justify-center gap-3 rounded-card border border-dashed border-outline-variant px-4 py-5 text-body-md text-on-surface-secondary transition hover:bg-surface-container-high"
         >
           <Add />
           <span className="max-w-36 text-center">Upload New Asset Version</span>
         </button>
+        <input
+          type="file"
+          ref={fileInputRef}
+          className="hidden"
+          accept=".pdf,.doc,.docx"
+          onChange={handleFileChange}
+        />
       </div>
     </Card>
   );
