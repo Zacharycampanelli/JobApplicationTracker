@@ -7,9 +7,8 @@ import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Resume } from "../../types/types";
-import { createApplication } from "../../features/applicationApi";
 
-const addApplicationSchema = z.object({
+const applicationSchema = z.object({
   title: z.string().min(1, "Title is required"),
   company: z.string().min(1, "Company is required"),
   status: z.enum(["APPLIED", "INTERVIEW", "REJECTED", "OFFER"]),
@@ -19,7 +18,7 @@ const addApplicationSchema = z.object({
     (value) => {
       if (typeof value !== "string") return value;
       const trimmedValue = value.trim();
-      if (!trimmedValue) return;
+      if (!trimmedValue) return "";
       if (/^https?:\/\//i.test(trimmedValue)) {
         return trimmedValue;
       }
@@ -30,42 +29,34 @@ const addApplicationSchema = z.object({
   resumeId: z.number().optional()
 });
 
-type AddApplicationFormValues = z.input<typeof addApplicationSchema>;
-export type AddApplicationValues = z.output<typeof addApplicationSchema>;
+type ApplicationFormValues = z.input<typeof applicationSchema>;
+export type ApplicationValues = z.output<typeof applicationSchema>;
 
-type AddApplicationFormProps = {
+type ApplicationFormProps = {
   resumes: Resume[];
-  onSuccess: () => void;
+  onSubmit: (values: ApplicationValues) => Promise<void>;
+  newOrEdit: "new" | "edit";
+  defaultValues?: Partial<ApplicationFormValues>;
 };
 
-const AddApplicationForm = ({
+const ApplicationForm = ({
   resumes,
-  onSuccess
-}: AddApplicationFormProps) => {
+  onSubmit,
+  newOrEdit,
+  defaultValues
+}: ApplicationFormProps) => {
   const {
     register,
     handleSubmit,
     setValue,
     control,
     formState: { errors, isSubmitting }
-  } = useForm<AddApplicationFormValues, unknown, AddApplicationValues>({
-    resolver: zodResolver(addApplicationSchema),
-    defaultValues: {
-      title: "",
-      company: "",
-      status: "APPLIED",
-      appliedAt: new Date(),
-      notes: "",
-      link: ""
-    }
+  } = useForm<ApplicationFormValues, unknown, ApplicationValues>({
+    resolver: zodResolver(applicationSchema),
+    defaultValues
   });
 
   const selectedResumeId = useWatch({ control, name: "resumeId" });
-
-  const onSubmit = async (values: AddApplicationValues) => {
-    await createApplication(values);
-    onSuccess();
-  };
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
@@ -130,10 +121,14 @@ const AddApplicationForm = ({
         }
       />
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Adding..." : "Add Application"}
+        {isSubmitting
+          ? "Submitting..."
+          : newOrEdit === "new"
+            ? "Add Application"
+            : "Update Application"}
       </Button>
     </form>
   );
 };
 
-export default AddApplicationForm;
+export default ApplicationForm;
