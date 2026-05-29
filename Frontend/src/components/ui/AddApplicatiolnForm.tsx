@@ -3,10 +3,11 @@ import Input from "./Input";
 import Link from "../../assets/images/link.svg?react";
 import ResumeSelect from "./ResumeSelect";
 import Select from "./Select";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Resume } from "../../types/types";
+import { createApplication } from "../../features/applicationApi";
 
 const addApplicationSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -14,7 +15,18 @@ const addApplicationSchema = z.object({
   status: z.enum(["APPLIED", "INTERVIEW", "REJECTED", "OFFER"]),
   appliedAt: z.coerce.date().optional(),
   notes: z.string().optional(),
-  link: z.string().url("Invalid URL").optional().or(z.literal("")),
+  link: z.preprocess(
+    (value) => {
+      if (typeof value !== "string") return value;
+      const trimmedValue = value.trim();
+      if (!trimmedValue) return;
+      if (/^https?:\/\//i.test(trimmedValue)) {
+        return trimmedValue;
+      }
+      return `https://${trimmedValue}`;
+    },
+    z.string().url("Invalid URL").optional().or(z.literal(""))
+  ),
   resumeId: z.number().optional()
 });
 
@@ -23,14 +35,18 @@ export type AddApplicationValues = z.output<typeof addApplicationSchema>;
 
 type AddApplicationFormProps = {
   resumes: Resume[];
+  onSuccess: () => void;
 };
 
-const AddApplicationForm = ({ resumes }: AddApplicationFormProps) => {
+const AddApplicationForm = ({
+  resumes,
+  onSuccess
+}: AddApplicationFormProps) => {
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
+    control,
     formState: { errors, isSubmitting }
   } = useForm<AddApplicationFormValues, unknown, AddApplicationValues>({
     resolver: zodResolver(addApplicationSchema),
@@ -44,10 +60,11 @@ const AddApplicationForm = ({ resumes }: AddApplicationFormProps) => {
     }
   });
 
-  const selectedResumeId = watch("resumeId");
+  const selectedResumeId = useWatch({ control, name: "resumeId" });
 
-  const onSubmit = (values: AddApplicationValues) => {
-    console.log(values);
+  const onSubmit = async (values: AddApplicationValues) => {
+    await createApplication(values);
+    onSuccess();
   };
 
   return (
@@ -105,10 +122,15 @@ const AddApplicationForm = ({ resumes }: AddApplicationFormProps) => {
       <ResumeSelect
         resumes={resumes}
         selectedResumeId={selectedResumeId}
-        onSelectResume={(resumeId) => setValue("resumeId", resumeId)}
+        onSelectResume={(resumeId) =>
+          setValue("resumeId", resumeId, {
+            shouldDirty: true,
+            shouldValidate: true
+          })
+        }
       />
       <Button type="submit" disabled={isSubmitting}>
-        Add Application
+        {isSubmitting ? "Adding..." : "Add Application"}
       </Button>
     </form>
   );

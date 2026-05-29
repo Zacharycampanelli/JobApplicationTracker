@@ -8,7 +8,9 @@ import Button from "../components/ui/Button";
 import SearchIcon from "../assets/images/search.svg?react";
 import StatusFilter from "../assets/images/statusFilter.svg?react";
 import Calendar from "../assets/images/calendar.svg?react";
+import Add from "../assets/images/add.svg?react";
 import type { JobApplication } from "../types/types";
+import { useNavigate } from "react-router";
 
 const statusClassMap: Record<string, string> = {
   APPLIED: "status-applied",
@@ -20,7 +22,8 @@ const statusClassMap: Record<string, string> = {
 const SORT_METHODS = ["Newest", "Oldest", "Title", "Company"] as const;
 type SortMethod = (typeof SORT_METHODS)[number];
 
-const dropdownClassName = "absolute left-0 top-14 z-20 w-44 rounded-control bg-surface-container-lowest shadow-menu"
+const dropdownClassName =
+  "absolute left-0 top-14 z-20 w-44 rounded-control bg-surface-container-lowest shadow-menu";
 
 const Applications = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -28,9 +31,10 @@ const Applications = () => {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [sortBy, setSortBy] = useState<SortMethod>("Newest");
   const [isLoading, setIsLoading] = useState(true);
-const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
+  const navigate = useNavigate();
 
   // Store the fetched applications
   const [applications, setApplications] = useState<JobApplication[]>([]);
@@ -39,15 +43,19 @@ const [errorMessage, setErrorMessage] = useState<string | null>(null);
   useEffect(() => {
     const fetchApps = async () => {
       try {
-        setIsLoading(true)
-        setErrorMessage(null)
+        setIsLoading(true);
+        setErrorMessage(null);
 
         const data = await getAllApplications();
         setApplications(data);
       } catch (error) {
-        setErrorMessage(error instanceof Error ? error.message : "Failed to load applications.");
+        setErrorMessage(
+          error instanceof Error
+            ? error.message
+            : "Failed to load applications."
+        );
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     };
 
@@ -100,9 +108,19 @@ const [errorMessage, setErrorMessage] = useState<string | null>(null);
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4">
       {isMobile && <Header />}
       <main className="flex flex-col">
-        <h2 className="mt-6 text-page-title text-on-surface">
-          Active Pursuits
-        </h2>
+        <div className="flex justify-between">
+          <h2 className="mt-6 text-page-title text-on-surface inline-block">
+            Active Pursuits
+          </h2>
+          <Button
+            onClick={() => navigate("/applications/add")}
+            className="mt-6"
+            size="sm"
+            variant="secondary"
+          >
+            <Add />
+          </Button>
+        </div>
         <p className="mt-4 text-body-lg text-on-surface-secondary">
           Managing {sortedApplications.length} ongoing professional
           trajectories.
@@ -191,15 +209,13 @@ const [errorMessage, setErrorMessage] = useState<string | null>(null);
         </div>
 
         <div className="mt-8 flex flex-col gap-4">
-           { isLoading ? (
+          {isLoading ? (
             <p className="text-body-md text-on-surface-variant">
               Loading Applications...
             </p>
-           ) : errorMessage ? (
-            <p className="text-body-md text-error">
-              {errorMessage}
-            </p>
-           ) : sortedApplications.length === 0 ? (
+          ) : errorMessage ? (
+            <p className="text-body-md text-error">{errorMessage}</p>
+          ) : sortedApplications.length === 0 ? (
             <p className="text-body-md text-on-surface-variant">
               No applications found.
             </p>

@@ -1,4 +1,3 @@
-import Add from "../../assets/images/add.svg?react";
 import Card from "./Card";
 import ResumeIcon from "../../assets/images/resume.svg?react";
 import SingleResume from "./SingleResume";

@@ -5,6 +5,7 @@ import { useBreakpoint } from "../utils/useBreakpoint";
 import { getAllResumes } from "../features/resumeApi";
 import { useEffect, useState } from "react";
 import type { Resume } from "../types/types";
+import Modal from "../components/ui/Modal";
 
 const AddApplication = () => {
   const isTabletUp = useBreakpoint("md");
@@ -15,6 +16,7 @@ const AddApplication = () => {
   const [error, setError] = useState("");
   const [empty, setEmpty] = useState(true);
   const [resumes, setResumes] = useState<Resume[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     getAllResumes()
@@ -36,13 +38,27 @@ const AddApplication = () => {
       <h2 className="mt-6 mb-6 text-page-title text-on-surface">
         Add Application
       </h2>
-      <AddApplicationForm resumes={resumes} />
+      <AddApplicationForm
+        resumes={resumes}
+        onSuccess={() => setIsModalOpen(true)}
+      />
       <ResumeManager
         isLoading={isLoading}
         error={error}
         empty={empty}
         resumes={resumes}
       />
+      <Modal
+        title="Success!"
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        closeAction={"/applications"}
+        closeText="Okay!"
+      >
+        <p className="text-body-md text-on-surface">
+          Application added successfully
+        </p>
+      </Modal>
     </div>
   );
 };
