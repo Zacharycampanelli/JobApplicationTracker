@@ -53,7 +53,7 @@ const AddApplication = () => {
         error={error}
         empty={empty}
         resumes={resumes}
-        onUploadSuccess={loadResumes}
+        onResumesChanged={loadResumes}
       />
       <Modal
         title="Success!"

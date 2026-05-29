@@ -11,7 +11,7 @@ type ResumeManagerProps = {
   error: string;
   empty: boolean;
   resumes: Resume[];
-  onUploadSuccess: () => void;
+  onResumesChanged: () => void;
 };
 
 const ResumeManager = ({
@@ -19,7 +19,7 @@ const ResumeManager = ({
   error,
   empty,
   resumes,
-  onUploadSuccess
+  onResumesChanged
 }: ResumeManagerProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -33,7 +33,7 @@ const ResumeManager = ({
     const formData = new FormData();
     formData.append("resume", file);
     await uploadResume(formData);
-    await onUploadSuccess();
+    await onResumesChanged();
   };
 
   return (
@@ -59,6 +59,8 @@ const ResumeManager = ({
                   key={resume.id}
                   resume={resume}
                   selected={false}
+                  deletable
+                  onDeleteSuccess={onResumesChanged}
                 />
               ))}
           </div>
