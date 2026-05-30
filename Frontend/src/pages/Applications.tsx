@@ -9,7 +9,7 @@ import SearchIcon from "../assets/images/search.svg?react";
 import StatusFilter from "../assets/images/statusFilter.svg?react";
 import Calendar from "../assets/images/calendar.svg?react";
 import Add from "../assets/images/add.svg?react";
-import Edit from "../assets/images/edit.svg?react";
+import RightArrow from "../assets/images/rightArrow.svg?react";
 import type { JobApplication } from "../types/types";
 import { useNavigate } from "react-router";
 
@@ -231,7 +231,7 @@ const Applications = () => {
                     <h3 className="text-card-title text-on-surface">
                       {app.title}
                     </h3>
-                    <p className="text-card-meta text-on-surface-secondary">
+                    <p className="text-card-meta text-on-surface-secondary mt-1">
                       {app.company}
                     </p>
                   </div>
@@ -246,7 +246,7 @@ const Applications = () => {
                     onClick={() => navigate(`/applications/edit/${app.id}`)}
                     className="group-hover:flex hidden absolute bottom-4 right-6"
                   >
-                    <Edit
+                    <RightArrow
                       width={18}
                       height={18}
                       color="text-on-surface-secondary"

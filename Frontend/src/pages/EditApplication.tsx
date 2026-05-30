@@ -3,6 +3,7 @@ import { useBreakpoint } from "../utils/useBreakpoint";
 import type { ApplicationValues } from "../components/ui/ApplicationForm";
 import type { Resume } from "../types/types";
 import {
+  deleteApplication,
   getSingleApplication,
   updateApplication
 } from "../features/applicationApi";
@@ -13,7 +14,6 @@ import ApplicationForm from "../components/ui/ApplicationForm";
 import ResumeManager from "../components/ui/ResumeManager";
 import Modal from "../components/ui/Modal";
 import Button from "../components/ui/Button";
-import { twMerge } from "tailwind-merge";
 
 const EditApplication = () => {
   const isTabletUp = useBreakpoint("md");
@@ -28,6 +28,7 @@ const EditApplication = () => {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [defaultValues, setDefaultValues] = useState<ApplicationValues>();
 
   useEffect(() => {
@@ -67,6 +68,12 @@ const EditApplication = () => {
     setIsSuccessModalOpen(true);
   };
 
+  const handleDelete = async () => {
+    if (!id) return;
+    await deleteApplication(Number(id));
+    navigate("/applications");
+  };
+
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
   if (!defaultValues) return <p>Application not found</p>;
@@ -80,6 +87,7 @@ const EditApplication = () => {
         resumes={resumes}
         onSubmit={onSubmit}
         onCancel={() => setIsCancelModalOpen(true)}
+        onDelete={() => setIsDeleteModalOpen(true)}
         newOrEdit="edit"
         defaultValues={defaultValues}
       />
@@ -124,6 +132,26 @@ const EditApplication = () => {
       >
         <p className="text-body-md text-on-surface">
           Are you sure you want to discard your changes?
+        </p>
+      </Modal>
+      <Modal
+        title="Delete application?"
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        titleClassName="text-error"
+        footer={
+          <div className="flex gap-4">
+            <Button variant="ghost" onClick={() => setIsDeleteModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={handleDelete}>
+              Yes, delete
+            </Button>
+          </div>
+        }
+      >
+        <p className="text-body-md text-on-surface">
+          Are you sure you want to delete this application?
         </p>
       </Modal>
     </div>
