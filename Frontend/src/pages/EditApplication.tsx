@@ -1,20 +1,24 @@
-import ApplicationForm, {
-  type ApplicationValues
-} from "../components/ui/ApplicationForm";
-import Header from "../components/layout/Header";
-import ResumeManager from "../components/ui/ResumeManager";
-import { useBreakpoint } from "../utils/useBreakpoint";
-import { getAllResumes } from "../features/resumeApi";
 import { useEffect, useState } from "react";
+import { useBreakpoint } from "../utils/useBreakpoint";
+import type { ApplicationValues } from "../components/ui/ApplicationForm";
 import type { Resume } from "../types/types";
+import {
+  getSingleApplication,
+  updateApplication
+} from "../features/applicationApi";
+import { useParams, useNavigate } from "react-router";
+import { getAllResumes } from "../features/resumeApi";
+import Header from "../components/layout/Header";
+import ApplicationForm from "../components/ui/ApplicationForm";
+import ResumeManager from "../components/ui/ResumeManager";
 import Modal from "../components/ui/Modal";
-import { createApplication } from "../features/applicationApi";
 import Button from "../components/ui/Button";
-import { useNavigate } from "react-router";
+import { twMerge } from "tailwind-merge";
 
-const AddApplication = () => {
+const EditApplication = () => {
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
+  const { id } = useParams();
   const navigate = useNavigate();
 
   // Resume state
@@ -24,6 +28,19 @@ const AddApplication = () => {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [defaultValues, setDefaultValues] = useState<ApplicationValues>();
+
+  useEffect(() => {
+    if (!id) return;
+    const getApplication = async () => {
+      const application = await getSingleApplication(Number(id));
+      setDefaultValues({
+        ...application,
+        appliedAt: application.appliedAt?.slice(0, 10)
+      });
+    };
+    getApplication();
+  }, [id]);
 
   const loadResumes = async () => {
     setIsLoading(true);
@@ -46,29 +63,25 @@ const AddApplication = () => {
   }, []);
 
   const onSubmit = async (values: ApplicationValues) => {
-    await createApplication(values);
+    await updateApplication(Number(id), values);
     setIsSuccessModalOpen(true);
   };
 
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+  if (!defaultValues) return <p>Application not found</p>;
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4">
       {isMobile && <Header />}
       <h2 className="mt-6 mb-6 text-page-title text-on-surface">
-        Add Application
+        Edit Application
       </h2>
       <ApplicationForm
         resumes={resumes}
         onSubmit={onSubmit}
         onCancel={() => setIsCancelModalOpen(true)}
-        newOrEdit="new"
-        defaultValues={{
-          title: "",
-          company: "",
-          status: "APPLIED",
-          appliedAt: new Date().toISOString().slice(0, 10),
-          notes: "",
-          link: ""
-        }}
+        newOrEdit="edit"
+        defaultValues={defaultValues}
       />
       <ResumeManager
         isLoading={isLoading}
@@ -85,7 +98,7 @@ const AddApplication = () => {
         closeText="Okay!"
       >
         <p className="text-body-md text-on-surface">
-          Application added successfully
+          Application updated successfully
         </p>
       </Modal>
       <Modal
@@ -117,4 +130,4 @@ const AddApplication = () => {
   );
 };
 
-export default AddApplication;
+export default EditApplication;

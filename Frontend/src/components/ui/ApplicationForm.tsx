@@ -7,6 +7,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Resume } from "../../types/types";
+import { useState } from "react";
 
 const applicationSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -35,6 +36,7 @@ export type ApplicationValues = z.output<typeof applicationSchema>;
 type ApplicationFormProps = {
   resumes: Resume[];
   onSubmit: (values: ApplicationValues) => Promise<void>;
+  onCancel: () => void;
   newOrEdit: "new" | "edit";
   defaultValues?: Partial<ApplicationFormValues>;
 };
@@ -42,6 +44,7 @@ type ApplicationFormProps = {
 const ApplicationForm = ({
   resumes,
   onSubmit,
+  onCancel,
   newOrEdit,
   defaultValues
 }: ApplicationFormProps) => {
@@ -126,6 +129,9 @@ const ApplicationForm = ({
           : newOrEdit === "new"
             ? "Add Application"
             : "Update Application"}
+      </Button>
+      <Button type="button" variant="danger" onClick={onCancel}>
+        Cancel
       </Button>
     </form>
   );

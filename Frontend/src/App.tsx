@@ -11,6 +11,7 @@ import Register from "./pages/Register";
 import AddApplication from "./pages/AddApplication";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
+import EditApplication from "./pages/EditApplication";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               <Route path="/applications">
                 <Route index element={<Applications />} />
                 <Route path="add" element={<AddApplication />} />
+                <Route path="edit/:id" element={<EditApplication />} />
               </Route>
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/profile" element={<Profile />} />

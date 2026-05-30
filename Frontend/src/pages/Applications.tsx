@@ -9,6 +9,7 @@ import SearchIcon from "../assets/images/search.svg?react";
 import StatusFilter from "../assets/images/statusFilter.svg?react";
 import Calendar from "../assets/images/calendar.svg?react";
 import Add from "../assets/images/add.svg?react";
+import Edit from "../assets/images/edit.svg?react";
 import type { JobApplication } from "../types/types";
 import { useNavigate } from "react-router";
 
@@ -223,7 +224,7 @@ const Applications = () => {
             sortedApplications.map((app: JobApplication) => (
               <div
                 key={app.id}
-                className="flex flex-col gap-2 rounded-2xl bg-surface-container-low p-4 shadow-sm"
+                className="flex flex-col group gap-2 rounded-2xl bg-surface-container-low p-4 shadow-sm relative"
               >
                 <div className="flex items-start justify-between">
                   <div>
@@ -239,6 +240,18 @@ const Applications = () => {
                   >
                     {app.status}
                   </span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => navigate(`/applications/edit/${app.id}`)}
+                    className="group-hover:flex hidden absolute bottom-4 right-6"
+                  >
+                    <Edit
+                      width={18}
+                      height={18}
+                      color="text-on-surface-secondary"
+                    />
+                  </Button>
                 </div>
                 {app.appliedAt && (
                   <p className="text-label-md text-on-surface-variant">
