@@ -86,7 +86,7 @@ const Applications = () => {
 
   const { searchQuery, setSearchQuery, filteredItems } = useSearch({
     items: filteredByStatus,
-    searchKeys: ["company", "title"]
+    searchKeys: ["company", "title", "location"]
   });
 
   const sortedApplications = useMemo(() => {
@@ -119,107 +119,100 @@ const Applications = () => {
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 relative">
       {isMobile && <Header />}
-      <main className="flex flex-col ">
-        <div className="flex justify-between">
-          <h2 className="mt-6 text-page-title text-on-surface inline-block">
+      <main className="flex flex-col pb-10">
+        <div>
+          {/* <div className="flex justify-between relative"> */}
+          <h2 className="mt-6 text-page-title text-on-surface">
             Active Pursuits
           </h2>
-          <Button
-            onClick={() => navigate("/applications/add")}
-            className="absolute z-10 bottom-28 right-4 rounded-full px-4 py-4 h-12"
-            size="md"
-            variant="primary"
-          >
-            <Add fill="#fff" />
-          </Button>
+          {/* </div> */}
+          <p className="mt-4 text-body-lg text-on-surface-secondary">
+            Managing {sortedApplications.length} ongoing professional
+            trajectories.
+          </p>
         </div>
-        <p className="mt-4 text-body-lg text-on-surface-secondary">
-          Managing {sortedApplications.length} ongoing professional
-          trajectories.
-        </p>
+        <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center">
+          <div className="md:w-96">
+            <Input
+              value={searchQuery}
+              placeholder="Search by company or role..."
+              onChange={(e) => setSearchQuery(e.target.value)}
+              startIcon={<SearchIcon />}
+            />
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  setIsFilterOpen((prev) => !prev);
+                  setIsSortOpen(false);
+                }}
+              >
+                <span>
+                  <StatusFilter />
+                </span>
+                <span className="text-action">{selectedFilter}</span>
+              </Button>
 
-        <div className="mt-6">
-          <Input
-            value={searchQuery}
-            placeholder="Search by company or role..."
-            onChange={(e) => setSearchQuery(e.target.value)}
-            startIcon={<SearchIcon />}
-          />
-        </div>
+              {isFilterOpen && (
+                <div className={dropdownClassName}>
+                  {["All", "Applied", "Interviewing", "Offer", "Rejected"].map(
+                    (filter) => (
+                      <Button
+                        variant="ghost"
+                        key={filter}
+                        type="button"
+                        onClick={() => {
+                          setSelectedFilter(filter);
+                          setIsFilterOpen(false);
+                        }}
+                        className="block w-full px-3 py-2 text-left text-body-md text-on-surface hover:bg-surface-container"
+                      >
+                        <span>{filter}</span>
+                      </Button>
+                    )
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="relative">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  setIsSortOpen((prev) => !prev);
+                  setIsFilterOpen(false);
+                }}
+              >
+                <span>
+                  <Calendar />
+                </span>
+                <span className="text-action">{sortBy}</span>
+              </Button>
 
-        <div className="mt-4 flex items-center gap-3">
-          <div className="relative">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => {
-                setIsFilterOpen((prev) => !prev);
-                setIsSortOpen(false);
-              }}
-            >
-              <span>
-                <StatusFilter />
-              </span>
-              <span className="text-action">{selectedFilter}</span>
-            </Button>
-
-            {isFilterOpen && (
-              <div className={dropdownClassName}>
-                {["All", "Applied", "Interviewing", "Offer", "Rejected"].map(
-                  (filter) => (
+              {isSortOpen && (
+                <div className={dropdownClassName}>
+                  {SORT_METHODS.map((method) => (
                     <Button
                       variant="ghost"
-                      key={filter}
+                      key={method}
                       type="button"
                       onClick={() => {
-                        setSelectedFilter(filter);
-                        setIsFilterOpen(false);
+                        setSortBy(method);
+                        setIsSortOpen(false);
                       }}
                       className="block w-full px-3 py-2 text-left text-body-md text-on-surface hover:bg-surface-container"
                     >
-                      <span>{filter}</span>
+                      <span>{method}</span>
                     </Button>
-                  )
-                )}
-              </div>
-            )}
-          </div>
-          <div className="relative">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => {
-                setIsSortOpen((prev) => !prev);
-                setIsFilterOpen(false);
-              }}
-            >
-              <span>
-                <Calendar />
-              </span>
-              <span className="text-action">{sortBy}</span>
-            </Button>
-
-            {isSortOpen && (
-              <div className={dropdownClassName}>
-                {SORT_METHODS.map((method) => (
-                  <Button
-                    variant="ghost"
-                    key={method}
-                    type="button"
-                    onClick={() => {
-                      setSortBy(method);
-                      setIsSortOpen(false);
-                    }}
-                    className="block w-full px-3 py-2 text-left text-body-md text-on-surface hover:bg-surface-container"
-                  >
-                    <span>{method}</span>
-                  </Button>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-
         <div className="mt-8 flex flex-col gap-4">
           {isLoading ? (
             <p className="text-body-md text-on-surface-variant">
@@ -244,6 +237,7 @@ const Applications = () => {
                     </h3>
                     <p className="text-card-meta text-on-surface-secondary mt-1">
                       {app.company}
+                      {app.location ? ` • ${app.location}` : ""}
                     </p>
                   </div>
                   <span
@@ -272,7 +266,15 @@ const Applications = () => {
               </div>
             ))
           )}
-        </div>
+        </div>{" "}
+        <Button
+          onClick={() => navigate("/applications/add")}
+          className="fixed z-10 bottom-24 right-8 rounded-full px-4 py-4 h-12"
+          size="md"
+          variant="primary"
+        >
+          <Add fill="#fff" />
+        </Button>
         {hasMore && (
           <Button
             type="button"

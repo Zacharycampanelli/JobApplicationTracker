@@ -12,6 +12,7 @@ export type JobApplication = {
   id: number;
   title: string;
   company: string;
+  location?: string | null;
   status: JobStatus;
   appliedAt: string;
   notes?: string | null;

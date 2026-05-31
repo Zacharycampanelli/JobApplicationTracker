@@ -11,6 +11,7 @@ import type { Resume } from "../../types/types";
 const applicationSchema = z.object({
   title: z.string().min(1, "Title is required"),
   company: z.string().min(1, "Company is required"),
+  location: z.string().optional(),
   status: z.enum(["APPLIED", "INTERVIEW", "REJECTED", "OFFER"]),
   appliedAt: z.coerce.date().optional(),
   notes: z.string().optional(),
@@ -77,6 +78,13 @@ const ApplicationForm = ({
         label="JOB TITLE"
         placeholder="e.g. Software Engineer"
         error={errors.title?.message}
+      />
+      <Input
+        id="location"
+        {...register("location")}
+        label="JOB LOCATION"
+        placeholder="e.g. Austin, TX or Remote"
+        error={errors.location?.message}
       />
       <Select
         id="status"

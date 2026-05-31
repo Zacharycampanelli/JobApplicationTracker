@@ -64,6 +64,7 @@ const AddApplication = () => {
         defaultValues={{
           title: "",
           company: "",
+          location: "",
           status: "APPLIED",
           appliedAt: new Date().toISOString().slice(0, 10),
           notes: "",

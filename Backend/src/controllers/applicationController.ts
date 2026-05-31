@@ -13,6 +13,7 @@ export const getAllApplications = async (req: AuthRequest, res: Response) => {
         id: true,
         title: true,
         company: true,
+        location: true,
         status: true,
         appliedAt: true,
         notes: true,
@@ -62,7 +63,7 @@ export const createApplication = async (req: AuthRequest, res: Response) => {
     if (!req.user) {
       return res.status(401).json({ error: 'Not authorized' });
     }
-    const { title, company, status, appliedAt, notes, link } = req.body;
+    const { title, company, location, status, appliedAt, notes, link } = req.body;
 
     if (!title || !company || !status) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -101,6 +102,7 @@ export const createApplication = async (req: AuthRequest, res: Response) => {
       data: {
         title,
         company,
+        location: typeof location === 'string' && location.trim() ? location.trim() : null,
         status,
         appliedAt: parsedAppliedAt,
         notes,
@@ -121,7 +123,7 @@ export const updateApplication = async (req: AuthRequest, res: Response) => {
     if (!req.user) {
       return res.status(401).json({ error: 'Not authorized' });
     }
-    const { title, company, status, appliedAt, notes, link } = req.body;
+    const { title, company, location, status, appliedAt, notes, link } = req.body;
 
     const id = Number(req.params.id);
 
@@ -180,6 +182,7 @@ export const updateApplication = async (req: AuthRequest, res: Response) => {
       data: {
         title,
         company,
+        location: typeof location === 'string' && location.trim() ? location.trim() : null,
         status,
         appliedAt: parsedAppliedAt,
         notes,

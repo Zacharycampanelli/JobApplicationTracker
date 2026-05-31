@@ -34,6 +34,7 @@ model JobApplication {
   id        Int      @id @default(autoincrement())
   title     String
   company   String
+  location  String?
   status    JobStatus
   appliedAt DateTime @default(now())
   notes     String?
