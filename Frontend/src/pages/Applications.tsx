@@ -37,6 +37,12 @@ const Applications = () => {
   const isMobile = !isTabletUp;
   const navigate = useNavigate();
 
+  // For tablet and up
+  const INITIAL_VISIBLE_COUNT = 5;
+  const LOAD_MORE_COUNT = 5;
+  // On mobile, always show all, otherwise show initial count
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
+
   // Store the fetched applications
   const [applications, setApplications] = useState<JobApplication[]>([]);
 
@@ -105,21 +111,26 @@ const Applications = () => {
     });
   }, [filteredItems, sortBy]);
 
+  const visibleApplications = isTabletUp
+    ? sortedApplications.slice(0, visibleCount)
+    : sortedApplications;
+  const hasMore = isTabletUp && visibleCount < sortedApplications.length;
+
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4">
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 relative">
       {isMobile && <Header />}
-      <main className="flex flex-col">
+      <main className="flex flex-col ">
         <div className="flex justify-between">
           <h2 className="mt-6 text-page-title text-on-surface inline-block">
             Active Pursuits
           </h2>
           <Button
             onClick={() => navigate("/applications/add")}
-            className="mt-6"
-            size="sm"
-            variant="secondary"
+            className="absolute z-10 bottom-28 right-4 rounded-full px-4 py-4 h-12"
+            size="md"
+            variant="primary"
           >
-            <Add />
+            <Add fill="#fff" />
           </Button>
         </div>
         <p className="mt-4 text-body-lg text-on-surface-secondary">
@@ -216,12 +227,12 @@ const Applications = () => {
             </p>
           ) : errorMessage ? (
             <p className="text-body-md text-error">{errorMessage}</p>
-          ) : sortedApplications.length === 0 ? (
+          ) : visibleApplications.length === 0 ? (
             <p className="text-body-md text-on-surface-variant">
               No applications found.
             </p>
           ) : (
-            sortedApplications.map((app: JobApplication) => (
+            visibleApplications.map((app: JobApplication) => (
               <div
                 key={app.id}
                 className="flex flex-col group gap-2 rounded-2xl bg-surface-container-low p-4 shadow-sm relative"
@@ -244,7 +255,7 @@ const Applications = () => {
                     type="button"
                     variant="ghost"
                     onClick={() => navigate(`/applications/edit/${app.id}`)}
-                    className="group-hover:flex hidden absolute bottom-4 right-6"
+                    className="group-hover:flex md:hidden absolute bottom-8 md:bottom-4 right-6"
                   >
                     <RightArrow
                       width={18}
@@ -262,6 +273,16 @@ const Applications = () => {
             ))
           )}
         </div>
+        {hasMore && (
+          <Button
+            type="button"
+            onClick={() => setVisibleCount((prev) => prev + LOAD_MORE_COUNT)}
+            variant="secondary"
+            className="mx-auto mt-6"
+          >
+            Load More
+          </Button>
+        )}
       </main>
     </div>
   );
