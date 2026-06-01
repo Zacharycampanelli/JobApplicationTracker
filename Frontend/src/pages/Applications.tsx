@@ -12,6 +12,7 @@ import Add from "../assets/images/add.svg?react";
 import RightArrow from "../assets/images/rightArrow.svg?react";
 import type { JobApplication } from "../types/types";
 import { useNavigate } from "react-router";
+import CompanyLogo from "../components/ui/CompanyLogo";
 
 const statusClassMap: Record<string, string> = {
   APPLIED: "status-applied",
@@ -68,7 +69,6 @@ const Applications = () => {
 
     fetchApps();
   }, []);
-
   // Pre-filter applications by status before passing to search
   const filteredByStatus = applications.filter((app: any) => {
     if (selectedFilter === "All") return true;
@@ -230,18 +230,31 @@ const Applications = () => {
                 key={app.id}
                 className="flex flex-col group gap-2 rounded-2xl bg-surface-container-low p-4 shadow-sm relative"
               >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="text-card-title text-on-surface">
-                      {app.title}
-                    </h3>
-                    <p className="text-card-meta text-on-surface-secondary mt-1">
-                      {app.company}
-                      {app.location ? ` • ${app.location}` : ""}
-                    </p>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex min-w-0 flex-1 items-start gap-4">
+                    {isTabletUp && (
+                      <CompanyLogo
+                        url={app?.link || undefined}
+                        company={app.company}
+                      />
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-card-title text-on-surface">
+                        {app.title}
+                      </h3>
+                      <p className="mt-1 text-card-meta text-on-surface-secondary">
+                        {app.company}
+                        {app.location ? ` • ${app.location}` : ""}
+                      </p>
+                      {app.appliedAt && (
+                        <p className="mt-2 text-label-md text-on-surface-variant">
+                          Applied: {new Date(app.appliedAt).toLocaleDateString()}
+                        </p>
+                      )}
+                    </div>
                   </div>
                   <span
-                    className={`rounded-full px-3 py-1 text-status ${statusClassMap[app.status] ?? "status-applied"}`}
+                    className={`shrink-0 rounded-full px-3 py-1 text-status ${statusClassMap[app.status] ?? "status-applied"}`}
                   >
                     {app.status}
                   </span>
@@ -258,11 +271,6 @@ const Applications = () => {
                     />
                   </Button>
                 </div>
-                {app.appliedAt && (
-                  <p className="text-label-md text-on-surface-variant">
-                    Applied: {new Date(app.appliedAt).toLocaleDateString()}
-                  </p>
-                )}
               </div>
             ))
           )}
