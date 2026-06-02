@@ -36,6 +36,7 @@ const Applications = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
+  const isDesktopUp = useBreakpoint("xl");
   const navigate = useNavigate();
 
   // For tablet and up
@@ -131,7 +132,7 @@ const Applications = () => {
             trajectories.
           </p>
         </div>
-        <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center">
+        <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="md:w-96">
             <Input
               value={searchQuery}
@@ -228,9 +229,9 @@ const Applications = () => {
             visibleApplications.map((app: JobApplication) => (
               <div
                 key={app.id}
-                className="flex flex-col group gap-2 rounded-2xl bg-surface-container-low p-4 shadow-sm relative"
+                className="flex flex-col group gap-2 rounded-2xl  xl:w-1/3  bg-surface-container-low p-4 shadow-sm relative"
               >
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start justify-between gap-4 md:items-center">
                   <div className="flex min-w-0 flex-1 items-start gap-4">
                     {isTabletUp && (
                       <CompanyLogo
@@ -247,12 +248,23 @@ const Applications = () => {
                         {app.location ? ` • ${app.location}` : ""}
                       </p>
                       {app.appliedAt && (
-                        <p className="mt-2 text-label-md text-on-surface-variant">
-                          Applied: {new Date(app.appliedAt).toLocaleDateString()}
+                        <p className="mt-2 text-label-md text-on-surface-variant md:hidden">
+                          Applied:{" "}
+                          {new Date(app.appliedAt).toLocaleDateString()}
                         </p>
                       )}
                     </div>
                   </div>
+                  {app.appliedAt && (
+                    <div className="hidden shrink-0 text-left md:block md:min-w-28">
+                      <p className="text-label-md text-on-surface-secondary uppercase">
+                        Applied
+                      </p>
+                      <p className="text-label-md text-on-surface-variant">
+                        {new Date(app.appliedAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                  )}
                   <span
                     className={`shrink-0 rounded-full px-3 py-1 text-status ${statusClassMap[app.status] ?? "status-applied"}`}
                   >
@@ -262,7 +274,7 @@ const Applications = () => {
                     type="button"
                     variant="ghost"
                     onClick={() => navigate(`/applications/edit/${app.id}`)}
-                    className="group-hover:flex md:hidden absolute bottom-8 md:bottom-4 right-6"
+                    className="group-hover:flex md:static absolute bottom-8 right-6"
                   >
                     <RightArrow
                       width={18}
@@ -277,11 +289,12 @@ const Applications = () => {
         </div>{" "}
         <Button
           onClick={() => navigate("/applications/add")}
-          className="fixed z-10 bottom-24 right-8 rounded-full px-4 py-4 h-12"
+          className="fixed z-10 bottom-24 right-8 px-4 py-4 h-12 md:absolute md:top-10 "
           size="md"
           variant="primary"
         >
           <Add fill="#fff" />
+          {isTabletUp ? "New Entry" : ""}
         </Button>
         {hasMore && (
           <Button

@@ -31,7 +31,6 @@ const CompanyLogo = ({ url, company }: CompanyLogoProps) => {
         className="w-6 h-6"
         onError={() => setImageError(true)}
       />
-      ;
     </div>
   );
 };

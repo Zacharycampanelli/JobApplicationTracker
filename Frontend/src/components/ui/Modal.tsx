@@ -58,7 +58,7 @@ const Modal = ({
 
         <div className="mt-6 flex justify-end gap-3">
           {footer ?? (
-            <Button variant="danger" onClick={() => handleClose()}>
+            <Button onClick={() => handleClose()}>
               {closeText || ""}
             </Button>
           )}
