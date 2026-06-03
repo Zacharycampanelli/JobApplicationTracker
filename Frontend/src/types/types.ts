@@ -35,3 +35,10 @@ export type Resume = {
   applications: JobApplication[];
   createdAt: string;
 };
+
+export const statusClassMap: Record<string, string> = {
+  APPLIED: "status-applied",
+  INTERVIEW: "status-interview",
+  OFFER: "status-offer",
+  REJECTED: "status-rejected"
+};

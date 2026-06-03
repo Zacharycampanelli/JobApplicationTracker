@@ -13,13 +13,7 @@ import RightArrow from "../assets/images/rightArrow.svg?react";
 import type { JobApplication } from "../types/types";
 import { useNavigate } from "react-router";
 import CompanyLogo from "../components/ui/CompanyLogo";
-
-const statusClassMap: Record<string, string> = {
-  APPLIED: "status-applied",
-  INTERVIEW: "status-interview",
-  OFFER: "status-offer",
-  REJECTED: "status-rejected"
-};
+import StatusClassBadge from "../components/ui/StatusClassBadge";
 
 const SORT_METHODS = ["Newest", "Oldest", "Title", "Company"] as const;
 type SortMethod = (typeof SORT_METHODS)[number];
@@ -214,7 +208,7 @@ const Applications = () => {
             </div>
           </div>
         </div>
-        <div className="mt-8 flex flex-col gap-4">
+        <div className="mt-8 flex flex-col gap-4 xl:grid xl:grid-cols-3">
           {isLoading ? (
             <p className="text-body-md text-on-surface-variant">
               Loading Applications...
@@ -229,17 +223,27 @@ const Applications = () => {
             visibleApplications.map((app: JobApplication) => (
               <div
                 key={app.id}
-                className="flex flex-col group gap-2 rounded-2xl  xl:w-1/3  bg-surface-container-low p-4 shadow-sm relative"
+                className="flex flex-col group gap-2 rounded-2xl bg-surface-container-low p-4 shadow-sm relative"
               >
-                <div className="flex items-start justify-between gap-4 md:items-center">
-                  <div className="flex min-w-0 flex-1 items-start gap-4">
-                    {isTabletUp && (
+                <div className="flex items-start justify-between gap-4 md:items-center xl:flex-col xl:items-stretch">
+                  <div className="flex min-w-0 flex-1 items-start gap-4 xl:flex-col">
+                    {/* Tablet layout logo */}
+                    <div className="hidden md:block xl:hidden">
                       <CompanyLogo
                         url={app?.link || undefined}
                         company={app.company}
                       />
-                    )}
-                    <div className="min-w-0 flex-1">
+                    </div>
+
+                    {/* Desktop layout logo + status */}
+                    <div className="hidden xl:flex xl:items-start xl:justify-between xl:w-full">
+                      <CompanyLogo
+                        url={app?.link || undefined}
+                        company={app.company}
+                      />
+                      <StatusClassBadge status={app.status} />
+                    </div>
+                    <div className="min-w-0 flex-1 xl:min-h-[76px]">
                       <h3 className="text-card-title text-on-surface">
                         {app.title}
                       </h3>
@@ -256,7 +260,7 @@ const Applications = () => {
                     </div>
                   </div>
                   {app.appliedAt && (
-                    <div className="hidden shrink-0 text-left md:block md:min-w-28">
+                    <div className="hidden shrink-0 text-left md:block md:min-w-28 xl:hidden">
                       <p className="text-label-md text-on-surface-secondary uppercase">
                         Applied
                       </p>
@@ -265,23 +269,26 @@ const Applications = () => {
                       </p>
                     </div>
                   )}
-                  <span
-                    className={`shrink-0 rounded-full px-3 py-1 text-status ${statusClassMap[app.status] ?? "status-applied"}`}
-                  >
-                    {app.status}
-                  </span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={() => navigate(`/applications/edit/${app.id}`)}
-                    className="group-hover:flex md:static absolute bottom-8 right-6"
-                  >
-                    <RightArrow
-                      width={18}
-                      height={18}
-                      color="text-on-surface-secondary"
-                    />
-                  </Button>
+                  <StatusClassBadge status={app.status} className="xl:hidden" />
+                  {app.appliedAt && (
+                    <div className="hidden border-t border-outline-variant pt-3 xl:flex xl:items-center xl:justify-between">
+                      <p className="text-label-md uppercase text-on-surface-variant">
+                        {new Date(app.appliedAt).toLocaleDateString()}
+                      </p>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={() => navigate(`/applications/edit/${app.id}`)}
+                        className="group-hover:flex md:static absolute bottom-8 right-6"
+                      >
+                        <RightArrow
+                          width={18}
+                          height={18}
+                          color="text-on-surface-secondary"
+                        />
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))
