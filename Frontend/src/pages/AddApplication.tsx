@@ -2,7 +2,6 @@ import ApplicationForm, {
   type ApplicationValues
 } from "../components/ui/ApplicationForm";
 import Header from "../components/layout/Header";
-import ResumeManager from "../components/ui/ResumeManager";
 import { useBreakpoint } from "../utils/useBreakpoint";
 import { getAllResumes } from "../features/resumeApi";
 import { useEffect, useState } from "react";
@@ -54,10 +53,18 @@ const AddApplication = () => {
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4">
       {isMobile && <Header />}
       <h2 className="mt-6 mb-6 text-page-title text-on-surface">
-        Add Application
+        Application Entry
       </h2>
+      <p className="text-body-lg text-on-surface mb-8">
+        Log your professional journey. Maintain the ledger with precision to
+        track every opportunity in your career pipeline.
+      </p>
       <ApplicationForm
         resumes={resumes}
+        isLoadingResumes={isLoading}
+        resumeError={error}
+        emptyResumes={empty}
+        onResumesChanged={loadResumes}
         onSubmit={onSubmit}
         onCancel={() => setIsCancelModalOpen(true)}
         newOrEdit="new"
@@ -70,13 +77,6 @@ const AddApplication = () => {
           notes: "",
           link: ""
         }}
-      />
-      <ResumeManager
-        isLoading={isLoading}
-        error={error}
-        empty={empty}
-        resumes={resumes}
-        onResumesChanged={loadResumes}
       />
       <Modal
         title="Success!"

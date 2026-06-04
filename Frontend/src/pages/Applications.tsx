@@ -243,7 +243,7 @@ const Applications = () => {
             Load More
           </Button>
         )}
-        <div className="flex gap-4">
+        <div className="hidden xl:flex xl:gap-4 ">
           <Card className="bg-primary-container flex-2 shadow-sm">
             <h4 className="text-primary text-body-lg">Success Rate</h4>
             <span className="text-primary text-[32px]">

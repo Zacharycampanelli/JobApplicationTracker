@@ -1,7 +1,7 @@
 import Button from "./Button";
 import Input from "./Input";
 import Link from "../../assets/images/link.svg?react";
-import ResumeSelect from "./ResumeSelect";
+import ResumeManager from "./ResumeManager";
 import Select from "./Select";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
@@ -35,6 +35,10 @@ export type ApplicationValues = z.output<typeof applicationSchema>;
 
 type ApplicationFormProps = {
   resumes: Resume[];
+  isLoadingResumes: boolean;
+  resumeError: string;
+  emptyResumes: boolean;
+  onResumesChanged: () => void;
   onSubmit: (values: ApplicationValues) => Promise<void>;
   onCancel: () => void;
   onDelete?: () => void;
@@ -44,6 +48,10 @@ type ApplicationFormProps = {
 
 const ApplicationForm = ({
   resumes,
+  isLoadingResumes,
+  resumeError,
+  emptyResumes,
+  onResumesChanged,
   onSubmit,
   onCancel,
   onDelete,
@@ -64,7 +72,10 @@ const ApplicationForm = ({
   const selectedResumeId = useWatch({ control, name: "resumeId" });
 
   return (
-    <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="flex flex-col gap-4 md:grid md:grid-cols-2"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Input
         id="company"
         {...register("company")}
@@ -102,17 +113,10 @@ const ApplicationForm = ({
       <Input
         id="appliedAt"
         {...register("appliedAt")}
-        label="STATUS"
+        label="DATE APPLIED"
         type="date"
         placeholder="e.g. 2022-01-01"
         error={errors.appliedAt?.message}
-      />
-      <Input
-        id="notes"
-        {...register("notes")}
-        label="NOTES"
-        placeholder="Document interview highlights, referral contacts, or preparation notes..."
-        error={errors.notes?.message}
       />
       <Input
         id="link"
@@ -122,7 +126,17 @@ const ApplicationForm = ({
         error={errors.link?.message}
         startIcon={<Link />}
       />
-      <ResumeSelect
+      <Input
+        id="notes"
+        {...register("notes")}
+        label="NOTES"
+        placeholder="Document interview highlights, referral contacts, or preparation notes..."
+        error={errors.notes?.message}
+      />
+      <ResumeManager
+        isLoading={isLoadingResumes}
+        error={resumeError}
+        empty={emptyResumes}
         resumes={resumes}
         selectedResumeId={selectedResumeId}
         onSelectResume={(resumeId) =>
@@ -131,6 +145,7 @@ const ApplicationForm = ({
             shouldValidate: true
           })
         }
+        onResumesChanged={onResumesChanged}
       />
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting

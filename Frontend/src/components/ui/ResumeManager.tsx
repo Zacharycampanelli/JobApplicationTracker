@@ -12,6 +12,8 @@ type ResumeManagerProps = {
   empty: boolean;
   resumes: Resume[];
   onResumesChanged: () => void;
+  selectedResumeId?: number;
+  onSelectResume?: (resumeId: number) => void;
 };
 
 const ResumeManager = ({
@@ -19,7 +21,9 @@ const ResumeManager = ({
   error,
   empty,
   resumes,
-  onResumesChanged
+  onResumesChanged,
+  selectedResumeId,
+  onSelectResume
 }: ResumeManagerProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -37,7 +41,7 @@ const ResumeManager = ({
   };
 
   return (
-    <Card className="mt-8 bg-surface-container">
+    <Card className="bg-surface-container md:col-span-2">
       <div className="flex flex-col gap-5">
         <span className="flex items-center gap-2 text-primary">
           <ResumeIcon />
@@ -58,7 +62,8 @@ const ResumeManager = ({
                 <SingleResume
                   key={resume.id}
                   resume={resume}
-                  selected={false}
+                  selected={selectedResumeId === resume.id}
+                  onClick={() => onSelectResume?.(resume.id)}
                   deletable
                   onDeleteSuccess={onResumesChanged}
                 />

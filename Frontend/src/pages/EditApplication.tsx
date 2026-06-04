@@ -11,7 +11,6 @@ import { useParams, useNavigate } from "react-router";
 import { getAllResumes } from "../features/resumeApi";
 import Header from "../components/layout/Header";
 import ApplicationForm from "../components/ui/ApplicationForm";
-import ResumeManager from "../components/ui/ResumeManager";
 import Modal from "../components/ui/Modal";
 import Button from "../components/ui/Button";
 
@@ -85,18 +84,15 @@ const EditApplication = () => {
       </h2>
       <ApplicationForm
         resumes={resumes}
+        isLoadingResumes={isLoading}
+        resumeError={error}
+        emptyResumes={empty}
+        onResumesChanged={loadResumes}
         onSubmit={onSubmit}
         onCancel={() => setIsCancelModalOpen(true)}
         onDelete={() => setIsDeleteModalOpen(true)}
         newOrEdit="edit"
         defaultValues={defaultValues}
-      />
-      <ResumeManager
-        isLoading={isLoading}
-        error={error}
-        empty={empty}
-        resumes={resumes}
-        onResumesChanged={loadResumes}
       />
       <Modal
         title="Success!"
