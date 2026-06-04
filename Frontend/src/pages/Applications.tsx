@@ -9,11 +9,11 @@ import SearchIcon from "../assets/images/search.svg?react";
 import StatusFilter from "../assets/images/statusFilter.svg?react";
 import Calendar from "../assets/images/calendar.svg?react";
 import Add from "../assets/images/add.svg?react";
-import RightArrow from "../assets/images/rightArrow.svg?react";
 import type { JobApplication } from "../types/types";
 import { useNavigate } from "react-router";
-import CompanyLogo from "../components/ui/CompanyLogo";
-import StatusClassBadge from "../components/ui/StatusClassBadge";
+import ApplicationCard from "../components/ui/ApplicationCard";
+import Card from "../components/ui/Card";
+import { interviewRate, successRate, totalLeadsRate } from "../utils/getStats";
 
 const SORT_METHODS = ["Newest", "Oldest", "Title", "Company"] as const;
 type SortMethod = (typeof SORT_METHODS)[number];
@@ -30,7 +30,6 @@ const Applications = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
-  const isDesktopUp = useBreakpoint("xl");
   const navigate = useNavigate();
 
   // For tablet and up
@@ -114,7 +113,7 @@ const Applications = () => {
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 relative">
       {isMobile && <Header />}
-      <main className="flex flex-col pb-10">
+      <main className="flex flex-col pb-10 gap-9">
         <div>
           {/* <div className="flex justify-between relative"> */}
           <h2 className="mt-6 text-page-title text-on-surface">
@@ -221,79 +220,10 @@ const Applications = () => {
             </p>
           ) : (
             visibleApplications.map((app: JobApplication) => (
-              <div
-                key={app.id}
-                className="flex flex-col group gap-2 rounded-2xl bg-surface-container-low p-4 shadow-sm relative"
-              >
-                <div className="flex items-start justify-between gap-4 md:items-center xl:flex-col xl:items-stretch">
-                  <div className="flex min-w-0 flex-1 items-start gap-4 xl:flex-col">
-                    {/* Tablet layout logo */}
-                    <div className="hidden md:block xl:hidden">
-                      <CompanyLogo
-                        url={app?.link || undefined}
-                        company={app.company}
-                      />
-                    </div>
-
-                    {/* Desktop layout logo + status */}
-                    <div className="hidden xl:flex xl:items-start xl:justify-between xl:w-full">
-                      <CompanyLogo
-                        url={app?.link || undefined}
-                        company={app.company}
-                      />
-                      <StatusClassBadge status={app.status} />
-                    </div>
-                    <div className="min-w-0 flex-1 xl:min-h-[76px]">
-                      <h3 className="text-card-title text-on-surface">
-                        {app.title}
-                      </h3>
-                      <p className="mt-1 text-card-meta text-on-surface-secondary">
-                        {app.company}
-                        {app.location ? ` • ${app.location}` : ""}
-                      </p>
-                      {app.appliedAt && (
-                        <p className="mt-2 text-label-md text-on-surface-variant md:hidden">
-                          Applied:{" "}
-                          {new Date(app.appliedAt).toLocaleDateString()}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  {app.appliedAt && (
-                    <div className="hidden shrink-0 text-left md:block md:min-w-28 xl:hidden">
-                      <p className="text-label-md text-on-surface-secondary uppercase">
-                        Applied
-                      </p>
-                      <p className="text-label-md text-on-surface-variant">
-                        {new Date(app.appliedAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                  )}
-                  <StatusClassBadge status={app.status} className="xl:hidden" />
-                  {app.appliedAt && (
-                    <div className="hidden border-t border-outline-variant pt-3 xl:flex xl:items-center xl:justify-between">
-                      <p className="text-label-md uppercase text-on-surface-variant">
-                        {new Date(app.appliedAt).toLocaleDateString()}
-                      </p>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        onClick={() => navigate(`/applications/edit/${app.id}`)}
-                        className="group-hover:flex md:static absolute bottom-8 right-6"
-                      >
-                        <RightArrow
-                          width={18}
-                          height={18}
-                          color="text-on-surface-secondary"
-                        />
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </div>
+              <ApplicationCard key={app.id} app={app} />
             ))
           )}
-        </div>{" "}
+        </div>
         <Button
           onClick={() => navigate("/applications/add")}
           className="fixed z-10 bottom-24 right-8 px-4 py-4 h-12 md:absolute md:top-10 "
@@ -313,6 +243,36 @@ const Applications = () => {
             Load More
           </Button>
         )}
+        <div className="flex gap-4">
+          <Card className="bg-primary-container flex-2 shadow-sm">
+            <h4 className="text-primary text-body-lg">Success Rate</h4>
+            <span className="text-primary text-[32px]">
+              {successRate(applications)}%
+            </span>
+            <progress
+              className="w-full h-4 rounded-full overflow-hidden appearance-none
+         [&::-webkit-progress-bar]:bg-surface-container-lowest 
+         [&::-webkit-progress-value]:bg-primary 
+         [&::-moz-progress-bar]:bg-primary"
+              max="100"
+              value={successRate(applications)}
+            >
+              {successRate(applications) + "%"}
+            </progress>
+          </Card>
+          <Card className="bg-surface-container-low flex-1 shadow-sm">
+            <h4 className="text-on-surface text-body-lg">Total Leads</h4>
+            <span className="text-on-surface text-[24px]">
+              {totalLeadsRate(applications)}
+            </span>
+          </Card>
+          <Card className="bg-surface-container-low flex-1 shadow-sm">
+            <h4 className="text-on-surface text-body-lg">Interviews</h4>
+            <span className="text-on-surface text-[24px]">
+              {interviewRate(applications)}
+            </span>
+          </Card>
+        </div>
       </main>
     </div>
   );
