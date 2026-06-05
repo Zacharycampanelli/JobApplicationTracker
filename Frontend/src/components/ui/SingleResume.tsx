@@ -58,7 +58,11 @@ const SingleResume = ({
           </span>
         </span>
       </button>
-      {deletable && <button onClick={handleDelete}>X</button>}
+      {deletable && (
+        <button onClick={handleDelete} className="md:">
+          X
+        </button>
+      )}
     </div>
   );
 };

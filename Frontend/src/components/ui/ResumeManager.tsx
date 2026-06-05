@@ -56,7 +56,7 @@ const ResumeManager = ({
             No resumes uploaded
           </p>
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 md:grid md:grid-cols-2 xl:grid-cols-3">
             {resumes &&
               resumes.map((resume) => (
                 <SingleResume
@@ -68,23 +68,25 @@ const ResumeManager = ({
                   onDeleteSuccess={onResumesChanged}
                 />
               ))}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center justify-center gap-3 rounded-card border border-dashed border-outline-variant px-4 py-5 text-body-md text-on-surface-secondary transition hover:bg-surface-container-high"
+            >
+              <Add />
+              <span className="max-w-36 text-center">
+                Upload New Asset Version
+              </span>
+            </button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
+              accept=".pdf,.doc,.docx"
+              onChange={handleFileChange}
+            />
           </div>
         )}
-        <button
-          type="button"
-          onClick={() => fileInputRef.current?.click()}
-          className="flex items-center justify-center gap-3 rounded-card border border-dashed border-outline-variant px-4 py-5 text-body-md text-on-surface-secondary transition hover:bg-surface-container-high"
-        >
-          <Add />
-          <span className="max-w-36 text-center">Upload New Asset Version</span>
-        </button>
-        <input
-          type="file"
-          ref={fileInputRef}
-          className="hidden"
-          accept=".pdf,.doc,.docx"
-          onChange={handleFileChange}
-        />
       </div>
     </Card>
   );

@@ -77,11 +77,24 @@ const EditApplication = () => {
   if (error) return <p>{error}</p>;
   if (!defaultValues) return <p>Application not found</p>;
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4">
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 md:relative">
       {isMobile && <Header />}
-      <h2 className="mt-6 mb-6 text-page-title text-on-surface">
-        Edit Application
-      </h2>
+      <div className="flex items-center justify-between">
+        <h2 className="mt-6 mb-6 text-page-title text-on-surface flex-1">
+          Application Adjustment
+        </h2>
+        <Button
+          type="button"
+          variant="danger"
+          onClick={() => setIsDeleteModalOpen(true)}
+          className="w-1/3 flex-0 md:hidden"
+        >
+          Delete
+        </Button>
+      </div>
+      <p className="text-body-lg text-on-surface mb-8">
+        Refine the spatial parameters of your career progression.
+      </p>
       <ApplicationForm
         resumes={resumes}
         isLoadingResumes={isLoading}
@@ -94,6 +107,16 @@ const EditApplication = () => {
         newOrEdit="edit"
         defaultValues={defaultValues}
       />
+      <div className="hidden md:flex md:w-full md:justify-end">
+        <Button
+          type="button"
+          variant="danger"
+          onClick={() => setIsDeleteModalOpen(true)}
+          className="w-fit mt-8"
+        >
+          Delete Application
+        </Button>
+      </div>
       <Modal
         title="Success!"
         isOpen={isSuccessModalOpen}

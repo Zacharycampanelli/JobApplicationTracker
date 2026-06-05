@@ -1,4 +1,3 @@
-import Button from "./Button";
 import Input from "./Input";
 import Link from "../../assets/images/link.svg?react";
 import ResumeManager from "./ResumeManager";
@@ -7,6 +6,8 @@ import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Resume } from "../../types/types";
+import Textarea from "./Textarea";
+import ApplicationFormActions from "./ApplicationFormActions";
 
 const applicationSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -126,13 +127,17 @@ const ApplicationForm = ({
         error={errors.link?.message}
         startIcon={<Link />}
       />
-      <Input
-        id="notes"
-        {...register("notes")}
-        label="NOTES"
-        placeholder="Document interview highlights, referral contacts, or preparation notes..."
-        error={errors.notes?.message}
-      />
+      <div className="md:col-span-2 md:mb-4">
+        <Textarea
+          id="notes"
+          {...register("notes")}
+          label="NOTES"
+          rows={4}
+          placeholder="Document interview highlights, referral contacts, or preparation notes..."
+          error={errors.notes?.message}
+          className="md:col-span-2"
+        />
+      </div>
       <ResumeManager
         isLoading={isLoadingResumes}
         error={resumeError}
@@ -147,21 +152,20 @@ const ApplicationForm = ({
         }
         onResumesChanged={onResumesChanged}
       />
-      <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting
-          ? "Submitting..."
-          : newOrEdit === "new"
-            ? "Add Application"
-            : "Update Application"}
-      </Button>
-      <Button type="button" variant="secondary" onClick={onCancel}>
-        Cancel
-      </Button>
-      {newOrEdit === "edit" && onDelete && (
-        <Button type="button" variant="danger" onClick={onDelete}>
-          Delete Application
-        </Button>
-      )}
+      <div className="flex flex-col gap-3 justify-between md:hidden">
+        <ApplicationFormActions
+          isSubmitting={isSubmitting}
+          newOrEdit={newOrEdit}
+          onCancel={onCancel}
+        />
+      </div>
+      <div className="hidden md:flex md:flex-row md:col-span-2 justify-between md:absolute md:right-8 md:top-10 md:gap-4">
+        <ApplicationFormActions
+          isSubmitting={isSubmitting}
+          newOrEdit={newOrEdit}
+          onCancel={onCancel}
+        />
+      </div>
     </form>
   );
 };
