@@ -3,7 +3,7 @@ import Header from "../components/layout/Header";
 import Input from "../components/ui/Input";
 import { useBreakpoint } from "../utils/useBreakpoint";
 import { useSearch } from "../utils/useSearch";
-import { getAllApplications } from "../features/applicationApi";
+import { getAllApplications } from "../features/applications/applicationApi";
 import Button from "../components/ui/Button";
 import SearchIcon from "../assets/images/search.svg?react";
 import StatusFilter from "../assets/images/statusFilter.svg?react";
@@ -11,7 +11,7 @@ import Calendar from "../assets/images/calendar.svg?react";
 import Add from "../assets/images/add.svg?react";
 import type { JobApplication } from "../types/types";
 import { useNavigate } from "react-router";
-import ApplicationCard from "../components/ui/ApplicationCard";
+import ApplicationCard from "../features/applications/components/ApplicationCard";
 import Card from "../components/ui/Card";
 import { interviewRate, successRate, totalLeadsRate } from "../utils/getStats";
 

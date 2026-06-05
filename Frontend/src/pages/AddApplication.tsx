@@ -1,13 +1,13 @@
 import ApplicationForm, {
   type ApplicationValues
-} from "../components/ui/ApplicationForm";
+} from "../features/applications/components/ApplicationForm";
 import Header from "../components/layout/Header";
 import { useBreakpoint } from "../utils/useBreakpoint";
-import { getAllResumes } from "../features/resumeApi";
+import { getAllResumes } from "../features/resumes/resumeApi";
 import { useEffect, useState } from "react";
 import type { Resume } from "../types/types";
 import Modal from "../components/ui/Modal";
-import { createApplication } from "../features/applicationApi";
+import { createApplication } from "../features/applications/applicationApi";
 import Button from "../components/ui/Button";
 import { useNavigate } from "react-router";
 

@@ -1,10 +1,10 @@
-import Card from "./Card";
-import ResumeIcon from "../../assets/images/resume.svg?react";
-import type { Resume } from "../../types/types";
+import Card from "../../../components/ui/Card";
+import ResumeIcon from "../../../assets/images/resume.svg?react";
+import type { Resume } from "../../../types/types";
 import SingleResume from "./SingleResume";
-import Add from "../../assets/images/add.svg?react";
+import Add from "../../../assets/images/add.svg?react";
 import { useRef } from "react";
-import { uploadResume } from "../../features/resumeApi";
+import { uploadResume } from "../resumeApi";
 
 type ResumeManagerProps = {
   isLoading: boolean;

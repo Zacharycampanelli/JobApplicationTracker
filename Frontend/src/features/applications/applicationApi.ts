@@ -1,5 +1,5 @@
-import { api } from "../api/api";
-import type { ApplicationValues } from "../components/ui/ApplicationForm";
+import { api } from "../../api/api";
+import type { ApplicationValues } from "./components/ApplicationForm";
 
 export const getAllApplications = () => {
   return api("api/applications");

@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { useBreakpoint } from "../utils/useBreakpoint";
-import type { ApplicationValues } from "../components/ui/ApplicationForm";
+import type { ApplicationValues } from "../features/applications/components/ApplicationForm";
 import type { Resume } from "../types/types";
 import {
   deleteApplication,
   getSingleApplication,
   updateApplication
-} from "../features/applicationApi";
+} from "../features/applications/applicationApi";
 import { useParams, useNavigate } from "react-router";
-import { getAllResumes } from "../features/resumeApi";
+import { getAllResumes } from "../features/resumes/resumeApi";
 import Header from "../components/layout/Header";
-import ApplicationForm from "../components/ui/ApplicationForm";
+import ApplicationForm from "../features/applications/components/ApplicationForm";
 import Modal from "../components/ui/Modal";
 import Button from "../components/ui/Button";
 
@@ -103,7 +103,6 @@ const EditApplication = () => {
         onResumesChanged={loadResumes}
         onSubmit={onSubmit}
         onCancel={() => setIsCancelModalOpen(true)}
-        onDelete={() => setIsDeleteModalOpen(true)}
         newOrEdit="edit"
         defaultValues={defaultValues}
       />

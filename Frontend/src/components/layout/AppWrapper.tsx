@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-import Navbar from "../ui/Navbar";
+import Navbar from "./Navbar";
 
 const AppWrapper = () => {
   return (

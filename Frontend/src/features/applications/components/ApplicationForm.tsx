@@ -1,12 +1,12 @@
-import Input from "./Input";
-import Link from "../../assets/images/link.svg?react";
-import ResumeManager from "./ResumeManager";
-import Select from "./Select";
+import Input from "../../../components/ui/Input";
+import Link from "../../../assets/images/link.svg?react";
+import ResumeManager from "../../resumes/components/ResumeManager";
+import Select from "../../../components/ui/Select";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Resume } from "../../types/types";
-import Textarea from "./Textarea";
+import type { Resume } from "../../../types/types";
+import Textarea from "../../../components/ui/Textarea";
 import ApplicationFormActions from "./ApplicationFormActions";
 
 const applicationSchema = z.object({
@@ -42,7 +42,6 @@ type ApplicationFormProps = {
   onResumesChanged: () => void;
   onSubmit: (values: ApplicationValues) => Promise<void>;
   onCancel: () => void;
-  onDelete?: () => void;
   newOrEdit: "new" | "edit";
   defaultValues?: Partial<ApplicationFormValues>;
 };
@@ -55,7 +54,6 @@ const ApplicationForm = ({
   onResumesChanged,
   onSubmit,
   onCancel,
-  onDelete,
   newOrEdit,
   defaultValues
 }: ApplicationFormProps) => {

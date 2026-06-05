@@ -1,5 +1,5 @@
-import { useBreakpoint } from "../../utils/useBreakpoint";
-import Button from "./Button";
+import { useBreakpoint } from "../../../utils/useBreakpoint";
+import Button from "../../../components/ui/Button";
 
 type ApplicationFormActionsProps = {
   isSubmitting: boolean;

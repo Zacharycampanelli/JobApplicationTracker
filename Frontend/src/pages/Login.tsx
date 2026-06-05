@@ -5,7 +5,7 @@ import ColorOverlay from "../components/ui/ColorOverlay";
 
 import background from "../assets/images/background.png";
 import { Link } from "react-router";
-import LoginForm from "../components/ui/LoginForm";
+import LoginForm from "../features/auth/components/LoginForm";
 import { useBreakpoint } from "../utils/useBreakpoint";
 
 const Login = () => {

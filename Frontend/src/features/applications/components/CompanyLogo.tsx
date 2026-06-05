@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getInitials } from "../../utils/getInitials";
+import { getInitials } from "../../../utils/getInitials";
 
 type CompanyLogoProps = {
   url?: string;

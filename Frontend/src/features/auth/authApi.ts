@@ -1,6 +1,6 @@
-import { api } from "../api/api";
-import type { LoginValues } from "../components/ui/LoginForm";
-import type { RegistrationValues } from "../components/ui/RegistrationForm";
+import { api } from "../../api/api";
+import type { LoginValues } from "../auth/components/LoginForm";
+import type { RegistrationValues } from "../auth/components/RegistrationForm";
 
 export const register = (data: RegistrationValues) => {
   return api("api/auth/register", {
@@ -14,5 +14,5 @@ export const login = (data: LoginValues) => {
 };
 
 export const getMe = () => {
-  return api("api/auth/me")
-}
+  return api("api/auth/me");
+};

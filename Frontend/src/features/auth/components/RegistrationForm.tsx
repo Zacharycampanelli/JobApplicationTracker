@@ -1,10 +1,10 @@
-import Button from "./Button";
-import Email from "../../assets/images/email.svg?react";
-import Input from "./Input";
-import Person from "../../assets/images/person.svg?react";
-import SideArrow from "../../assets/images/sidearrow.svg?react";
-import { register as registerUser } from "../../features/authApi";
-import { useAuthContext } from "../../context/AuthContext";
+import Button from "../../../components/ui/Button";
+import Email from "../../../assets/images/email.svg?react";
+import Input from "../../../components/ui/Input";
+import Person from "../../../assets/images/person.svg?react";
+import SideArrow from "../../../assets/images/sidearrow.svg?react";
+import { register as registerUser } from "../authApi";
+import { useAuthContext } from "../../../context/AuthContext";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { z } from "zod";

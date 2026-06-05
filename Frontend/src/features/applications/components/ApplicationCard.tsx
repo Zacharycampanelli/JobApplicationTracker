@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router";
-import RightArrow from "../../assets/images/rightArrow.svg?react";
-import Button from "./Button";
+import RightArrow from "../../../assets/images/rightArrow.svg?react";
+import Button from "../../../components/ui/Button";
 import CompanyLogo from "./CompanyLogo";
 import StatusClassBadge from "./StatusClassBadge";
-import type { JobApplication } from "../../types/types";
+import type { JobApplication } from "../../../types/types";
 
 type ApplicationCardProps = {
   app: JobApplication;

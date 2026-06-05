@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge";
-import { statusClassMap } from "../../types/types";
+import { statusClassMap } from "../../../types/types";
 
 type StatusClassBadgeProps = {
   status: string;

@@ -4,7 +4,7 @@ import Card from "../components/ui/Card";
 import ColorOverlay from "../components/ui/ColorOverlay";
 
 import background from "../assets/images/background.png";
-import RegistrationForm from "../components/ui/RegistrationForm";
+import RegistrationForm from "../features/auth/components/RegistrationForm";
 import { Link } from "react-router";
 import { useBreakpoint } from "../utils/useBreakpoint";
 

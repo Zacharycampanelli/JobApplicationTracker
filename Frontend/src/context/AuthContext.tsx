@@ -8,7 +8,7 @@ import {
 
 import type { User } from "../types/types";
 import { useNavigate } from "react-router";
-import { getMe } from "../features/authApi";
+import { getMe } from "../features/auth/authApi";
 
 interface AuthContextType {
   user: User | null;
@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const currentTime = Date.now() / 1000;
       return payload.exp > currentTime;
     } catch (error) {
+      console.error(error);
       return false;
     }
   };

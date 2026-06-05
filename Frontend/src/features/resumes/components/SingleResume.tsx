@@ -1,7 +1,7 @@
-import type { Resume } from "../../types/types";
-import SelectInput from "../../assets/images/selectInput.svg?react";
-import SelectedInput from "../../assets/images/selectedInput.svg?react";
-import { deleteResume } from "../../features/resumeApi";
+import type { Resume } from "../../../types/types";
+import SelectInput from "../../../assets/images/selectInput.svg?react";
+import SelectedInput from "../../../assets/images/selectedInput.svg?react";
+import { deleteResume } from "../resumeApi";
 import type React from "react";
 import { twMerge } from "tailwind-merge";
 
