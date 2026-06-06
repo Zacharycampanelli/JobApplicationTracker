@@ -12,8 +12,8 @@ import Add from "../assets/images/add.svg?react";
 import type { JobApplication } from "../types/types";
 import { useNavigate } from "react-router";
 import ApplicationCard from "../features/applications/components/ApplicationCard";
-import Card from "../components/ui/Card";
 import { interviewRate, successRate, totalLeadsRate } from "../utils/getStats";
+import StatCard from "../components/shared/StatCard";
 
 const SORT_METHODS = ["Newest", "Oldest", "Title", "Company"] as const;
 type SortMethod = (typeof SORT_METHODS)[number];
@@ -244,34 +244,22 @@ const Applications = () => {
           </Button>
         )}
         <div className="hidden xl:flex xl:gap-4 ">
-          <Card className="bg-primary-container flex-2 shadow-sm">
-            <h4 className="text-primary text-body-lg">Success Rate</h4>
-            <span className="text-primary text-[32px]">
-              {successRate(applications)}%
-            </span>
-            <progress
-              className="w-full h-4 rounded-full overflow-hidden appearance-none
-         [&::-webkit-progress-bar]:bg-surface-container-lowest 
-         [&::-webkit-progress-value]:bg-primary 
-         [&::-moz-progress-bar]:bg-primary"
-              max="100"
-              value={successRate(applications)}
-            >
-              {successRate(applications) + "%"}
-            </progress>
-          </Card>
-          <Card className="bg-surface-container-low flex-1 shadow-sm">
-            <h4 className="text-on-surface text-body-lg">Total Leads</h4>
-            <span className="text-on-surface text-[24px]">
-              {totalLeadsRate(applications)}
-            </span>
-          </Card>
-          <Card className="bg-surface-container-low flex-1 shadow-sm">
-            <h4 className="text-on-surface text-body-lg">Interviews</h4>
-            <span className="text-on-surface text-[24px]">
-              {interviewRate(applications)}
-            </span>
-          </Card>
+          <StatCard
+            applications={applications}
+            statFunction={successRate}
+            statName="Success Rate"
+            primaryCard={true}
+          />
+          <StatCard
+            applications={applications}
+            statFunction={totalLeadsRate}
+            statName="Total Leads"
+          />
+          <StatCard
+            applications={applications}
+            statFunction={interviewRate}
+            statName="Interviews"
+          />
         </div>
       </main>
     </div>
