@@ -1,9 +1,8 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Header from "../components/layout/Header";
 import Input from "../components/ui/Input";
 import { useBreakpoint } from "../utils/useBreakpoint";
 import { useSearch } from "../utils/useSearch";
-import { getAllApplications } from "../features/applications/applicationApi";
 import Button from "../components/ui/Button";
 import SearchIcon from "../assets/images/search.svg?react";
 import StatusFilter from "../assets/images/statusFilter.svg?react";
@@ -14,6 +13,7 @@ import { useNavigate } from "react-router";
 import ApplicationCard from "../features/applications/components/ApplicationCard";
 import { interviewRate, successRate, totalLeadsRate } from "../utils/getStats";
 import StatCard from "../components/shared/StatCard";
+import { useApplications } from "../utils/useApplications";
 
 const SORT_METHODS = ["Newest", "Oldest", "Title", "Company"] as const;
 type SortMethod = (typeof SORT_METHODS)[number];
@@ -26,8 +26,6 @@ const Applications = () => {
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [sortBy, setSortBy] = useState<SortMethod>("Newest");
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
   const navigate = useNavigate();
@@ -38,33 +36,10 @@ const Applications = () => {
   // On mobile, always show all, otherwise show initial count
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
 
-  // Store the fetched applications
-  const [applications, setApplications] = useState<JobApplication[]>([]);
-
   // Fetch applications when the component mounts
-  useEffect(() => {
-    const fetchApps = async () => {
-      try {
-        setIsLoading(true);
-        setErrorMessage(null);
+  const { applications, isLoading, errorMessage } = useApplications(); // Pre-filter applications by status before passing to search
 
-        const data = await getAllApplications();
-        setApplications(data);
-      } catch (error) {
-        setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : "Failed to load applications."
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchApps();
-  }, []);
-  // Pre-filter applications by status before passing to search
-  const filteredByStatus = applications.filter((app: any) => {
+  const filteredByStatus = applications.filter((app: JobApplication) => {
     if (selectedFilter === "All") return true;
 
     // Map the friendly dropdown text to the actual database enum values for filtering
@@ -110,6 +85,8 @@ const Applications = () => {
     : sortedApplications;
   const hasMore = isTabletUp && visibleCount < sortedApplications.length;
 
+  if (isLoading) return <p>Loading...</p>;
+  if (errorMessage) return <p>{errorMessage}</p>;
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 relative">
       {isMobile && <Header />}
