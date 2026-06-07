@@ -4,6 +4,8 @@ import { useAuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 import { useBreakpoint } from "../utils/useBreakpoint";
 import StatCard from "../components/shared/StatCard";
+import careerPlanning from "../assets/images/CareerPlanning.png";
+
 import {
   applicationCount,
   interviewRate,
@@ -11,6 +13,31 @@ import {
   totalLeadsRate
 } from "../utils/getStats";
 import { useApplications } from "../utils/useApplications";
+import Resume from "../assets/images/resume.svg?react";
+import SuccessApp from "../assets/images/successApp.svg?react";
+import Medal from "../assets/images/medal.svg?react";
+import Add from "../assets/images/add.svg?react";
+
+const stats = [
+  {
+    statFunction: applicationCount,
+    statName: "Total Applications",
+    icon: Resume,
+    primaryCard: true
+  },
+
+  {
+    statFunction: interviewRate,
+    statName: "Interviews",
+    icon: SuccessApp
+  },
+
+  {
+    statFunction: successRate,
+    statName: "Offers",
+    icon: Medal
+  }
+];
 
 const Dashboard = () => {
   const { user } = useAuthContext();
@@ -18,7 +45,7 @@ const Dashboard = () => {
   const isMobile = !isTabletUp;
   const navigate = useNavigate();
   const { applications, isLoading, errorMessage } = useApplications(); // Pre-filter applications by status before passing to search
-
+  console.log(Resume);
   if (isLoading) return <p>Loading...</p>;
   if (errorMessage) return <p>{errorMessage}</p>;
   return (
@@ -37,26 +64,41 @@ const Dashboard = () => {
             </p>
           </div>
         </div>
-        <div className="flex flex-col gap-2 items-center">
-          <StatCard
-            applications={applications}
-            statFunction={applicationCount}
-            statName="Total Applications"
-            primaryCard
-            className=""
-          />
-          <StatCard
-            applications={applications}
-            statFunction={interviewRate}
-            statName="Interviews"
-            className=""
-          />
-          <StatCard
-            applications={applications}
-            statFunction={successRate}
-            statName="Offers"
-            className=""
-          />
+        <div className="flex flex-col gap-6 items-center">
+          {stats.map((stat, index) => (
+            <StatCard
+              key={index}
+              applications={applications}
+              statFunction={stat.statFunction}
+              statName={stat.statName}
+              primaryCard={stat.primaryCard}
+              icon={stat.icon}
+              index={index}
+            />
+          ))}
+          <div
+            className="flex flex-col justify-center items-center aspect-square w-95 relative rounded-full overflow-hidden bg-cover bg-center shrink-0 mt-6 gap-8"
+            style={{
+              backgroundImage: `radial-gradient(circle, rgba(37, 99, 235, 0.4) 0%, rgba(0, 0, 0, 0.5) 95%), url(${careerPlanning})`
+            }}
+          >
+            <div className="absolute inset-0 bg-blue-500 opacity-50 mix-blend-multiply"></div>
+            <h5 className="text-card-title text-white text-center z-10">
+              Architect your future.
+            </h5>
+            <p className="text-white text-body-lg z-10 text-justify px-10 mt-4">
+              Every entry in your ledger is a step closer to the next milestone
+              in your professional journey.
+            </p>
+            <Button
+              variant="ghost"
+              className="bg-white z-10 mt-4 text-primary"
+              onClick={() => navigate("/applications/add")}
+            >
+              <Add />
+              Quick Add
+            </Button>
+          </div>
         </div>
         <div className="hidden md:block">
           <Button
