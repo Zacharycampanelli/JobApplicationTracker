@@ -1,10 +1,24 @@
 import { NavLink } from "react-router";
+import DashboardNav from "../../assets/images/dashboardNav.svg?react";
+import AppsNav from "../../assets/images/appsNav.svg?react";
+import AnalyticsNav from "../../assets/images/analyticsNav.svg?react";
+import ProfileNav from "../../assets/images/profileNav.svg?react";
 
 const navItems = [
-  { to: "/", label: "Dashboard" },
-  { to: "/applications", label: "Applications" },
-  { to: "/analytics", label: "Analytics" },
-  { to: "/profile", label: "Profile" },
+  { to: "/", label: "Dashboard", mobileLabel: "Home", icon: DashboardNav },
+  {
+    to: "/applications",
+    label: "Applications",
+    mobileLabel: "Apps",
+    icon: AppsNav
+  },
+  {
+    to: "/analytics",
+    label: "Analytics",
+    mobileLabel: "Stats",
+    icon: AnalyticsNav
+  },
+  { to: "/profile", label: "Profile", mobileLabel: "Profile", icon: ProfileNav }
 ];
 
 const baseLinkClasses =
@@ -15,23 +29,24 @@ const Navbar = () => {
     <>
       {/* Mobile Bottom Navbar */}
       <nav className="fixed inset-x-0 bottom-0 z-50 bg-surface-container-lowest/80 backdrop-blur-xl md:hidden">
-        <div className="mx-auto grid max-w-md grid-cols-4 gap-2 px-3 py-3">
-          {navItems.map((item) => (
+        <div className="mx-auto grid max-w-md grid-cols-4 gap-1 px-2 py-2">
+          {navItems.map(({ to, mobileLabel, icon: Icon }) => (
             <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === "/"}
+              key={to}
+              to={to}
+              end={to === "/"}
               className={({ isActive }) =>
                 [
                   baseLinkClasses,
-                  "min-h-12 px-2 py-2",
+                  "min-h-12 px-1 py-1 gap-1 text-center flex flex-col",
                   isActive
                     ? "bg-primary text-white"
-                    : "bg-transparent text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface",
+                    : "bg-transparent text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
                 ].join(" ")
               }
             >
-              {item.label}
+              <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
+              <span className="max-w-full truncate">{mobileLabel}</span>
             </NavLink>
           ))}
         </div>
@@ -47,21 +62,22 @@ const Navbar = () => {
         </div>
 
         <nav className="flex flex-col gap-2">
-          {navItems.map((item) => (
+          {navItems.map(({ to, label, icon: Icon }) => (
             <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === "/"}
+              key={to}
+              to={to}
+              end={to === "/"}
               className={({ isActive }) =>
                 [
-                  "rounded-card px-4 py-3 text-left text-nav-label uppercase transition-colors",
+                  "flex items-center rounded-card px-4 py-3 text-left text-nav-label uppercase transition-colors",
                   isActive
                     ? "bg-primary text-white"
-                    : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface",
+                    : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
                 ].join(" ")
               }
             >
-              {item.label}
+              <Icon className="mr-2 shrink-0" />
+              {label}
             </NavLink>
           ))}
         </nav>
