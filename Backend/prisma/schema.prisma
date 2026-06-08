@@ -30,6 +30,22 @@ enum JobStatus {
   REJECTED
 }
 
+enum ApplicationSource {
+  LINKEDIN
+  INDEED
+  COMPANY_SITE
+  REFERRAL
+  RECRUITER
+  NETWORKING
+  OTHER
+}
+
+enum WorkMode {
+  REMOTE
+  HYBRID
+  ONSITE
+}
+
 model JobApplication {
   id        Int      @id @default(autoincrement())
   title     String
@@ -39,10 +55,25 @@ model JobApplication {
   appliedAt DateTime @default(now())
   notes     String?
   link      String?
+  source    ApplicationSource?
+  workMode  WorkMode?
+  
   resumeId  Int?
   resume    Resume?   @relation(fields: [resumeId], references: [id], onDelete: SetNull)
   userId    Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  salaryMin Int?
+  salaryMax Int?
+
+  firstResponseAt DateTime?
+  interviewAt DateTime?
+  offerAt DateTime?
+  rejectedAt DateTime?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
 }
 
 model Resume {

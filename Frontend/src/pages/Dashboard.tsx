@@ -99,6 +99,7 @@ const Dashboard = () => {
               Quick Add
             </Button>
           </div>
+          Recent activity - coming soon daily insights - coming soon
         </div>
         <div className="hidden md:block">
           <Button
