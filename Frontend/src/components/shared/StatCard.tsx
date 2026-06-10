@@ -62,7 +62,7 @@ const StatCard = ({
         <progress
           className="w-full h-4 rounded-full overflow-hidden appearance-none [&::-webkit-progress-bar]:bg-surface-container-lowest [&::-webkit-progress-value]:bg-primary [&::-moz-progress-bar]:bg-primary"
           max="100"
-          value={statFunction(applications)}
+          value={statFunction(applications).toLocaleString()}
         >
           {statFunction(applications) + "%"}
         </progress>

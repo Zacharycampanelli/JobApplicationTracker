@@ -4,21 +4,51 @@ type ParsedApplicationData = {
   title: string;
   company: string;
   status: JobStatus;
-  link?: string;
-  source?: ApplicationSource;
-  salaryMin?: number;
-  salaryMax?: number;
+  link?: string | null;
+  source?: ApplicationSource | null;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
   location?: string | null;
-  notes?: string;
-  workMode?: WorkMode;
+  notes?: string | null;
+  workMode?: WorkMode | null;
   appliedAt?: Date;
-  firstResponseAt?: Date;
-  interviewAt?: Date;
-  offerAt?: Date;
-  rejectedAt?: Date;
+  firstResponseAt?: Date | null;
+  interviewAt?: Date | null;
+  offerAt?: Date | null;
+  rejectedAt?: Date | null;
 };
 
 type ParseApplicationPayloadResult = { success: false; error: string } | { success: true; data: ParsedApplicationData };
+
+const parseOptionalDate = (value: unknown, label: string) => {
+  if (value === undefined) return { success: true as const, value: undefined };
+  if (value === null || value === '') return { success: true as const, value: null };
+
+  const date = new Date(String(value));
+
+  if (Number.isNaN(date.getTime())) {
+    return { success: false as const, error: `Invalid ${label} date` };
+  }
+
+  return { success: true as const, value: date };
+};
+const parseOptionalNumber = (value: unknown, label: string) => {
+  if (value === undefined) return { success: true as const, value: undefined };
+  if (value === null || value === '') return { success: true as const, value: null };
+
+  const num = Number(value);
+
+  if (Number.isNaN(num)) {
+    return { success: false as const, error: `Invalid ${label} number` };
+  }
+
+  return { success: true as const, value: num };
+};
+
+const toDateOnly = (value: Date | null | undefined) => {
+  if (!value) return value;
+  return value.toISOString().slice(0, 10);
+};
 
 export const parseApplicationPayload = (applicationData: any): ParseApplicationPayloadResult => {
   const {
@@ -57,46 +87,73 @@ export const parseApplicationPayload = (applicationData: any): ParseApplicationP
     return { success: false, error: 'Invalid work mode' };
   }
 
-  const parsedAppliedAt = appliedAt ? new Date(appliedAt) : undefined;
-  if (parsedAppliedAt && isNaN(parsedAppliedAt.getTime())) {
-    return { success: false, error: 'Invalid applied date' };
+  if (!appliedAt) {
+    return { success: false, error: 'Applied date is required' };
   }
 
-  const parsedFirstResponseAt = firstResponseAt ? new Date(firstResponseAt) : undefined;
-  if (parsedFirstResponseAt && isNaN(parsedFirstResponseAt.getTime())) {
-    return { success: false, error: 'Invalid first response date' };
+  const parsedAppliedAt = new Date(appliedAt);
+
+  const parsedFirstResponseAt = parseOptionalDate(firstResponseAt, 'first response');
+  if (!parsedFirstResponseAt.success) {
+    return { success: false, error: parsedFirstResponseAt.error };
+  }
+  const parsedInterviewAt = parseOptionalDate(interviewAt, 'interview');
+  if (!parsedInterviewAt.success) {
+    return { success: false, error: parsedInterviewAt.error };
+  }
+  const parsedOfferAt = parseOptionalDate(offerAt, 'offer');
+  if (!parsedOfferAt.success) {
+    return { success: false, error: parsedOfferAt.error };
+  }
+  const parsedRejectedAt = parseOptionalDate(rejectedAt, 'rejected');
+  if (!parsedRejectedAt.success) {
+    return { success: false, error: parsedRejectedAt.error };
   }
 
-  const parsedInterviewAt = interviewAt ? new Date(interviewAt) : undefined;
-  if (parsedInterviewAt && isNaN(parsedInterviewAt.getTime())) {
-    return { success: false, error: 'Invalid interview date' };
-  }
+  const appliedDateOnly = toDateOnly(parsedAppliedAt);
+  const firstResponseDateOnly = toDateOnly(parsedFirstResponseAt.value);
+  const interviewDateOnly = toDateOnly(parsedInterviewAt.value);
+  const offerDateOnly = toDateOnly(parsedOfferAt.value);
+  const rejectedDateOnly = toDateOnly(parsedRejectedAt.value);
 
-  const parsedOfferAt = offerAt ? new Date(offerAt) : undefined;
-  if (parsedOfferAt && isNaN(parsedOfferAt.getTime())) {
-    return { success: false, error: 'Invalid offer date' };
-  }
-
-  const parsedRejectedAt = rejectedAt ? new Date(rejectedAt) : undefined;
-  if (parsedRejectedAt && isNaN(parsedRejectedAt.getTime())) {
-    return { success: false, error: 'Invalid rejected date' };
-  }
-
-  if (parsedFirstResponseAt && parsedAppliedAt && parsedFirstResponseAt < parsedAppliedAt) {
+  if (firstResponseDateOnly && appliedDateOnly && firstResponseDateOnly < appliedDateOnly) {
     return { success: false, error: 'First response cannot be before applied date' };
   }
 
-  const parsedSalaryMin = salaryMin ? Number(salaryMin) : undefined;
-  if (parsedSalaryMin !== undefined && Number.isNaN(parsedSalaryMin)) {
-    return { success: false, error: 'Invalid minimum salary' };
+  if (
+    (status === 'INTERVIEW' || status === 'OFFER') &&
+    interviewDateOnly &&
+    appliedDateOnly &&
+    interviewDateOnly < appliedDateOnly
+  ) {
+    return { success: false, error: 'Interview date cannot be before applied date' };
   }
 
-  const parsedSalaryMax = salaryMax ? Number(salaryMax) : undefined;
-  if (parsedSalaryMax !== undefined && Number.isNaN(parsedSalaryMax)) {
-    return { success: false, error: 'Invalid maximum salary' };
+  if (status === 'OFFER' && offerDateOnly && interviewDateOnly && offerDateOnly < interviewDateOnly) {
+    return { success: false, error: 'Offer date cannot be before interview date' };
   }
 
-  if (parsedSalaryMin !== undefined && parsedSalaryMax !== undefined && parsedSalaryMin >= parsedSalaryMax) {
+  if (status === 'REJECTED' && rejectedDateOnly && appliedDateOnly && rejectedDateOnly < appliedDateOnly) {
+    return { success: false, error: 'Rejected date cannot be before applied date' };
+  }
+
+  const parsedSalaryMin = parseOptionalNumber(salaryMin, 'minimum salary');
+  if (!parsedSalaryMin.success) {
+    return { success: false, error: parsedSalaryMin.error };
+  }
+
+  const parsedSalaryMax = parseOptionalNumber(salaryMax, 'maximum salary');
+  if (!parsedSalaryMax.success) {
+    return { success: false, error: parsedSalaryMax.error };
+  }
+
+  if (
+    parsedSalaryMin.value !== undefined &&
+    parsedSalaryMin.value !== null &&
+    parsedSalaryMax.value !== undefined &&
+    parsedSalaryMax.value !== null &&
+    parsedSalaryMin.value >= parsedSalaryMax.value
+  ) {
     return { success: false, error: 'Minimum salary must be less than maximum salary' };
   }
 
@@ -106,18 +163,18 @@ export const parseApplicationPayload = (applicationData: any): ParseApplicationP
       title,
       company,
       status: status as JobStatus,
-      link,
-      source: source ? (source as ApplicationSource) : undefined,
-      salaryMin: parsedSalaryMin,
-      salaryMax: parsedSalaryMax,
+      link: typeof link === 'string' && link.trim() ? link.trim() : null,
+      salaryMin: parsedSalaryMin.value,
+      salaryMax: parsedSalaryMax.value,
       location: typeof location === 'string' && location.trim() ? location.trim() : null,
-      notes,
-      workMode: workMode ? (workMode as WorkMode) : undefined,
+      notes: typeof notes === 'string' && notes.trim() ? notes.trim() : null,
+      source: source === null || source === '' ? null : source ? (source as ApplicationSource) : undefined,
+      workMode: workMode === null || workMode === '' ? null : workMode ? (workMode as WorkMode) : undefined,
       appliedAt: parsedAppliedAt,
-      firstResponseAt: parsedFirstResponseAt,
-      interviewAt: parsedInterviewAt,
-      offerAt: parsedOfferAt,
-      rejectedAt: parsedRejectedAt,
+      firstResponseAt: parsedFirstResponseAt.value,
+      interviewAt: parsedInterviewAt.value,
+      offerAt: parsedOfferAt.value,
+      rejectedAt: parsedRejectedAt.value,
     },
   };
 };

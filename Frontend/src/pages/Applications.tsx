@@ -90,7 +90,7 @@ const Applications = () => {
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 relative">
       {isMobile && <Header />}
-      <main className="flex flex-col pb-10 gap-9">
+      <main className="flex flex-col pb-10 gap-6">
         <div>
           {/* <div className="flex justify-between relative"> */}
           <h2 className="mt-6 text-page-title text-on-surface">
@@ -102,8 +102,8 @@ const Applications = () => {
             trajectories.
           </p>
         </div>
-        <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div className="md:w-96">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div className="w-full md:min-w-96">
             <Input
               value={searchQuery}
               placeholder="Search by company or role..."
@@ -111,26 +111,33 @@ const Applications = () => {
               startIcon={<SearchIcon />}
             />
           </div>
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => {
-                  setIsFilterOpen((prev) => !prev);
-                  setIsSortOpen(false);
-                }}
-              >
-                <span>
-                  <StatusFilter />
-                </span>
-                <span className="text-action">{selectedFilter}</span>
-              </Button>
+          <div className="flex items-center md:justify-between gap-3">
+            <div className="flex justify-end w-full">
+              <div className="relative w-full mx-2 md:w-auto md:min-w-28">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => {
+                    setIsFilterOpen((prev) => !prev);
+                    setIsSortOpen(false);
+                  }}
+                  className="w-full"
+                >
+                  <span>
+                    <StatusFilter />
+                  </span>
+                  <span className="text-action">{selectedFilter}</span>
+                </Button>
 
-              {isFilterOpen && (
-                <div className={dropdownClassName}>
-                  {["All", "Applied", "Interviewing", "Offer", "Rejected"].map(
-                    (filter) => (
+                {isFilterOpen && (
+                  <div className={dropdownClassName}>
+                    {[
+                      "All",
+                      "Applied",
+                      "Interviewing",
+                      "Offer",
+                      "Rejected"
+                    ].map((filter) => (
                       <Button
                         variant="ghost"
                         key={filter}
@@ -143,44 +150,45 @@ const Applications = () => {
                       >
                         <span>{filter}</span>
                       </Button>
-                    )
-                  )}
-                </div>
-              )}
-            </div>
-            <div className="relative">
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => {
-                  setIsSortOpen((prev) => !prev);
-                  setIsFilterOpen(false);
-                }}
-              >
-                <span>
-                  <Calendar />
-                </span>
-                <span className="text-action">{sortBy}</span>
-              </Button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="relative w-full mx-2 md:w-auto">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => {
+                    setIsSortOpen((prev) => !prev);
+                    setIsFilterOpen(false);
+                  }}
+                  className="w-full"
+                >
+                  <span>
+                    <Calendar />
+                  </span>
+                  <span className="text-action">{sortBy}</span>
+                </Button>
 
-              {isSortOpen && (
-                <div className={dropdownClassName}>
-                  {SORT_METHODS.map((method) => (
-                    <Button
-                      variant="ghost"
-                      key={method}
-                      type="button"
-                      onClick={() => {
-                        setSortBy(method);
-                        setIsSortOpen(false);
-                      }}
-                      className="block w-full px-3 py-2 text-left text-body-md text-on-surface hover:bg-surface-container"
-                    >
-                      <span>{method}</span>
-                    </Button>
-                  ))}
-                </div>
-              )}
+                {isSortOpen && (
+                  <div className={dropdownClassName}>
+                    {SORT_METHODS.map((method) => (
+                      <Button
+                        variant="ghost"
+                        key={method}
+                        type="button"
+                        onClick={() => {
+                          setSortBy(method);
+                          setIsSortOpen(false);
+                        }}
+                        className="block w-full px-3 py-2 text-left text-body-md text-on-surface hover:bg-surface-container"
+                      >
+                        <span>{method}</span>
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

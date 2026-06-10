@@ -10,6 +10,11 @@ type ApplicationCardProps = {
 };
 
 const ApplicationCard = ({ app }: ApplicationCardProps) => {
+  const formatDateOnly = (date: string) => {
+    const [year, month, day] = date.slice(0, 10).split("-");
+    return `${Number(month)}/${Number(day)}/${year}`;
+  };
+
   const navigate = useNavigate();
   return (
     <div
@@ -39,7 +44,7 @@ const ApplicationCard = ({ app }: ApplicationCardProps) => {
 
             {app.appliedAt && (
               <p className="mt-4 text-label-md text-on-surface-variant md:hidden">
-                Applied: {new Date(app.appliedAt).toLocaleDateString()}
+                Applied: {formatDateOnly(app.appliedAt)}
               </p>
             )}
           </div>
@@ -50,7 +55,7 @@ const ApplicationCard = ({ app }: ApplicationCardProps) => {
               Applied
             </p>
             <p className="text-label-md text-on-surface-variant">
-              {new Date(app.appliedAt).toLocaleDateString()}
+              {formatDateOnly(app.appliedAt)}
             </p>
           </div>
         )}
@@ -70,7 +75,7 @@ const ApplicationCard = ({ app }: ApplicationCardProps) => {
         {app.appliedAt && (
           <div className="hidden border-t border-outline-variant pt-3 xl:flex xl:items-center xl:justify-between">
             <p className="text-label-md uppercase text-on-surface-variant">
-              {new Date(app.appliedAt).toLocaleDateString()}
+              {formatDateOnly(app.appliedAt)}
             </p>
             <Button
               type="button"

@@ -29,6 +29,7 @@ const EditApplication = () => {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [defaultValues, setDefaultValues] = useState<ApplicationValues>();
+  const [submitError, setSubmitError] = useState("");
 
   useEffect(() => {
     if (!id) return;
@@ -36,7 +37,11 @@ const EditApplication = () => {
       const application = await getSingleApplication(Number(id));
       setDefaultValues({
         ...application,
-        appliedAt: application.appliedAt?.slice(0, 10)
+        appliedAt: application.appliedAt?.slice(0, 10),
+        firstResponseAt: application.firstResponseAt?.slice(0, 10) ?? null,
+        interviewAt: application.interviewAt?.slice(0, 10) ?? null,
+        offerAt: application.offerAt?.slice(0, 10) ?? null,
+        rejectedAt: application.rejectedAt?.slice(0, 10) ?? null
       });
     };
     getApplication();
@@ -63,8 +68,16 @@ const EditApplication = () => {
   }, []);
 
   const onSubmit = async (values: ApplicationValues) => {
-    await updateApplication(Number(id), values);
-    setIsSuccessModalOpen(true);
+    console.log(values);
+    try {
+      setSubmitError("");
+      await updateApplication(Number(id), values);
+      setIsSuccessModalOpen(true);
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : "Failed to update application"
+      );
+    }
   };
 
   const handleDelete = async () => {
@@ -105,6 +118,7 @@ const EditApplication = () => {
         onCancel={() => setIsCancelModalOpen(true)}
         newOrEdit="edit"
         defaultValues={defaultValues}
+        submitError={submitError}
       />
       <div className="hidden md:flex md:w-full md:justify-end">
         <Button

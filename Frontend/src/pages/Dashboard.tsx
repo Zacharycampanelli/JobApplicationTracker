@@ -9,8 +9,7 @@ import careerPlanning from "../assets/images/CareerPlanning.png";
 import {
   applicationCount,
   interviewRate,
-  successRate,
-  totalLeadsRate
+  successRate
 } from "../utils/getStats";
 import { useApplications } from "../utils/useApplications";
 import Resume from "../assets/images/resume.svg?react";

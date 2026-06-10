@@ -8,30 +8,83 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { Resume } from "../../../types/types";
 import Textarea from "../../../components/ui/Textarea";
 import ApplicationFormActions from "./ApplicationFormActions";
+import AdditionalFormOptions from "./AdditionalFormOptions";
+import { useState } from "react";
+import Button from "../../../components/ui/Button";
+import ChevronDown from "../../../assets/images/chevronDown.svg?react";
 
-const applicationSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  company: z.string().min(1, "Company is required"),
-  location: z.string().optional(),
-  status: z.enum(["APPLIED", "INTERVIEW", "REJECTED", "OFFER"]),
-  appliedAt: z.coerce.date().optional(),
-  notes: z.string().optional(),
-  link: z.preprocess(
-    (value) => {
-      if (typeof value !== "string") return value;
-      const trimmedValue = value.trim();
-      if (!trimmedValue) return "";
-      if (/^https?:\/\//i.test(trimmedValue)) {
-        return trimmedValue;
-      }
-      return `https://${trimmedValue}`;
-    },
-    z.string().url("Invalid URL").optional().or(z.literal(""))
-  ),
-  resumeId: z.number().optional()
-});
+const optionalNumber = z.preprocess(
+  (value) => (value === "" || value === null ? null : value),
+  z.coerce.number().nullable().optional()
+);
 
-type ApplicationFormValues = z.input<typeof applicationSchema>;
+const optionalDate = z.preprocess(
+  (value) => (value === "" || value === null ? null : value),
+  z.coerce.date().nullable().optional()
+);
+
+const optionalText = z.preprocess(
+  (value) => (value === null ? "" : value),
+  z.string().optional()
+);
+
+const requiredDate = z.preprocess(
+  (value) => (value === "" || value === null ? undefined : value),
+  z.coerce.date({ error: "Date applied is required" })
+);
+
+const applicationSchema = z
+  .object({
+    title: z.string().min(1, "Title is required"),
+    company: z.string().min(1, "Company is required"),
+    location: optionalText,
+    status: z.enum(["APPLIED", "INTERVIEW", "REJECTED", "OFFER"]),
+    appliedAt: requiredDate,
+    notes: optionalText,
+    link: z.preprocess(
+      (value) => {
+        if (value === null || value === undefined) return "";
+        if (typeof value !== "string") return value;
+        const trimmedValue = value.trim();
+        if (!trimmedValue) return "";
+        if (/^https?:\/\//i.test(trimmedValue)) {
+          return trimmedValue;
+        }
+        return `https://${trimmedValue}`;
+      },
+      z.string().url("Invalid URL").optional().or(z.literal(""))
+    ),
+    source: z
+      .enum([
+        "LINKEDIN",
+        "INDEED",
+        "COMPANY_SITE",
+        "REFERRAL",
+        "RECRUITER",
+        "NETWORKING",
+        "OTHER"
+      ])
+      .nullish(),
+    workMode: z.enum(["REMOTE", "HYBRID", "ONSITE"]).nullish(),
+    salaryMin: optionalNumber,
+    salaryMax: optionalNumber,
+    firstResponseAt: optionalDate,
+    interviewAt: optionalDate,
+    offerAt: optionalDate,
+    rejectedAt: optionalDate,
+    resumeId: optionalNumber
+  })
+  .refine(
+    (data) =>
+      data.salaryMin == null ||
+      data.salaryMax == null ||
+      data.salaryMin < data.salaryMax,
+    {
+      message: "Salary range is invalid",
+      path: ["salaryMax"]
+    }
+  );
+export type ApplicationFormValues = z.input<typeof applicationSchema>;
 export type ApplicationValues = z.output<typeof applicationSchema>;
 
 type ApplicationFormProps = {
@@ -44,6 +97,7 @@ type ApplicationFormProps = {
   onCancel: () => void;
   newOrEdit: "new" | "edit";
   defaultValues?: Partial<ApplicationFormValues>;
+  submitError?: string;
 };
 
 const ApplicationForm = ({
@@ -55,21 +109,22 @@ const ApplicationForm = ({
   onSubmit,
   onCancel,
   newOrEdit,
-  defaultValues
+  defaultValues,
+  submitError
 }: ApplicationFormProps) => {
   const {
     register,
     handleSubmit,
     setValue,
     control,
+    watch,
     formState: { errors, isSubmitting }
   } = useForm<ApplicationFormValues, unknown, ApplicationValues>({
     resolver: zodResolver(applicationSchema),
     defaultValues
   });
-
+  const [additionalValuesShown, setAdditionalValuesShown] = useState(false);
   const selectedResumeId = useWatch({ control, name: "resumeId" });
-
   return (
     <form
       className="flex flex-col gap-4 md:grid md:grid-cols-2"
@@ -141,7 +196,9 @@ const ApplicationForm = ({
         error={resumeError}
         empty={emptyResumes}
         resumes={resumes}
-        selectedResumeId={selectedResumeId}
+        selectedResumeId={
+          typeof selectedResumeId === "number" ? selectedResumeId : undefined
+        }
         onSelectResume={(resumeId) =>
           setValue("resumeId", resumeId, {
             shouldDirty: true,
@@ -150,6 +207,26 @@ const ApplicationForm = ({
         }
         onResumesChanged={onResumesChanged}
       />
+      <div className="flex flex-col">
+        <Button
+          icon={<ChevronDown width="16px" height="16px" />}
+          variant="ghost"
+          type="button"
+          onClick={() => setAdditionalValuesShown((prev) => !prev)}
+        >
+          Additional Information
+        </Button>
+        {additionalValuesShown && (
+          <AdditionalFormOptions
+            status={watch("status")}
+            register={register}
+            errors={errors}
+          />
+        )}
+      </div>
+      {submitError && (
+        <p className="text-label-md text-error md:col-span-2">{submitError}</p>
+      )}
       <div className="flex flex-col gap-3 justify-between md:hidden">
         <ApplicationFormActions
           isSubmitting={isSubmitting}
