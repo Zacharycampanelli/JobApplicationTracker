@@ -21,7 +21,7 @@ const AdditionalFormOptions = ({
   const shouldShowRejected = status === "REJECTED";
 
   return (
-    <div className="mt-4 flex flex-col gap-6">
+    <div className="mt-4 flex flex-col gap-6 md:grid md:grid-cols-2 xl:grid-cols-3">
       <Select
         id="source"
         {...register("source")}

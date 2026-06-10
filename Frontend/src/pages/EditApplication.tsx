@@ -17,6 +17,7 @@ import Button from "../components/ui/Button";
 const EditApplication = () => {
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
+  const isDesktop = useBreakpoint("xl");
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -94,16 +95,16 @@ const EditApplication = () => {
       {isMobile && <Header />}
       <div className="flex items-center justify-between">
         <h2 className="mt-6 mb-6 text-page-title text-on-surface flex-1">
-          Application Adjustment
+          Application {!isDesktop && <br />}Adjustment
         </h2>
-        <Button
+        {/* <Button
           type="button"
           variant="danger"
           onClick={() => setIsDeleteModalOpen(true)}
           className="w-1/3 flex-0 md:hidden"
         >
           Delete
-        </Button>
+        </Button> */}
       </div>
       <p className="text-body-lg text-on-surface mb-8">
         Refine the spatial parameters of your career progression.
@@ -120,12 +121,12 @@ const EditApplication = () => {
         defaultValues={defaultValues}
         submitError={submitError}
       />
-      <div className="hidden md:flex md:w-full md:justify-end">
+      <div className="flex md:w-full md:justify-end">
         <Button
           type="button"
           variant="danger"
           onClick={() => setIsDeleteModalOpen(true)}
-          className="w-fit mt-8"
+          className="w-full md:w-fit mt-3"
         >
           Delete Application
         </Button>

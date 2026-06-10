@@ -15,11 +15,12 @@ const ApplicationFormActions = ({
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
   return (
-    <div className="flex w-full justify-between md:flex-row-reverse md:justify-end xl:flex-col gap-3">
+    <div className="flex flex-col w-full justify-between md:flex-row-reverse md:justify-end md:items-center gap-3 mt-4 md:leading-6">
       <Button
         type="submit"
         size={isMobile ? "lg" : "md"}
         disabled={isSubmitting}
+        className="w-full px-4 py-2"
       >
         {isSubmitting
           ? "Submitting..."
@@ -32,6 +33,7 @@ const ApplicationFormActions = ({
         size={isMobile ? "lg" : "md"}
         variant="secondary"
         onClick={onCancel}
+        className="w-full px-4 py-2"
       >
         Cancel
       </Button>

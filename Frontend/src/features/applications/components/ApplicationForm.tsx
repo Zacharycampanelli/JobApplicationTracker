@@ -126,122 +126,133 @@ const ApplicationForm = ({
   const [additionalValuesShown, setAdditionalValuesShown] = useState(false);
   const selectedResumeId = useWatch({ control, name: "resumeId" });
   return (
-    <form
-      className="flex flex-col gap-4 md:grid md:grid-cols-2"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <Input
-        id="company"
-        {...register("company")}
-        label="COMPANY NAME"
-        placeholder="e.g. Google"
-        error={errors.company?.message}
-      />
-      <Input
-        id="title"
-        {...register("title")}
-        label="JOB TITLE"
-        placeholder="e.g. Software Engineer"
-        error={errors.title?.message}
-      />
-      <Input
-        id="location"
-        {...register("location")}
-        label="JOB LOCATION"
-        placeholder="e.g. Austin, TX or Remote"
-        error={errors.location?.message}
-      />
-      <Select
-        id="status"
-        {...register("status")}
-        name="status"
-        label="STATUS"
-        options={[
-          { value: "APPLIED", label: "APPLIED" },
-          { value: "INTERVIEW", label: "INTERVIEW" },
-          { value: "REJECTED", label: "REJECTED" },
-          { value: "OFFER", label: "OFFER" }
-        ]}
-        error={errors.status?.message}
-      ></Select>
-      <Input
-        id="appliedAt"
-        {...register("appliedAt")}
-        label="DATE APPLIED"
-        type="date"
-        placeholder="e.g. 2022-01-01"
-        error={errors.appliedAt?.message}
-      />
-      <Input
-        id="link"
-        {...register("link")}
-        label="JOB LINK/ URL"
-        placeholder="LINK"
-        error={errors.link?.message}
-        startIcon={<Link />}
-      />
-      <div className="md:col-span-2 md:mb-4">
-        <Textarea
-          id="notes"
-          {...register("notes")}
-          label="NOTES"
-          rows={4}
-          placeholder="Document interview highlights, referral contacts, or preparation notes..."
-          error={errors.notes?.message}
-          className="md:col-span-2"
+    <>
+      <div className="hidden md:flex md:flex-row md:col-span-2 justify-between md:absolute md:right-8 md:top-4 md:gap-4">
+        <ApplicationFormActions
+          isSubmitting={isSubmitting}
+          newOrEdit={newOrEdit}
+          onCancel={onCancel}
         />
       </div>
-      <ResumeManager
-        isLoading={isLoadingResumes}
-        error={resumeError}
-        empty={emptyResumes}
-        resumes={resumes}
-        selectedResumeId={
-          typeof selectedResumeId === "number" ? selectedResumeId : undefined
-        }
-        onSelectResume={(resumeId) =>
-          setValue("resumeId", resumeId, {
-            shouldDirty: true,
-            shouldValidate: true
-          })
-        }
-        onResumesChanged={onResumesChanged}
-      />
-      <div className="flex flex-col">
-        <Button
-          icon={<ChevronDown width="16px" height="16px" />}
-          variant="ghost"
-          type="button"
-          onClick={() => setAdditionalValuesShown((prev) => !prev)}
-        >
-          Additional Information
-        </Button>
-        {additionalValuesShown && (
-          <AdditionalFormOptions
-            status={watch("status")}
-            register={register}
-            errors={errors}
+      <form
+        className="flex flex-col gap-4 md:grid md:grid-cols-2"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <Input
+          id="company"
+          {...register("company")}
+          label="COMPANY NAME"
+          placeholder="e.g. Google"
+          error={errors.company?.message}
+        />
+        <Input
+          id="title"
+          {...register("title")}
+          label="JOB TITLE"
+          placeholder="e.g. Software Engineer"
+          error={errors.title?.message}
+        />
+        <Input
+          id="location"
+          {...register("location")}
+          label="JOB LOCATION"
+          placeholder="e.g. Austin, TX or Remote"
+          error={errors.location?.message}
+        />
+        <Select
+          id="status"
+          {...register("status")}
+          name="status"
+          label="STATUS"
+          options={[
+            { value: "APPLIED", label: "APPLIED" },
+            { value: "INTERVIEW", label: "INTERVIEW" },
+            { value: "REJECTED", label: "REJECTED" },
+            { value: "OFFER", label: "OFFER" }
+          ]}
+          error={errors.status?.message}
+        ></Select>
+        <Input
+          id="appliedAt"
+          {...register("appliedAt")}
+          label="DATE APPLIED"
+          type="date"
+          placeholder="e.g. 2022-01-01"
+          error={errors.appliedAt?.message}
+        />
+        <Input
+          id="link"
+          {...register("link")}
+          label="JOB LINK/ URL"
+          placeholder="LINK"
+          error={errors.link?.message}
+          startIcon={<Link />}
+        />
+        <div className="md:col-span-2 md:mb-4">
+          <Textarea
+            id="notes"
+            {...register("notes")}
+            label="NOTES"
+            rows={4}
+            placeholder="Document interview highlights, referral contacts, or preparation notes..."
+            error={errors.notes?.message}
+            className="md:col-span-2"
           />
+        </div>
+        <ResumeManager
+          isLoading={isLoadingResumes}
+          error={resumeError}
+          empty={emptyResumes}
+          resumes={resumes}
+          selectedResumeId={
+            typeof selectedResumeId === "number" ? selectedResumeId : undefined
+          }
+          onSelectResume={(resumeId) =>
+            setValue("resumeId", resumeId, {
+              shouldDirty: true,
+              shouldValidate: true
+            })
+          }
+          onResumesChanged={onResumesChanged}
+        />
+        <div className="flex flex-col md:col-span-2">
+          <Button
+            icon={<ChevronDown width="16px" height="16px" />}
+            variant="ghost"
+            type="button"
+            onClick={() => setAdditionalValuesShown((prev) => !prev)}
+          >
+            Additional Information
+          </Button>
+          {additionalValuesShown && (
+            <AdditionalFormOptions
+              status={watch("status")}
+              register={register}
+              errors={errors}
+            />
+          )}
+        </div>
+        {submitError && (
+          <p className="text-label-md text-error md:col-span-2">
+            {submitError}
+          </p>
         )}
-      </div>
-      {submitError && (
-        <p className="text-label-md text-error md:col-span-2">{submitError}</p>
-      )}
-      <div className="flex flex-col gap-3 justify-between md:hidden">
-        <ApplicationFormActions
-          isSubmitting={isSubmitting}
-          newOrEdit={newOrEdit}
-          onCancel={onCancel}
-        />
-      </div>
-      <div className="hidden md:flex md:flex-row md:col-span-2 justify-between md:absolute md:right-8 md:top-10 md:gap-4">
-        <ApplicationFormActions
-          isSubmitting={isSubmitting}
-          newOrEdit={newOrEdit}
-          onCancel={onCancel}
-        />
-      </div>
-    </form>
+        <div className="flex flex-col gap-3 justify-between md:hidden">
+          <ApplicationFormActions
+            isSubmitting={isSubmitting}
+            newOrEdit={newOrEdit}
+            onCancel={onCancel}
+          />
+        </div>
+        {/* <div className="hidden md:flex md:flex-row md:col-span-2 justify-between md:absolute md:right-8 md:top-10 md:gap-4">
+          <ApplicationFormActions
+            isSubmitting={isSubmitting}
+            newOrEdit={newOrEdit}
+            onCancel={onCancel}
+          />
+        </div> */}
+      </form>
+    </>
   );
 };
 
