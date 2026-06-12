@@ -9,6 +9,10 @@ export const getSingleApplication = (id: number) => {
   return api(`api/applications/${id}`);
 };
 
+export const getRecentApplications = () => {
+  return api("api/applications/recent");
+};
+
 export const createApplication = (data: ApplicationValues) => {
   return api("api/applications", {
     method: "POST",

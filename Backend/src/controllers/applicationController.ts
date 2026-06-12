@@ -67,6 +67,42 @@ export const getSingleApplication = async (req: AuthRequest, res: Response) => {
   }
 };
 
+export const getRecentApplications = async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Not authorized' });
+    }
+    const applications = await prisma.jobApplication.findMany({
+      where: { userId: req.user.userId },
+      select: {
+        id: true,
+        title: true,
+        company: true,
+        location: true,
+        status: true,
+        appliedAt: true,
+        notes: true,
+        link: true,
+        resumeId: true,
+        source: true,
+        workMode: true,
+        salaryMin: true,
+        salaryMax: true,
+        firstResponseAt: true,
+        interviewAt: true,
+        offerAt: true,
+        rejectedAt: true,
+      },
+      orderBy: { appliedAt: 'desc' },
+      take: 4,
+    });
+    res.status(200).json(applications);
+  } catch (error) {
+    console.error('Error fetching applications:', error);
+    res.status(500).json({ error: 'Failed to fetch applications' });
+  }
+};
+
 export const createApplication = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) {

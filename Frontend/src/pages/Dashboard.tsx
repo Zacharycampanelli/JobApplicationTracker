@@ -16,6 +16,7 @@ import Resume from "../assets/images/resume.svg?react";
 import SuccessApp from "../assets/images/successApp.svg?react";
 import Medal from "../assets/images/medal.svg?react";
 import Add from "../assets/images/add.svg?react";
+import RecentApplications from "../features/applications/components/RecentApplications";
 
 const stats = [
   {
@@ -51,7 +52,7 @@ const Dashboard = () => {
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 relative">
       {isMobile && <Header />}
 
-      <main className="flex flex-col pb-10 gap-9">
+      <main className="flex flex-col pb-10 gap-9 items-center">
         <div className="flex justify-between">
           <div>
             <h2 className="mt-6 text-page-title text-on-surface">
@@ -63,20 +64,23 @@ const Dashboard = () => {
             </p>
           </div>
         </div>
-        <div className="flex flex-col gap-6 items-center">
-          {stats.map((stat, index) => (
-            <StatCard
-              key={index}
-              applications={applications}
-              statFunction={stat.statFunction}
-              statName={stat.statName}
-              primaryCard={stat.primaryCard}
-              icon={stat.icon}
-              index={index}
-            />
-          ))}
+        <div>
+          <div className="flex flex-col gap-6 items-center md:flex-row-reverse">
+            {/* <div className="md:flex"> */}
+            {stats.map((stat, index) => (
+              <StatCard
+                key={index}
+                applications={applications}
+                statFunction={stat.statFunction}
+                statName={stat.statName}
+                primaryCard={stat.primaryCard}
+                icon={stat.icon}
+                index={index}
+              />
+            ))}
+          </div>
           <div
-            className="flex flex-col justify-center items-center aspect-square w-95 relative rounded-full overflow-hidden bg-cover bg-center shrink-0 mt-6 gap-8"
+            className="flex flex-col justify-center items-center aspect-square w-95 relative rounded-full overflow-hidden bg-cover bg-center shrink-0 mt-6 gap-8 md:hidden"
             style={{
               backgroundImage: `radial-gradient(circle, rgba(37, 99, 235, 0.4) 0%, rgba(0, 0, 0, 0.5) 95%), url(${careerPlanning})`
             }}
@@ -100,17 +104,20 @@ const Dashboard = () => {
           </div>
           Recent activity - coming soon daily insights - coming soon
         </div>
-        <div className="hidden md:block">
-          <Button
-            variant="primary"
-            onClick={() => {
-              navigate("/applications");
-            }}
-          >
-            Add Application
-          </Button>
+        <div className="hidden md:flex">
+          <RecentApplications />
         </div>
       </main>
+      <div className="hidden md:block">
+        <Button
+          variant="primary"
+          onClick={() => {
+            navigate("/applications");
+          }}
+        >
+          Add Application
+        </Button>
+      </div>
     </div>
   );
 };

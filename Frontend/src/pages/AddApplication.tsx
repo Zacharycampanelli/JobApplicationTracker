@@ -16,7 +16,6 @@ const AddApplication = () => {
   const isMobile = !isTabletUp;
   const navigate = useNavigate();
 
-  // Resume state
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [empty, setEmpty] = useState(true);

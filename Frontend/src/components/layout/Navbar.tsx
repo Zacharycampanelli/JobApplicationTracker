@@ -53,10 +53,10 @@ const Navbar = () => {
       </nav>
 
       {/* Desktop / Tablet Side Navbar */}
-      <aside className="hidden md:flex md:w-64 md:shrink-0 md:flex-col md:bg-surface-container-low md:px-4 md:py-6 lg:w-72">
+      <aside className="hidden md:flex md:w-48 md:shrink-0 md:flex-col md:bg-surface-container-low md:px-4 md:py-6 xl:w-72">
         <div className="mb-8 px-3">
           <h1 className="text-brand text-on-surface">Job Tracker</h1>
-          <p className="mt-1 text-label-md text-on-surface-variant">
+          <p className="mt-1 text-label-md mt-4 text-on-surface-variant">
             Track your applications
           </p>
         </div>

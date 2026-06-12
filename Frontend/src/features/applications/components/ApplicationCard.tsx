@@ -7,15 +7,57 @@ import type { JobApplication } from "../../../types/types";
 
 type ApplicationCardProps = {
   app: JobApplication;
+  variant?: "full" | "compact";
 };
 
-const ApplicationCard = ({ app }: ApplicationCardProps) => {
+const ApplicationCard = ({ app, variant = "full" }: ApplicationCardProps) => {
+  const navigate = useNavigate();
+  const isCompact = variant === "compact";
+
   const formatDateOnly = (date: string) => {
     const [year, month, day] = date.slice(0, 10).split("-");
     return `${Number(month)}/${Number(day)}/${year}`;
   };
 
-  const navigate = useNavigate();
+  const cardClassName = isCompact
+    ? "group flex w-full flex-col gap-3 rounded-2xl bg-surface-container-low p-4 shadow-sm transition-colors hover:bg-surface-container"
+    : "group relative flex min-h-36 flex-col gap-2 rounded-2xl bg-surface-container-low p-4 shadow-sm transition-colors hover:bg-surface-container md:min-h-0";
+
+  if (isCompact) {
+    return (
+      <div className={cardClassName}>
+          <div className="flex items-start gap-4">
+          <CompanyLogo url={app.link || undefined} company={app.company} />
+
+          <div className="min-w-0 flex-1">
+            <h3 className="text-action text-on-surface">{app.title}</h3>
+            <p className="mt-1 text-label-md text-on-surface-secondary">
+              {app.company}
+            </p>
+          </div>
+
+          <StatusClassBadge className="self-start" status={app.status} />
+
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => navigate(`/applications/edit/${app.id}`)}
+            className="shrink-0"
+          >
+            <RightArrow width={18} height={18} />
+          </Button>
+        </div>
+        {app.appliedAt && (
+          <div className="border-t border-outline-variant pt-3">
+            <p className="text-label-md uppercase text-on-surface-variant">
+              Applied: {formatDateOnly(app.appliedAt)}
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div
       key={app.id}
