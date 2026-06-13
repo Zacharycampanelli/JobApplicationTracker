@@ -25,7 +25,7 @@ async function seed() {
         }),
       ),
     );
-    const applicationCount = faker.number.int({ min: 0, max: 10 });
+    const applicationCount = faker.number.int({ min: 1, max: 10 });
 
     await Promise.all(
       Array.from({ length: applicationCount }, () => {

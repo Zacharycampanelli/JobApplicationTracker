@@ -26,7 +26,7 @@ const ApplicationCard = ({ app, variant = "full" }: ApplicationCardProps) => {
   if (isCompact) {
     return (
       <div className={cardClassName}>
-          <div className="flex items-start gap-4">
+        <div className="flex items-start gap-4">
           <CompanyLogo url={app.link || undefined} company={app.company} />
 
           <div className="min-w-0 flex-1">
@@ -75,7 +75,7 @@ const ApplicationCard = ({ app, variant = "full" }: ApplicationCardProps) => {
             <CompanyLogo url={app?.link || undefined} company={app.company} />
             <StatusClassBadge status={app.status} />
           </div>
-          <div className="flex min-h-24 min-w-0 flex-1 flex-col justify-between md:block md:min-h-0 xl:min-h-[76px]">
+          <div className="flex min-h-24 min-w-0 flex-1 flex-col justify-between md:block md:min-h-0 xl:min-h-[94px]">
             <div>
               <h3 className="text-card-title text-on-surface">{app.title}</h3>
               <p className="mt-1 text-card-meta text-on-surface-secondary">
@@ -106,7 +106,7 @@ const ApplicationCard = ({ app, variant = "full" }: ApplicationCardProps) => {
           type="button"
           variant="ghost"
           onClick={() => navigate(`/applications/edit/${app.id}`)}
-          className="group-hover:flex md:static absolute bottom-8 right-6 xl:hidden"
+          className="group-hover:flex md:static absolute bottom-8 right-6 xl:hidden xl:group-hover:hidden"
         >
           <RightArrow
             width={18}

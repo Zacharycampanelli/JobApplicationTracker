@@ -52,7 +52,7 @@ const Dashboard = () => {
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 relative">
       {isMobile && <Header />}
 
-      <main className="flex flex-col pb-10 gap-9 items-center">
+      <main className="flex flex-col pb-10 gap-9 items-start">
         <div className="flex justify-between">
           <div>
             <h2 className="mt-6 text-page-title text-on-surface">
@@ -102,21 +102,31 @@ const Dashboard = () => {
               Quick Add
             </Button>
           </div>
-          Recent activity - coming soon daily insights - coming soon
+          {isMobile && (
+            <p className="mt-4 text-body-lg text-on-surface-secondary">
+              Recent activity - coming soon daily insights - coming soon
+            </p>
+          )}
         </div>
         <div className="hidden md:flex">
           <RecentApplications />
+          <div className="w-1/2 flex flex-col gap-4">
+            <p>market outlook</p>
+            <p>quick resources</p>
+          </div>
         </div>
       </main>
       <div className="hidden md:block">
-        <Button
-          variant="primary"
-          onClick={() => {
-            navigate("/applications");
-          }}
-        >
-          Add Application
-        </Button>
+        {isMobile && (
+          <Button
+            variant="primary"
+            onClick={() => {
+              navigate("/applications");
+            }}
+          >
+            Add Application
+          </Button>
+        )}
       </div>
     </div>
   );
