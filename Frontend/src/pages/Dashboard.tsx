@@ -10,7 +10,7 @@ import {
   applicationCount,
   interviewRate,
   responseRate,
-  successRate
+  offerRate
 } from "../utils/getStats";
 import { useApplications } from "../utils/useApplications";
 import Resume from "../assets/images/resume.svg?react";
@@ -37,7 +37,7 @@ const stats = [
   },
 
   {
-    statFunction: successRate,
+    statFunction: offerRate,
     statName: "Offers",
     icon: Medal,
     suffix: "%"

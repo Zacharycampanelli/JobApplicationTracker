@@ -19,13 +19,15 @@ export const rejectionRate = (applications: JobApplication[]) => {
   return percentage(rejections.length, applications.length);
 };
 
-export const successRate = (applications: JobApplication[]) => {
+export const offerRate = (applications: JobApplication[]) => {
   const offers = applications.filter((app) => app.status === "OFFER");
   return percentage(offers.length, applications.length);
 };
 
 export const activePipelineRate = (applications: JobApplication[]) => {
-  const active = applications.filter((app) => app.status === "APPLIED" || app.status === "INTERVIEW");
+  const active = applications.filter(
+    (app) => app.status === "APPLIED" || app.status === "INTERVIEW"
+  );
   return percentage(active.length, applications.length);
 };
 

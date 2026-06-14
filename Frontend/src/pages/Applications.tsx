@@ -11,7 +11,11 @@ import Add from "../assets/images/add.svg?react";
 import type { JobApplication } from "../types/types";
 import { useNavigate } from "react-router";
 import ApplicationCard from "../features/applications/components/ApplicationCard";
-import { interviewRate, successRate, activePipelineRate } from "../utils/getStats";
+import {
+  interviewRate,
+  offerRate,
+  activePipelineRate
+} from "../utils/getStats";
 import StatCard from "../components/shared/StatCard";
 import { useApplications } from "../utils/useApplications";
 
@@ -20,6 +24,25 @@ type SortMethod = (typeof SORT_METHODS)[number];
 
 const dropdownClassName =
   "absolute left-0 top-14 z-20 w-44 rounded-control bg-surface-container-lowest shadow-menu";
+
+const stats = [
+  {
+    statFunction: offerRate,
+    statName: "Success Rate",
+    suffix: "%",
+    primary: true
+  },
+  {
+    statFunction: activePipelineRate,
+    statName: "Active Pipeline",
+    suffix: "%"
+  },
+  {
+    statFunction: interviewRate,
+    statName: "Interviews",
+    suffix: "%"
+  }
+];
 
 const Applications = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -229,25 +252,19 @@ const Applications = () => {
           </Button>
         )}
         <div className="hidden xl:flex xl:gap-4 ">
-          <StatCard
-            applications={applications}
-            statFunction={successRate}
-            statName="Success Rate"
-            suffix="%"
-            primaryCard={true}
-          />
-          <StatCard
-            applications={applications}
-            statFunction={activePipelineRate}
-            suffix="%"
-            statName="Active Pipeline"
-          />
-          <StatCard
-            applications={applications}
-            statFunction={interviewRate}
-            suffix="%"
-            statName="Interviews"
-          />
+          {stats.map((stat, index) => {
+            return (
+              <StatCard
+                key={index}
+                applications={applications}
+                statFunction={stat.statFunction}
+                statName={stat.statName}
+                primaryCard={stat.primary}
+                index={index}
+                suffix={stat.suffix}
+              />
+            );
+          })}
         </div>
       </main>
     </div>
