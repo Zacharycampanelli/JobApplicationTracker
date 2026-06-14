@@ -34,7 +34,7 @@ const RecentApplications = () => {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <div className="w-[70%]">
+        <div>
           <h4 className="text-card-title mb-4">Recent Applications</h4>
           <div className="flex flex-col gap-4">
             {!isLoading &&

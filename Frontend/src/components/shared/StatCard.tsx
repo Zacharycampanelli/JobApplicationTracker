@@ -21,16 +21,14 @@ const StatCard = ({
   index,
   className
 }: StatCardProps) => {
-  let fill = "text-primary";
+  let iconColor = "text-primary";
   let background = "bg-primary-container";
 
   if (Icon && index !== undefined && index % 2 === 0) {
-    fill = "text-primary-container";
+    iconColor = "text-primary-container";
     background = "bg-primary";
   }
-
-  console.log(background, fill);
-
+  console.log(iconColor);
   return (
     <Card
       className={twMerge(
@@ -48,8 +46,10 @@ const StatCard = ({
           {statName}
         </h4>
         {Icon && (
-          <div className={`rounded-xl p-3 ${background}`}>
-            <Icon className={fill} />
+          <div
+            className={`rounded-xl p-3 ${background} size-8 flex justify-center items-center`}
+          >
+            <Icon fill={iconColor} />
           </div>
         )}
       </div>

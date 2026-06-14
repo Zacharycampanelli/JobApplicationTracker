@@ -23,7 +23,7 @@ const stats = [
     statFunction: applicationCount,
     statName: "Total Applications",
     icon: Resume,
-    primaryCard: true
+    className: "bg-primary-container"
   },
 
   {
@@ -45,7 +45,7 @@ const Dashboard = () => {
   const isMobile = !isTabletUp;
   const navigate = useNavigate();
   const { applications, isLoading, errorMessage } = useApplications(); // Pre-filter applications by status before passing to search
-  console.log(Resume);
+
   if (isLoading) return <p>Loading...</p>;
   if (errorMessage) return <p>{errorMessage}</p>;
   return (
@@ -73,9 +73,9 @@ const Dashboard = () => {
                 applications={applications}
                 statFunction={stat.statFunction}
                 statName={stat.statName}
-                primaryCard={stat.primaryCard}
                 icon={stat.icon}
                 index={index}
+                className={stat.className}
               />
             ))}
           </div>

@@ -30,30 +30,31 @@ const ApplicationCard = ({ app, variant = "full" }: ApplicationCardProps) => {
           <CompanyLogo url={app.link || undefined} company={app.company} />
 
           <div className="min-w-0 flex-1">
-            <h3 className="text-action text-on-surface">{app.title}</h3>
+            <h3 className="text-card-title text-on-surface">{app.title}</h3>
             <p className="mt-1 text-label-md text-on-surface-secondary">
               {app.company}
             </p>
           </div>
 
           <StatusClassBadge className="self-start" status={app.status} />
-
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => navigate(`/applications/edit/${app.id}`)}
-            className="shrink-0"
-          >
-            <RightArrow width={18} height={18} />
-          </Button>
         </div>
-        {app.appliedAt && (
-          <div className="border-t border-outline-variant pt-3">
-            <p className="text-label-md uppercase text-on-surface-variant">
-              Applied: {formatDateOnly(app.appliedAt)}
-            </p>
+        <div className="border-t border-outline-variant pt-3">
+          <div className="flex justify-between items-center">
+            {app.appliedAt && (
+              <p className="text-label-md uppercase text-on-surface-variant">
+                Applied: {formatDateOnly(app.appliedAt)}
+              </p>
+            )}
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => navigate(`/applications/edit/${app.id}`)}
+              className="shrink-0"
+            >
+              <RightArrow width={18} height={18} />
+            </Button>
           </div>
-        )}
+        </div>
       </div>
     );
   }
@@ -102,18 +103,20 @@ const ApplicationCard = ({ app, variant = "full" }: ApplicationCardProps) => {
           </div>
         )}
         <StatusClassBadge status={app.status} className="xl:hidden" />
-        <Button
-          type="button"
-          variant="ghost"
-          onClick={() => navigate(`/applications/edit/${app.id}`)}
-          className="group-hover:flex md:static absolute bottom-8 right-6 xl:hidden xl:group-hover:hidden"
-        >
-          <RightArrow
-            width={18}
-            height={18}
-            color="text-on-surface-secondary"
-          />
-        </Button>
+        {!isCompact && (
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => navigate(`/applications/edit/${app.id}`)}
+            className="group-hover:flex md:static absolute bottom-8 right-6 xl:hidden xl:group-hover:hidden"
+          >
+            <RightArrow
+              width={18}
+              height={18}
+              color="text-on-surface-secondary"
+            />
+          </Button>
+        )}
         {app.appliedAt && (
           <div className="hidden border-t border-outline-variant pt-3 xl:flex xl:items-center xl:justify-between">
             <p className="text-label-md uppercase text-on-surface-variant">

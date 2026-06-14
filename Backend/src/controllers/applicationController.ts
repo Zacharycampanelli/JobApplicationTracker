@@ -94,7 +94,7 @@ export const getRecentApplications = async (req: AuthRequest, res: Response) => 
         rejectedAt: true,
       },
       orderBy: { appliedAt: 'desc' },
-      take: 4,
+      take: 3,
     });
     res.status(200).json(applications);
   } catch (error) {
