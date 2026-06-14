@@ -9,6 +9,7 @@ import careerPlanning from "../assets/images/CareerPlanning.png";
 import {
   applicationCount,
   interviewRate,
+  responseRate,
   successRate
 } from "../utils/getStats";
 import { useApplications } from "../utils/useApplications";
@@ -17,6 +18,7 @@ import SuccessApp from "../assets/images/successApp.svg?react";
 import Medal from "../assets/images/medal.svg?react";
 import Add from "../assets/images/add.svg?react";
 import RecentApplications from "../features/applications/components/RecentApplications";
+import ExpandableSection from "../components/shared/ExpandableSection";
 
 const stats = [
   {
@@ -30,13 +32,21 @@ const stats = [
   {
     statFunction: interviewRate,
     statName: "Interviews",
-    icon: SuccessApp
+    icon: SuccessApp,
+    suffix: "%"
   },
 
   {
     statFunction: successRate,
     statName: "Offers",
-    icon: Medal
+    icon: Medal,
+    suffix: "%"
+  },
+  {
+    statFunction: responseRate,
+    statName: "Response Rate",
+    icon: SuccessApp,
+    suffix: "%"
   }
 ];
 
@@ -77,9 +87,11 @@ const Dashboard = () => {
                 icon={stat.icon}
                 primaryCard={stat.primaryCard}
                 index={index}
+                suffix={stat.suffix}
                 className={`${stat.className} w-54 h-48`}
               />
             ))}
+            {/* <ExpandableSection title="More Stats">{}</ExpandableSection> */}
           </div>
           <div
             className="flex flex-col justify-center items-center aspect-square w-95 relative rounded-full overflow-hidden bg-cover bg-center shrink-0 mt-6 gap-8 md:hidden"

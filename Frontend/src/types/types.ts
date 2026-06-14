@@ -17,8 +17,8 @@ export type JobApplication = {
   appliedAt: string;
   notes?: string | null;
   link?: string | null;
-  source?: ApplicationSource;
-  workMode?: WorkMode;
+  source?: ApplicationSource | null;
+  workMode?: WorkMode | null;
   resumeId?: number | null;
   resume?: Resume | null;
   userId: number;

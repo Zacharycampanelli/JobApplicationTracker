@@ -11,7 +11,7 @@ import Add from "../assets/images/add.svg?react";
 import type { JobApplication } from "../types/types";
 import { useNavigate } from "react-router";
 import ApplicationCard from "../features/applications/components/ApplicationCard";
-import { interviewRate, successRate, totalLeadsRate } from "../utils/getStats";
+import { interviewRate, successRate, activePipelineRate } from "../utils/getStats";
 import StatCard from "../components/shared/StatCard";
 import { useApplications } from "../utils/useApplications";
 
@@ -233,16 +233,19 @@ const Applications = () => {
             applications={applications}
             statFunction={successRate}
             statName="Success Rate"
+            suffix="%"
             primaryCard={true}
           />
           <StatCard
             applications={applications}
-            statFunction={totalLeadsRate}
-            statName="Total Leads"
+            statFunction={activePipelineRate}
+            suffix="%"
+            statName="Active Pipeline"
           />
           <StatCard
             applications={applications}
             statFunction={interviewRate}
+            suffix="%"
             statName="Interviews"
           />
         </div>

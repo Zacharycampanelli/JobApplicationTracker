@@ -9,6 +9,7 @@ type StatCardProps = {
   primaryCard?: boolean;
   icon?: ComponentType<SVGProps<SVGSVGElement>>;
   index?: number;
+  suffix?: string;
   className?: string;
 };
 
@@ -19,6 +20,7 @@ const StatCard = ({
   primaryCard,
   icon: Icon,
   index,
+  suffix,
   className
 }: StatCardProps) => {
   let iconColor = "text-primary";
@@ -56,7 +58,7 @@ const StatCard = ({
       <span
         className={`${primaryCard ? "text-primary text-[32px]" : "text-on-surface text-[24px]"}`}
       >
-        {statFunction(applications)}%
+        {statFunction(applications)} {suffix}
       </span>
       {primaryCard ? (
         <progress
@@ -64,7 +66,7 @@ const StatCard = ({
           max="100"
           value={statFunction(applications).toLocaleString()}
         >
-          {statFunction(applications) + "%"}
+          {statFunction(applications)} {suffix}
         </progress>
       ) : (
         ""
