@@ -49,7 +49,7 @@ const StatCard = ({
           <div
             className={`rounded-xl p-3 ${background} size-8 flex justify-center items-center`}
           >
-            <Icon fill={iconColor} />
+            <Icon className={`size-4 fill-current ${iconColor}`} />{" "}
           </div>
         )}
       </div>
@@ -60,7 +60,7 @@ const StatCard = ({
       </span>
       {primaryCard ? (
         <progress
-          className="w-full h-4 rounded-full overflow-hidden appearance-none [&::-webkit-progress-bar]:bg-surface-container-lowest [&::-webkit-progress-value]:bg-primary [&::-moz-progress-bar]:bg-primary"
+          className="w-full h-4 rounded-full overflow-hidden appearance-none [&::-webkit-progress-bar]:bg-primary/10 [&::-webkit-progress-value]:bg-primary [&::-moz-progress-bar]:bg-primary/10 [&::-moz-progress-value]:bg-primary "
           max="100"
           value={statFunction(applications).toLocaleString()}
         >

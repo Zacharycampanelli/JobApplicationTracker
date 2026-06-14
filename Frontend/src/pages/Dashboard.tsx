@@ -23,7 +23,8 @@ const stats = [
     statFunction: applicationCount,
     statName: "Total Applications",
     icon: Resume,
-    className: "bg-primary-container"
+    primaryCard: true,
+    className: "bg-primary-container flex-1"
   },
 
   {
@@ -74,8 +75,9 @@ const Dashboard = () => {
                 statFunction={stat.statFunction}
                 statName={stat.statName}
                 icon={stat.icon}
+                primaryCard={stat.primaryCard}
                 index={index}
-                className={stat.className}
+                className={`${stat.className} w-54 h-48`}
               />
             ))}
           </div>

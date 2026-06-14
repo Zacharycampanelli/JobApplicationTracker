@@ -17,10 +17,20 @@ export type JobApplication = {
   appliedAt: string;
   notes?: string | null;
   link?: string | null;
+  source?: ApplicationSource;
+  workMode?: WorkMode;
   resumeId?: number | null;
   resume?: Resume | null;
   userId: number;
   user?: User;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  firstResponseAt?: string | null;
+  interviewAt?: string | null;
+  offerAt?: string | null;
+  rejectedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type JobStatus = "APPLIED" | "INTERVIEW" | "OFFER" | "REJECTED";
@@ -42,3 +52,14 @@ export const statusClassMap: Record<string, string> = {
   OFFER: "status-offer",
   REJECTED: "status-rejected"
 };
+
+export type ApplicationSource =
+  | "LINKEDIN"
+  | "INDEED"
+  | "COMPANY_SITE"
+  | "REFERRAL"
+  | "RECRUITER"
+  | "NETWORKING"
+  | "OTHER";
+
+export type WorkMode = "REMOTE" | "HYBRID" | "ONSITE";

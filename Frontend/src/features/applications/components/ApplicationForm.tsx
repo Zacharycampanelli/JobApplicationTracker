@@ -9,9 +9,7 @@ import type { Resume } from "../../../types/types";
 import Textarea from "../../../components/ui/Textarea";
 import ApplicationFormActions from "./ApplicationFormActions";
 import AdditionalFormOptions from "./AdditionalFormOptions";
-import { useState } from "react";
-import Button from "../../../components/ui/Button";
-import ChevronDown from "../../../assets/images/chevronDown.svg?react";
+import ExpandableSection from "../../../components/shared/ExpandableSection";
 
 const optionalNumber = z.preprocess(
   (value) => (value === "" || value === null ? null : value),
@@ -123,7 +121,7 @@ const ApplicationForm = ({
     resolver: zodResolver(applicationSchema),
     defaultValues
   });
-  const [additionalValuesShown, setAdditionalValuesShown] = useState(false);
+
   const selectedResumeId = useWatch({ control, name: "resumeId" });
   return (
     <>
@@ -216,21 +214,16 @@ const ApplicationForm = ({
           onResumesChanged={onResumesChanged}
         />
         <div className="flex flex-col md:col-span-2">
-          <Button
-            icon={<ChevronDown width="16px" height="16px" />}
-            variant="ghost"
-            type="button"
-            onClick={() => setAdditionalValuesShown((prev) => !prev)}
+          <ExpandableSection
+            title="Additional Information"
+            className="flex flex-col md:col-span-2"
           >
-            Additional Information
-          </Button>
-          {additionalValuesShown && (
             <AdditionalFormOptions
               status={watch("status")}
               register={register}
               errors={errors}
             />
-          )}
+          </ExpandableSection>
         </div>
         {submitError && (
           <p className="text-label-md text-error md:col-span-2">
