@@ -4,6 +4,7 @@ import Resume from "../assets/images/resume.svg?react";
 import SuccessApp from "../assets/images/successApp.svg?react";
 import Medal from "../assets/images/medal.svg?react";
 import Calendar from "../assets/images/calendar.svg?react";
+import Chat from "../assets/images/chat.svg?react";
 import {
   applicationCount,
   interviewRate,
@@ -14,39 +15,44 @@ import {
 } from "../utils/getStats";
 import StatCard from "../components/shared/StatCard";
 import { useApplications } from "../utils/useApplications";
+import AnalyticsMetricCard from "../features/analytics/components/AnalyticsMetricCard";
 
-const stats = [
+const getAnalyticsStats = (applications: JobApplication[]) => [
   {
-    statFunction: applicationCount,
-    statName: "Total Applications",
+    title: "RESPONSE RATE",
+    value: responseRate(applications),
+    icon: Chat,
+    suffix: "%"
+  },
+  {
+    title: "TOTAL APPLICATIONS",
+    value: applicationCount(applications),
     icon: Resume,
-    primaryCard: true,
+    progressBar: true,
+    variant: "compact"
   },
 
   {
-    statFunction: interviewRate,
-    statName: "Interviews",
+    title: "INTERVIEWS",
+    value: interviewRate(applications),
     icon: SuccessApp,
-    suffix: "%"
+    progressBar: true,
+    variant: "compact"
   },
 
   {
-    statFunction: offerRate,
-    statName: "Offers",
-    icon: Medal,
-    suffix: "%"
-  },
-  {
-    statFunction: responseRate,
-    statName: "Response Rate",
-    icon: SuccessApp,
-    suffix: "%"
-  },
-  {
-    statFunction: averageResponseDays,
-    statName: "Average Response Days",
+    title: "ACTIVE PIPELINE",
+    value: activePipelineRate(applications),
     icon: Calendar,
-    suffix: " days"
+    progressBar: true,
+    suffix: "%",
+    variant: "compact"
+  },
+  {
+    title: "AVERAGE RESPONSE DAYS",
+    value: averageResponseDays(applications),
+    suffix: " days",
+    variant: "compact"
   }
 ];
 
@@ -55,7 +61,7 @@ const Analytics = () => {
   const isMobile = !isTabletUp;
 
   const { applications, isLoading, errorMessage } = useApplications(); // Pre-filter applications by status before passing to search
-
+  const stats = getAnalyticsStats(applications);
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 relative">
@@ -67,23 +73,35 @@ const Analytics = () => {
         <p className="mt-4 text-body-lg text-on-surface-secondary">
           Measuring your application journey with architectural precision.
         </p>
-
-        <div className="flex flex-col justify-between gap-6">
-          {stats.map((stat, index) => {
-            return (
-              <StatCard
-                key={index}
-                applications={applications}
-                statFunction={stat.statFunction}
-                statName={stat.statName}
-                primaryCard={stat.primaryCard}
-                icon={stat.icon}
-                index={index}
-                suffix={stat.suffix}
-              />
-            );
-          })}
-        </div>
+        {isMobile && (
+          <>
+            <AnalyticsMetricCard
+              title={stats[0].title}
+              value={stats[0].value}
+              suffix={stats[0].suffix}
+              icon={stats[0].icon}
+              progressBar={true}
+              emphasis="highlight"
+              className="bg-primary text-white"
+            />
+            <section className="grid grid-cols-2 gap-3">
+              {stats.slice(1).map((stat, index) => {
+                return (
+                  <AnalyticsMetricCard
+                    key={stat.title}
+                    title={stat.title}
+                    value={stat.value}
+                    suffix={stat.suffix}
+                    variant="compact"
+                    // icon={stat.icon}
+                    className={stat.className}
+                    index={index}
+                  />
+                );
+              })}
+            </section>
+          </>
+        )}
       </main>
     </div>
   );

@@ -82,11 +82,15 @@
   --text-card-meta-line: 1.5;
   --text-card-meta-weight: 400;
 
+  --text-analytics-card-size: 2.5rem;
+  --text-analytics-card-line: 1.1;
+  --text-analytics-card-weight: 800;
+
   /* Shape */
   --radius-control: 0.75rem;
   --radius-card: 1rem;
 
-  /* Layout */
+  /* Layout */ 
   --space-card: 2rem;
 
   /* Breakpoints  */
@@ -190,6 +194,14 @@
   font-size: var(--text-card-meta-size);
   line-height: var(--text-card-meta-line);
   font-weight: var(--text-card-meta-weight);
+  letter-spacing: 0;
+}
+
+.text-analytics-card {
+  font-family: var(--font-sans);
+  font-size: var(--text-analytics-card-size);
+  line-height: var(--text-analytics-card-line);
+  font-weight: var(--text-analytics-card-weight);
   letter-spacing: 0;
 }
 

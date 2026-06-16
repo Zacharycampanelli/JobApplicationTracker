@@ -30,7 +30,7 @@ const StatCard = ({
     iconColor = "text-primary-container";
     background = "bg-primary";
   }
-  console.log(iconColor);
+
   return (
     <Card
       className={twMerge(
