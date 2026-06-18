@@ -1,15 +1,11 @@
-import React, { type SVGProps } from "react";
+import type { PipelineDistributionItem } from "../../../utils/getAnalyticsData";
 
 type PipelineDistributionProps = {
-  data: {
-    title: string;
-    value: number;
-    icon?: SVGProps<SVGSVGElement>;
-    suffix?: string;
-  };
+  data: PipelineDistributionItem[];
 };
-const PipelineDistribution = () => {
-  return <div>PipelineDistribution</div>;
+
+const PipelineDistribution = ({ data }: PipelineDistributionProps) => {
+  return <div></div>;
 };
 
 export default PipelineDistribution;

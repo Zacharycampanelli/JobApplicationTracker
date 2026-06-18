@@ -18,7 +18,6 @@ import SuccessApp from "../assets/images/successApp.svg?react";
 import Medal from "../assets/images/medal.svg?react";
 import Add from "../assets/images/add.svg?react";
 import RecentApplications from "../features/applications/components/RecentApplications";
-import ExpandableSection from "../components/shared/ExpandableSection";
 
 const stats = [
   {

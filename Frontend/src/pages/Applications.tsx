@@ -18,6 +18,7 @@ import {
 } from "../utils/getStats";
 import StatCard from "../components/shared/StatCard";
 import { useApplications } from "../utils/useApplications";
+import PipelineDistribution from "../features/analytics/components/PipelineDistribution";
 
 const SORT_METHODS = ["Newest", "Oldest", "Title", "Company"] as const;
 type SortMethod = (typeof SORT_METHODS)[number];
@@ -266,6 +267,14 @@ const Applications = () => {
             );
           })}
         </div>
+        <PipelineDistribution
+          data={stats.map((stat) => ({
+            title: stat.statName,
+            value: stat.statFunction(applications),
+            suffix: stat.suffix,
+            primary: stat.primary
+          }))}
+        />
       </main>
     </div>
   );
