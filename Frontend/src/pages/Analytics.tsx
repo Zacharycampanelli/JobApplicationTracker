@@ -16,6 +16,7 @@ import {
 import StatCard from "../components/shared/StatCard";
 import { useApplications } from "../utils/useApplications";
 import AnalyticsMetricCard from "../features/analytics/components/AnalyticsMetricCard";
+import PipelineDistribution from "../features/analytics/components/PipelineDistribution";
 
 const getAnalyticsStats = (applications: JobApplication[]) => [
   {
@@ -102,6 +103,7 @@ const Analytics = () => {
             </section>
           </>
         )}
+        <PipelineDistribution data={stats} />
       </main>
     </div>
   );
