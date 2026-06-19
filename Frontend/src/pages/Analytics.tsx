@@ -48,7 +48,7 @@ const Analytics = () => {
             </section>
           </>
         )}
-        <PipelineDistribution data={analyticsData.pipelineDistribution} />
+        <PipelineDistribution data={analyticsData.pipelineDistribution} className="mt-18" />
       </main>
     </div>
   );

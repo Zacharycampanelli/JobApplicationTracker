@@ -18,6 +18,7 @@ export type AnalyticsMetric = {
 export type PipelineDistributionItem = {
   label: string;
   value: number;
+  color: string;
 };
 
 export type AnalyticsData = {
@@ -73,21 +74,25 @@ export const getAnalyticsData = (
     ],
     pipelineDistribution: [
       {
-        label: "Applied",
-        value: applied
-      },
-      {
-        label: "Interview",
-        value: interviews
-      },
-      {
-        label: "Offer",
-        value: offers
-      },
-      {
-        label: "Rejected",
-        value: rejected
-      }
+    label: "Applied",
+    value: applied,
+    color: "#4c56af"
+  },
+  {
+    label: "Interview",
+    value: interviews,
+    color: "#8b92d6"
+  },
+  {
+    label: "Offer",
+    value: offers,
+    color: "#186d54"
+  },
+  {
+    label: "Rejected",
+    value: rejected,
+    color: "#9f403d"
+  }
     ]
   };
 };
