@@ -6,6 +6,7 @@ import { useApplications } from "../utils/useApplications";
 import AnalyticsMetricCard from "../features/analytics/components/AnalyticsMetricCard";
 import PipelineDistribution from "../features/analytics/components/PipelineDistribution";
 import { getAnalyticsData } from "../utils/getAnalyticsData";
+import { ApplicationVelocityChart } from "../features/analytics/components/ApplicationVelocityChart";
 
 const Analytics = () => {
   const isTabletUp = useBreakpoint("md");
@@ -49,6 +50,7 @@ const Analytics = () => {
           </>
         )}
         <PipelineDistribution data={analyticsData.pipelineDistribution} className="mt-18" />
+        <ApplicationVelocityChart data={analyticsData.applicationVelocity} className="mt-10"/>
       </main>
     </div>
   );

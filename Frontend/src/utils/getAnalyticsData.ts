@@ -21,10 +21,49 @@ export type PipelineDistributionItem = {
   color: string;
 };
 
+export type ApplicationVelocityItem = {
+  label: string;
+  value: number;
+}
+
 export type AnalyticsData = {
   stats: AnalyticsMetric[];
   pipelineDistribution: PipelineDistributionItem[];
+  applicationVelocity: ApplicationVelocityItem[];
 };
+
+const getApplicationVelocity = (
+  applications: JobApplication[]
+) : ApplicationVelocityItem[] => {
+  const now = new Date();
+
+  const weeks = Array.from({ length: 4}, (_, index) => {
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - (3 - index) * 7);
+
+    const weekEnd = new Date(weekStart)
+    weekEnd.setDate(weekStart.getDate() + 6)
+
+    return {
+      label: `Week ${index + 1}`,
+      start: weekStart,
+      end: weekEnd,
+      value: 0
+    }
+  })
+  applications.forEach((app) => {
+    const appliedDate = new Date(app.appliedAt);
+    const matchingWeek = weeks.find((week) => appliedDate >= week.start && appliedDate <= week.end)
+    
+    if(matchingWeek) {
+      matchingWeek.value += 1;
+    }
+  })
+
+  return weeks.map(({label, value}) => ({ label, value}))
+}
+
+
 
 export const getAnalyticsData = (
   applications: JobApplication[]
@@ -93,6 +132,7 @@ export const getAnalyticsData = (
     value: rejected,
     color: "#9f403d"
   }
-    ]
+    ],
+    applicationVelocity: getApplicationVelocity(applications)
   };
 };
