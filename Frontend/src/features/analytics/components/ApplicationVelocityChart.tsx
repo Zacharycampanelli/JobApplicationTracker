@@ -1,6 +1,7 @@
 import type { ChartData, ChartOptions } from "chart.js";
 import VerticalBarChart from "../../../components/charts/VerticalBarChart";
 import type { ApplicationVelocityItem } from "../../../utils/getAnalyticsData";
+import Card from "../../../components/ui/Card";
 
 type ApplicationVelocityChartProps = {
   data: ApplicationVelocityItem[];
@@ -44,11 +45,11 @@ export const ApplicationVelocityChart = ({
   };
 
   return (
-    <section className={className}>
+    <Card className={className}>
       <h3 className="text-page-title text-on-surface mb-8 text-center">
         Application Velocity
       </h3>
       <VerticalBarChart data={chartData} options={options} />
-    </section>
+    </Card>
   );
 };

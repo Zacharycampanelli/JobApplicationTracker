@@ -1,4 +1,3 @@
-import { type ComponentType, type SVGProps } from "react";
 import Header from "../components/layout/Header";
 import { useBreakpoint } from "../utils/useBreakpoint";
 
@@ -7,6 +6,8 @@ import AnalyticsMetricCard from "../features/analytics/components/AnalyticsMetri
 import PipelineDistribution from "../features/analytics/components/PipelineDistribution";
 import { getAnalyticsData } from "../utils/getAnalyticsData";
 import { ApplicationVelocityChart } from "../features/analytics/components/ApplicationVelocityChart";
+import SourceBreakdownChart from "../features/analytics/components/SourceBreakdownChart";
+import Appplication from '../assets/images/addApplication.svg?react'
 
 const Analytics = () => {
   const isTabletUp = useBreakpoint("md");
@@ -34,9 +35,10 @@ const Analytics = () => {
               title={analyticsData.stats[0].title}
               value={analyticsData.stats[0].value}
               suffix={analyticsData.stats[0].suffix}
+              icon={Appplication}
             />
             <section className="grid grid-cols-2 gap-3">
-              {analyticsData.stats.slice(1).map((stat, index) => {
+              {analyticsData.stats.slice(1).map((stat) => {
                 return (
                   <AnalyticsMetricCard
                     key={stat.title}
@@ -49,8 +51,10 @@ const Analytics = () => {
             </section>
           </>
         )}
+      
         <PipelineDistribution data={analyticsData.pipelineDistribution} className="mt-18" />
         <ApplicationVelocityChart data={analyticsData.applicationVelocity} className="mt-10"/>
+        <SourceBreakdownChart data={analyticsData.sourceBreakdown} className="mt-10"/>
       </main>
     </div>
   );

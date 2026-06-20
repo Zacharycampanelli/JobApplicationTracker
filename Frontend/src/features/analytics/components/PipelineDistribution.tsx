@@ -3,6 +3,7 @@ import { useBreakpoint } from "../../../utils/useBreakpoint";
 import DonutChart from "../../../components/charts/DonutChart";
 import HorizontalBarChart from "../../../components/charts/HorizontalBarChart";
 import type { PipelineDistributionItem } from "../../../utils/getAnalyticsData";
+import Card from "../../../components/ui/Card";
 
 type PipelineDistributionProps = {
   data: PipelineDistributionItem[];
@@ -57,7 +58,7 @@ const PipelineDistribution = ({
   const totalApplications = data.reduce((total, item) => total + item.value, 0);
 
   return (
-    <section className={className}>
+    <Card className={className}>
       <h3 className="text-page-title text-on-surface mb-8 text-center">
         Pipeline Distribution
       </h3>
@@ -103,7 +104,7 @@ const PipelineDistribution = ({
           </ul>
         </div>
       )}
-    </section>
+    </Card>
   );
 };
 
