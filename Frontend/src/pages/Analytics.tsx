@@ -7,7 +7,8 @@ import PipelineDistribution from "../features/analytics/components/PipelineDistr
 import { getAnalyticsData } from "../utils/getAnalyticsData";
 import { ApplicationVelocityChart } from "../features/analytics/components/ApplicationVelocityChart";
 import SourceBreakdownChart from "../features/analytics/components/SourceBreakdownChart";
-import Appplication from '../assets/images/addApplication.svg?react'
+import Appplication from "../assets/images/addApplication.svg?react";
+import Calendar from "../assets/images/calendar.svg?react";
 
 const Analytics = () => {
   const isTabletUp = useBreakpoint("md");
@@ -51,10 +52,31 @@ const Analytics = () => {
             </section>
           </>
         )}
-      
-        <PipelineDistribution data={analyticsData.pipelineDistribution} className="mt-18" />
-        <ApplicationVelocityChart data={analyticsData.applicationVelocity} className="mt-10"/>
-        <SourceBreakdownChart data={analyticsData.sourceBreakdown} className="mt-10"/>
+
+        <PipelineDistribution
+          data={analyticsData.pipelineDistribution}
+          className="mt-18"
+        />
+        <ApplicationVelocityChart
+          data={analyticsData.applicationVelocity}
+          className="mt-10"
+        />
+        <SourceBreakdownChart
+          data={analyticsData.sourceBreakdown}
+          className="mt-10"
+        />
+
+        <AnalyticsMetricCard
+          key={analyticsData.peakActivity.label}
+          title={"Peak Activity"}
+          value={analyticsData.peakActivity.label}
+          description={
+            analyticsData.peakActivity.count === 0
+              ? "Add applications to reveal your busiest day."
+              : `${analyticsData.peakActivity.count} applications submitted on this day`
+          }
+          icon={Calendar}
+        />
       </main>
     </div>
   );

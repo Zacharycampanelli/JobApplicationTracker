@@ -32,11 +32,17 @@ export type SourceBreakdownItem = {
   color: string;
 };
 
+export type PeakActivityItem = {
+  label: string;
+  count: number;
+};
+
 export type AnalyticsData = {
   stats: AnalyticsMetric[];
   pipelineDistribution: PipelineDistributionItem[];
   applicationVelocity: ApplicationVelocityItem[];
   sourceBreakdown: SourceBreakdownItem[];
+  peakActivity: PeakActivityItem;
 };
 
 const sourceLabels: Record<string, string> = {
@@ -58,6 +64,16 @@ const sourceColors: Record<string, string> = {
   NETWORKING: "#a9b4b9",
   OTHER: "#9f403d"
 };
+
+const dayLabels = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday"
+];
 
 const getApplicationVelocity = (
   applications: JobApplication[]
@@ -105,6 +121,32 @@ const getSourceBreakdown = (
     value,
     color: sourceColors[source] ?? "#66757d"
   }));
+};
+
+const getPeakActivity = (
+  applications: JobApplication[]
+): PeakActivityItem => {
+  const dayCounts = applications.reduce<Record<string, number>>((acc, app) => {
+    const dayName = dayLabels[new Date(app.appliedAt).getDay()];
+
+    acc[dayName] = (acc[dayName] ?? 0) + 1;
+
+    return acc;
+  }, {});
+
+  const peakDay = Object.entries(dayCounts).sort((a, b) => b[1] - a[1])[0];
+
+  if (!peakDay) {
+    return {
+      label: "No activity yet",
+      count: 0
+    };
+  }
+
+  return {
+    label: peakDay[0],
+    count: peakDay[1]
+  };
 };
 
 export const getAnalyticsData = (
@@ -176,6 +218,7 @@ export const getAnalyticsData = (
       }
     ],
     applicationVelocity: getApplicationVelocity(applications),
-    sourceBreakdown: getSourceBreakdown(applications)
+    sourceBreakdown: getSourceBreakdown(applications),
+    peakActivity: getPeakActivity(applications)
   };
 };
