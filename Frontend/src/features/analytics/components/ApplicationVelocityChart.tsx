@@ -49,7 +49,7 @@ export const ApplicationVelocityChart = ({
       <h3 className="text-page-title text-on-surface mb-8 text-center">
         Application Velocity
       </h3>
-      <VerticalBarChart data={chartData} options={options} />
+      <VerticalBarChart data={chartData} options={options} className="w-full h-56"/>
     </Card>
   );
 };

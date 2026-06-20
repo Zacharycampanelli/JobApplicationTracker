@@ -16,6 +16,8 @@ const HorizontalBarChart = ({
       <Bar
         data={data}
         options={{
+          responsive: true,
+          maintainAspectRatio: false,
           indexAxis: "y",
           ...options
         }}

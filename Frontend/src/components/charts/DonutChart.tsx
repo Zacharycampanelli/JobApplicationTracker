@@ -9,7 +9,11 @@ type DoughnutChartProps = {
 const DoughnutChart = ({ data, options, className }: DoughnutChartProps) => {
   return (
     <div className={className}>
-      <Doughnut data={data} options={options} />
+      <Doughnut data={data} options={
+        {
+          responsive: true,
+          maintainAspectRatio: false,
+          ...options}} />
     </div>
   );
 };

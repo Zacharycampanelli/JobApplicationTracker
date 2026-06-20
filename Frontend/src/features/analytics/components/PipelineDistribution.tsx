@@ -73,7 +73,7 @@ const PipelineDistribution = ({
             <DonutChart
               data={chartData as ChartData<"doughnut">}
               options={donutOptions}
-              className="size-full"
+              className="w-full h-full"
             />
             <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-card-title text-on-surface">

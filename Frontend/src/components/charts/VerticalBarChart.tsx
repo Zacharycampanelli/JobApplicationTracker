@@ -14,7 +14,10 @@ const VerticalBarChart = ({
 }: VerticalBarChartProps) => {
   return (
     <div className={className}>
-      <Bar data={data} options={options} />
+      <Bar data={data} options={{
+        responsive: true,
+        maintainAspectRatio: false,
+        ...options}} />
     </div>
   );
 }

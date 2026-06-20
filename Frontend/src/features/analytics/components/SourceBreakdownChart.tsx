@@ -50,9 +50,13 @@ const SourceBreakdownChart = ({
   return (
     <Card className={className}>
       <h3 className="mb-8 text-center text-page-title text-on-surface">
-        SourceBreakdown
+        Source Breakdown
       </h3>
-      <HorizontalBarChart data={chartData} options={options} />
+      <HorizontalBarChart
+        data={chartData}
+        options={options}
+        className="w-full h-full"
+      />
     </Card>
   );
 };
