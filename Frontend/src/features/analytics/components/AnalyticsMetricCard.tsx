@@ -1,4 +1,4 @@
-import type { ComponentType, SVGProps } from "react";
+import type { ComponentType, SVGProps, ReactNode } from "react";
 import Card from "../../../components/ui/Card";
 import { twMerge } from "tailwind-merge";
 
@@ -13,6 +13,7 @@ type AnalyticsMetricCardProps = {
   progressBar?: boolean;
   index?: number;
   className?: string;
+  children?: ReactNode; 
 };
 
 const variantStyles = {
@@ -48,7 +49,8 @@ const AnalyticsMetricCard = ({
   emphasis = "default",
   progressBar,
   index,
-  className
+  className,
+  children
 }: AnalyticsMetricCardProps) => {
   let iconColor = "text-primary";
   let background = "bg-primary-container";
@@ -94,6 +96,7 @@ const AnalyticsMetricCard = ({
           value={typeof value === "number" ? value : 0}
         />
       )}
+      {children}
     </Card>
   );
 };

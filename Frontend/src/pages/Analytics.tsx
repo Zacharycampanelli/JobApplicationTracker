@@ -9,6 +9,7 @@ import { ApplicationVelocityChart } from "../features/analytics/components/Appli
 import SourceBreakdownChart from "../features/analytics/components/SourceBreakdownChart";
 import Appplication from "../assets/images/addApplication.svg?react";
 import Calendar from "../assets/images/calendar.svg?react";
+import DayIndicator from "../components/shared/DayIndicator";
 
 const Analytics = () => {
   const isTabletUp = useBreakpoint("md");
@@ -76,7 +77,9 @@ const Analytics = () => {
               : `${analyticsData.peakActivity.count} applications submitted on this day`
           }
           icon={Calendar}
-        />
+        >
+          <DayIndicator activeDay={analyticsData.peakActivity.label} />
+        </AnalyticsMetricCard>
       </main>
     </div>
   );
