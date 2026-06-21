@@ -62,7 +62,11 @@ const PipelineDistribution = ({
       <h3 className="text-page-title text-on-surface mb-8 text-center">
         Pipeline Distribution
       </h3>
-      {isTabletUp ? (
+      {totalApplications === 0 ? (
+        <p className="text-label-md text-on-surface-secondary">
+          No pipeline data yet.
+        </p>
+      ) : isTabletUp ? (
         <HorizontalBarChart
           data={chartData as ChartData<"bar">}
           options={barOptions}
@@ -73,7 +77,7 @@ const PipelineDistribution = ({
             <DonutChart
               data={chartData as ChartData<"doughnut">}
               options={donutOptions}
-              className="w-full h-full"
+              className="w-full h-56"
             />
             <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-card-title text-on-surface">

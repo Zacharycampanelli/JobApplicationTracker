@@ -52,11 +52,17 @@ const SourceBreakdownChart = ({
       <h3 className="mb-8 text-center text-page-title text-on-surface">
         Source Breakdown
       </h3>
-      <HorizontalBarChart
-        data={chartData}
-        options={options}
-        className="w-full h-full"
-      />
+      {data.length === 0 ? (
+        <p className="text-label-md text-on-surface-secondary">
+          Add source details to unlock this chart.
+        </p>
+      ) : (
+        <HorizontalBarChart
+          data={chartData}
+          options={options}
+          className="w-full h-56"
+        />
+      )}
     </Card>
   );
 };

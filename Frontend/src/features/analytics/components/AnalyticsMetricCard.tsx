@@ -13,12 +13,22 @@ type AnalyticsMetricCardProps = {
   progressBar?: boolean;
   index?: number;
   className?: string;
-  children?: ReactNode; 
+  children?: ReactNode;
 };
 
 const variantStyles = {
   featured: "p-6 min-h-54",
   compact: "p-4 min-h-32"
+};
+
+const valueStyles = {
+  featured: "text-analytics-card",
+  compact: "text-3xl leading-tight font-bold"
+};
+
+const titleStyles = {
+  featured: "text-label-md",
+  compact: "text-label-sm"
 };
 
 const emphasisStyles = {
@@ -79,10 +89,12 @@ const AnalyticsMetricCard = ({
           <Icon className={`size-8 fill-current ${iconColor}`} />
         </span>
       )}
-      <h3 className={`text-analytics-card ${emphasisClassName.value}`}>
+      <h3 className={`${valueStyles[variant]} ${emphasisClassName.value}`}>
         {value} {suffix || ""}
       </h3>
-      <h4 className={`text-label-md ${emphasisClassName.title}`}>{title}</h4>
+      <h4 className={`${titleStyles[variant]} ${emphasisClassName.title}`}>
+        {title}
+      </h4>
       <p className={`text-body-md ${emphasisClassName.description}`}>
         {description || ""}
       </p>

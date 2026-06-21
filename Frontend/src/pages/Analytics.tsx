@@ -7,7 +7,7 @@ import PipelineDistribution from "../features/analytics/components/PipelineDistr
 import { getAnalyticsData } from "../utils/getAnalyticsData";
 import { ApplicationVelocityChart } from "../features/analytics/components/ApplicationVelocityChart";
 import SourceBreakdownChart from "../features/analytics/components/SourceBreakdownChart";
-import Appplication from "../assets/images/addApplication.svg?react";
+import Application from "../assets/images/addApplication.svg?react";
 import Calendar from "../assets/images/calendar.svg?react";
 import DayIndicator from "../components/shared/DayIndicator";
 
@@ -24,39 +24,39 @@ const Analytics = () => {
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 relative">
       {isMobile && <Header />}
-      <main className="flex flex-col pb-10 gap-6">
+      <main className="flex flex-col pb-10 gap-6 md:gap-8">
         <h2 className="mt-6 text-page-title text-on-surface">
           Performance Ledger
         </h2>
         <p className="mt-4 text-body-lg text-on-surface-secondary">
           Measuring your application journey with architectural precision.
         </p>
-        {isMobile && (
-          <>
+        {/* {isMobile && ( */}
+        <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4 lg:auto-rows-[8rem]">
+          <AnalyticsMetricCard
+            title={analyticsData.stats[0].title}
+            value={analyticsData.stats[0].value}
+            suffix={analyticsData.stats[0].suffix}
+            icon={Application}
+            className="col-span-2 min-h-40 md:min-h-44 lg:row-span-2 lg:min-h-0"
+          />
+
+          {analyticsData.stats.slice(1).map((stat) => (
             <AnalyticsMetricCard
-              title={analyticsData.stats[0].title}
-              value={analyticsData.stats[0].value}
-              suffix={analyticsData.stats[0].suffix}
-              icon={Appplication}
+              key={stat.title}
+              title={stat.title}
+              value={stat.value}
+              suffix={stat.suffix}
+              variant="compact"
+              className="lg:min-h-0"
             />
-            <section className="grid grid-cols-2 gap-3">
-              {analyticsData.stats.slice(1).map((stat) => {
-                return (
-                  <AnalyticsMetricCard
-                    key={stat.title}
-                    title={stat.title}
-                    value={stat.value}
-                    suffix={stat.suffix}
-                  />
-                );
-              })}
-            </section>
-          </>
-        )}
+          ))}
+        </div>
+        {/* )} */}
 
         <PipelineDistribution
           data={analyticsData.pipelineDistribution}
-          className="mt-18"
+          className="mt-18 md:mt-12"
         />
         <ApplicationVelocityChart
           data={analyticsData.applicationVelocity}
@@ -68,8 +68,7 @@ const Analytics = () => {
         />
 
         <AnalyticsMetricCard
-          key={analyticsData.peakActivity.label}
-          title={"Peak Activity"}
+          title="Peak Activity"
           value={analyticsData.peakActivity.label}
           description={
             analyticsData.peakActivity.count === 0
@@ -77,6 +76,7 @@ const Analytics = () => {
               : `${analyticsData.peakActivity.count} applications submitted on this day`
           }
           icon={Calendar}
+          className="mt-10"
         >
           <DayIndicator activeDay={analyticsData.peakActivity.label} />
         </AnalyticsMetricCard>
