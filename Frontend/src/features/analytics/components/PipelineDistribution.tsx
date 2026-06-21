@@ -59,7 +59,7 @@ const PipelineDistribution = ({
 
   return (
     <Card className={className}>
-      <h3 className="text-page-title text-on-surface mb-8 text-center">
+      <h3 className="text-card-title text-on-surface mb-4 text-center lg:text-left">
         Pipeline Distribution
       </h3>
       {totalApplications === 0 ? (

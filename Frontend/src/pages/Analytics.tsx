@@ -31,42 +31,42 @@ const Analytics = () => {
         <p className="mt-4 text-body-lg text-on-surface-secondary">
           Measuring your application journey with architectural precision.
         </p>
-        {/* {isMobile && ( */}
-        <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4 lg:auto-rows-[8rem]">
-          <AnalyticsMetricCard
-            title={analyticsData.stats[0].title}
-            value={analyticsData.stats[0].value}
-            suffix={analyticsData.stats[0].suffix}
-            icon={Application}
-            className="col-span-2 min-h-40 md:min-h-44 lg:row-span-2 lg:min-h-0"
-          />
-
-          {analyticsData.stats.slice(1).map((stat) => (
+        <section className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)] lg:items-stretch">
+          <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4 lg:auto-rows-[8rem]">
             <AnalyticsMetricCard
-              key={stat.title}
-              title={stat.title}
-              value={stat.value}
-              suffix={stat.suffix}
-              variant="compact"
-              className="lg:min-h-0"
+              title={analyticsData.stats[0].title}
+              value={analyticsData.stats[0].value}
+              suffix={analyticsData.stats[0].suffix}
+              icon={Application}
+              className="col-span-2 min-h-40 md:min-h-44 lg:row-span-2 lg:min-h-0"
             />
-          ))}
-        </div>
-        {/* )} */}
 
-        <PipelineDistribution
-          data={analyticsData.pipelineDistribution}
-          className="mt-18 md:mt-12"
-        />
-        <ApplicationVelocityChart
-          data={analyticsData.applicationVelocity}
-          className="mt-10"
-        />
-        <SourceBreakdownChart
-          data={analyticsData.sourceBreakdown}
-          className="mt-10"
-        />
+            {analyticsData.stats.slice(1).map((stat) => (
+              <AnalyticsMetricCard
+                key={stat.title}
+                title={stat.title}
+                value={stat.value}
+                suffix={stat.suffix}
+                variant="compact"
+                className="lg:min-h-0"
+              />
+            ))}
+          </div>
 
+          <PipelineDistribution
+            data={analyticsData.pipelineDistribution}
+            className="mt-12 md:mt-0 lg:h-full lg:p-4"
+          />
+        </section>
+
+        <section className="grid gap-4 lg:grid-cols-2">
+          <ApplicationVelocityChart
+            data={analyticsData.applicationVelocity}
+          />
+          <SourceBreakdownChart
+            data={analyticsData.sourceBreakdown}
+          />
+        </section>
         <AnalyticsMetricCard
           title="Peak Activity"
           value={analyticsData.peakActivity.label}

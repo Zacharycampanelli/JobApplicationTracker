@@ -49,7 +49,7 @@ const SourceBreakdownChart = ({
 
   return (
     <Card className={className}>
-      <h3 className="mb-8 text-center text-page-title text-on-surface">
+      <h3 className="mb-8 text-center text-card-title text-on-surface">
         Source Breakdown
       </h3>
       {data.length === 0 ? (
