@@ -13,6 +13,7 @@ import Header from "../components/layout/Header";
 import ApplicationForm from "../features/applications/components/ApplicationForm";
 import Modal from "../components/ui/Modal";
 import Button from "../components/ui/Button";
+import CancelModal from "../components/shared/CancelModal";
 
 const EditApplication = () => {
   const isTabletUp = useBreakpoint("md");
@@ -142,31 +143,12 @@ const EditApplication = () => {
           Application updated successfully
         </p>
       </Modal>
-      <Modal
-        title="Discard changes?"
+      <CancelModal
         isOpen={isCancelModalOpen}
         onClose={() => setIsCancelModalOpen(false)}
-        titleClassName="text-error"
-        footer={
-          <div className="flex gap-4">
-            <Button variant="ghost" onClick={() => setIsCancelModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                setIsCancelModalOpen(false);
-                navigate("/applications");
-              }}
-            >
-              Yes
-            </Button>
-          </div>
-        }
-      >
-        <p className="text-body-md text-on-surface">
-          Are you sure you want to discard your changes?
-        </p>
-      </Modal>
+        newLocation="/applications"
+      />
+
       <Modal
         title="Delete application?"
         isOpen={isDeleteModalOpen}

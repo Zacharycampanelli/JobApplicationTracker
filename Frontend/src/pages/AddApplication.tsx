@@ -8,13 +8,11 @@ import { useEffect, useState } from "react";
 import type { Resume } from "../types/types";
 import Modal from "../components/ui/Modal";
 import { createApplication } from "../features/applications/applicationApi";
-import Button from "../components/ui/Button";
-import { useNavigate } from "react-router";
+import CancelModal from "../components/shared/CancelModal";
 
 const AddApplication = () => {
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
-  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -88,31 +86,11 @@ const AddApplication = () => {
           Application added successfully
         </p>
       </Modal>
-      <Modal
-        title="Discard changes?"
+      <CancelModal
         isOpen={isCancelModalOpen}
         onClose={() => setIsCancelModalOpen(false)}
-        titleClassName="text-error"
-        footer={
-          <div className="flex gap-4">
-            <Button variant="ghost" onClick={() => setIsCancelModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                setIsCancelModalOpen(false);
-                navigate("/applications");
-              }}
-            >
-              Yes
-            </Button>
-          </div>
-        }
-      >
-        <p className="text-body-md text-on-surface">
-          Are you sure you want to discard your changes?
-        </p>
-      </Modal>
+        newLocation="/applications"
+        />
     </div>
   );
 };
