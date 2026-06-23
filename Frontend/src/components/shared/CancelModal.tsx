@@ -5,11 +5,12 @@ import { useNavigate } from 'react-router';
 type CancelModalProps = {
     isOpen: boolean;
     onClose: () => void;
-    newLocation: string;
+    newLocation?: string;
+    onConfirm?: () => void;
    
 }
 
-const CancelModal = ({isOpen, onClose, newLocation }: CancelModalProps) => {
+const CancelModal = ({isOpen, onClose, newLocation, onConfirm }: CancelModalProps) => {
     const navigate = useNavigate();
   return (
     <Modal
@@ -25,7 +26,12 @@ const CancelModal = ({isOpen, onClose, newLocation }: CancelModalProps) => {
             <Button
               onClick={() => {
                 onClose();
-                navigate(newLocation);
+                if (newLocation) {
+                  navigate(newLocation);
+                }
+                else if (onConfirm) {
+                  onConfirm();
+                }
               }}
             >
               Yes

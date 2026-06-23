@@ -10,26 +10,7 @@ import Textarea from "../../../components/ui/Textarea";
 import ApplicationFormActions from "./ApplicationFormActions";
 import AdditionalFormOptions from "./AdditionalFormOptions";
 import ExpandableSection from "../../../components/shared/ExpandableSection";
-
-const optionalNumber = z.preprocess(
-  (value) => (value === "" || value === null ? null : value),
-  z.coerce.number().nullable().optional()
-);
-
-const optionalDate = z.preprocess(
-  (value) => (value === "" || value === null ? null : value),
-  z.coerce.date().nullable().optional()
-);
-
-const optionalText = z.preprocess(
-  (value) => (value === null ? "" : value),
-  z.string().optional()
-);
-
-const requiredDate = z.preprocess(
-  (value) => (value === "" || value === null ? undefined : value),
-  z.coerce.date({ error: "Date applied is required" })
-);
+import { optionalNumber, optionalText, optionalDate, requiredDate } from "../../../utils/zodUtils";
 
 const applicationSchema = z
   .object({
@@ -237,13 +218,6 @@ const ApplicationForm = ({
             onCancel={onCancel}
           />
         </div>
-        {/* <div className="hidden md:flex md:flex-row md:col-span-2 justify-between md:absolute md:right-8 md:top-10 md:gap-4">
-          <ApplicationFormActions
-            isSubmitting={isSubmitting}
-            newOrEdit={newOrEdit}
-            onCancel={onCancel}
-          />
-        </div> */}
       </form>
     </>
   );

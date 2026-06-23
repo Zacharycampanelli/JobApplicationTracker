@@ -6,9 +6,9 @@ import { useBreakpoint } from "../utils/useBreakpoint";
 import { getAllResumes } from "../features/resumes/resumeApi";
 import { useEffect, useState } from "react";
 import type { Resume } from "../types/types";
-import Modal from "../components/ui/Modal";
 import { createApplication } from "../features/applications/applicationApi";
 import CancelModal from "../components/shared/CancelModal";
+import SuccessModal from "../components/shared/SuccessModal";
 
 const AddApplication = () => {
   const isTabletUp = useBreakpoint("md");
@@ -75,17 +75,11 @@ const AddApplication = () => {
           link: ""
         }}
       />
-      <Modal
-        title="Success!"
+      <SuccessModal
         isOpen={isSuccessModalOpen}
         onClose={() => setIsSuccessModalOpen(false)}
-        closeAction={"/applications"}
-        closeText="Okay!"
-      >
-        <p className="text-body-md text-on-surface">
-          Application added successfully
-        </p>
-      </Modal>
+        newLocation={"/applications"}
+      />
       <CancelModal
         isOpen={isCancelModalOpen}
         onClose={() => setIsCancelModalOpen(false)}
