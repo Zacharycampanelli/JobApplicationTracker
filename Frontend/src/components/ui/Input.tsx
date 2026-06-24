@@ -12,7 +12,7 @@ const sizeStyles = {
 type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size"> & {
   label?: string;
   error?: string;
-  type?: "text" | "password" | "email" | "number" | "search" | "date";
+  type?: "text" | "password" | "email" | "number" | "search" | "date" | "file";
   startIcon?: ReactElement;
   endIcon?: ReactElement;
   size?: keyof typeof sizeStyles;

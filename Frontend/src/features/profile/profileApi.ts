@@ -1,8 +1,13 @@
 import { api } from "../../api/api";
 
 export type UpdateProfileValues = {
-    name: string;
-}
+  name: string;
+  summary?: string;
+  title?: string;
+  location?: string;
+  website?: string | null;
+  linkedin?: string | null;
+};
 
 export const updateProfile = (data: UpdateProfileValues) => {
   return api("api/users/me", {
@@ -16,4 +21,4 @@ export const uploadProfileImage = (formData: FormData) => {
     method: "PATCH",
     body: formData
   });
-}
+};

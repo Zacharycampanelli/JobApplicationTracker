@@ -18,6 +18,7 @@ export type UserProfile = {
   location?: string | null;
   website?: string | null;
   linkedin?: string | null;
+  avatarUrl?: string | null;
   createdAt: string;
   updatedAt: string;
 };

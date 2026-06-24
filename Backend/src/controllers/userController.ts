@@ -84,6 +84,7 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
 
 export const uploadAvatar = async (req: AuthRequest, res: Response) => {
   const userId = req.user?.userId;
+  const avatarUrl = `/uploads/avatars/${req.file?.filename}`
 
   if (!userId) {
     return res.status(401).json({ error: 'Unauthorized' });
@@ -96,8 +97,8 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
   try {
     await prisma.userProfile.upsert({
       where: { userId },
-      update: { avatarUrl: req.file.path },
-      create: { userId, avatarUrl: req.file.path },
+      update: { avatarUrl },
+      create: { userId, avatarUrl },
     });
 
     const updatedUserWithAvatar = await prisma.user.findUnique({

@@ -2,7 +2,10 @@ import Header from "../components/layout/Header";
 import { useBreakpoint } from "../utils/useBreakpoint";
 import { useAuthContext } from "../context/AuthContext";
 import Input from "../components/ui/Input";
-import { updateProfile } from "../features/profile/profileApi";
+import {
+  updateProfile,
+  uploadProfileImage
+} from "../features/profile/profileApi";
 import type { Resume } from "../types/types";
 import z from "zod";
 import { useForm } from "react-hook-form";
@@ -17,6 +20,7 @@ import { getAllResumes } from "../features/resumes/resumeApi";
 import { optionalNumber, optionalText, optionalUrl } from "../utils/zodUtils";
 import SuccessModal from "../components/shared/SuccessModal";
 import Textarea from "../components/ui/Textarea";
+import { API_URL } from "../api/api";
 
 const profileSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
@@ -52,6 +56,11 @@ const Profile = () => {
 
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
+
+  const avatarSrc = user?.profile?.avatarUrl
+    ? `${API_URL}${user.profile.avatarUrl}`
+    : undefined;
+
   const loadResumes = async () => {
     setIsLoading(true);
 
@@ -75,18 +84,19 @@ const Profile = () => {
   useEffect(() => {
     reset({
       name: user?.name ?? "",
-      summary: user?.profile?.summary,
-      title: user?.profile?.title,
-      location: user?.profile?.location,
-      website: user?.profile?.website,
-      linkedin: user?.profile?.linkedin,
+      summary: user?.profile?.summary ?? "",
+      title: user?.profile?.title ?? "",
+      location: user?.profile?.location ?? "",
+      website: user?.profile?.website ?? "",
+      linkedin: user?.profile?.linkedin ?? "",
       resumeId: undefined
     });
   }, [user, reset]);
 
   const onSubmit = async (data: ProfileValues) => {
     try {
-      const updatedUser = await updateProfile(data);
+      const { resumeId, ...profileData } = data;
+      const updatedUser = await updateProfile(profileData);
       updateUser(updatedUser);
       setInEditMode(false);
       setIsSuccessModalOpen(true);
@@ -104,7 +114,15 @@ const Profile = () => {
   };
 
   const exitEditMode = () => {
-    reset({ name: user?.name ?? "", resumeId: undefined });
+    reset({
+      name: user?.name ?? "",
+      resumeId: undefined,
+      summary: user?.profile?.summary ?? "",
+      title: user?.profile?.title ?? "",
+      location: user?.profile?.location ?? "",
+      website: user?.profile?.website ?? "",
+      linkedin: user?.profile?.linkedin ?? ""
+    });
     setInEditMode(false);
     setIsCancelModalOpen(false);
   };
@@ -127,7 +145,7 @@ const Profile = () => {
     return `http://${url}`;
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -137,8 +155,6 @@ const Profile = () => {
     try {
       const updatedUser = await uploadProfileImage(formData);
       updateUser(updatedUser);
-      setInEditMode(false);
-      setIsSuccessModalOpen(true);
     } catch (error) {
       console.error(error);
     }
@@ -169,8 +185,26 @@ const Profile = () => {
           />
         </Button>
       </div>
-
-      <span className="size-28 mx-auto rounded-full bg-black " />
+      {avatarSrc ? (
+        <img
+          src={avatarSrc}
+          alt={`${user?.name ?? "User"} avatar`}
+          className="size-28 mx-auto rounded-full object-cover"
+        />
+      ) : (
+        <span className="flex justify-center items-center size-28 mx-auto rounded-full bg-surface-container-high text-page-title text-on-surface">
+          {user?.name?.charAt(0).toUpperCase() ?? "U"}
+        </span>
+      )}
+      {inEditMode && (
+        <Input
+          type="file"
+          id="avatar"
+          label="PROFILE IMAGE"
+          accept="image/png,image/jpeg,image/webp"
+          onChange={handleAvatarUpload}
+        />
+      )}
       <form
         className="mt-8 flex flex-col gap-6"
         onSubmit={handleSubmit(onSubmit)}
