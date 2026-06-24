@@ -15,7 +15,7 @@ const SuccessModal = ({ isOpen, onClose, newLocation }: SuccessModalProps) => {
       closeAction={newLocation || undefined}
       closeText={newLocation ? "Okay!" : "Close"}
     >
-      <p className="tex t-body-md text-on-surface">
+      <p className="text-body-md text-on-surface">
         {newLocation ? "Application added successfully" : "Changes saved successfully"}
       </p>
     </Modal>

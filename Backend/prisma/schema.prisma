@@ -21,6 +21,8 @@ model User {
   updatedAt DateTime @updatedAt
   applications JobApplication[]
   resumes Resume[]
+  
+  profile UserProfile?
 }
 
 enum JobStatus {
@@ -85,4 +87,18 @@ model Resume {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   applications JobApplication[]
   createdAt DateTime @default(now())
+}
+
+model UserProfile {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  summary   String?
+  title     String?
+  location  String?
+  website   String?
+  linkedin  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

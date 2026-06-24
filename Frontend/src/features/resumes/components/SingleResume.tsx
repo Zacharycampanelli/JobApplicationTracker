@@ -59,7 +59,7 @@ const SingleResume = ({
         </span>
       </button>
       {deletable && (
-        <button onClick={handleDelete} className="md:">
+        <button onClick={handleDelete} type="button" className="md:">
           X
         </button>
       )}

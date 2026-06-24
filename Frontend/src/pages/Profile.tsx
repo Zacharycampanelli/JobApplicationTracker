@@ -5,7 +5,7 @@ import Input from "../components/ui/Input";
 import { updateProfile } from "../features/profile/profileApi";
 import type { Resume } from "../types/types";
 import z from "zod";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import Button from "../components/ui/Button";
@@ -31,9 +31,7 @@ const Profile = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
-    control,
-    setValue
+    reset
   } = useForm<ProfileFormValues, unknown, ProfileValues>({
     resolver: zodResolver(profileSchema)
   });
@@ -103,7 +101,6 @@ const Profile = () => {
       enterEditMode();
     }
   };
-  const selectedResumeId = useWatch({ control, name: "resumeId" });
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 md:relative">
@@ -161,31 +158,20 @@ const Profile = () => {
               Cancel
             </Button>
           </span>
-            <SuccessModal
-              isOpen={isSuccessModalOpen}
-              onClose={() => setIsSuccessModalOpen(false)}
-            />
-            <CancelModal
-              isOpen={isCancelModalOpen}
-              onClose={() => setIsCancelModalOpen(false)}
-              onConfirm={exitEditMode}
-            />
+          <SuccessModal
+            isOpen={isSuccessModalOpen}
+            onClose={() => setIsSuccessModalOpen(false)}
+          />
+          <CancelModal
+            isOpen={isCancelModalOpen}
+            onClose={() => setIsCancelModalOpen(false)}
+            onConfirm={exitEditMode}
+          />
           <ResumeManager
             resumes={resumes}
             isLoading={isLoading}
             error={error}
             empty={empty}
-            selectedResumeId={
-              typeof selectedResumeId === "number"
-                ? selectedResumeId
-                : undefined
-            }
-            onSelectResume={(resumeId) =>
-              setValue("resumeId", resumeId, {
-                shouldDirty: true,
-                shouldValidate: true
-              })
-            }
             onResumesChanged={loadResumes}
           />
         </form>

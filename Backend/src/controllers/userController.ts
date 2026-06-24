@@ -20,24 +20,62 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  const { name } = req.body;
+  const { name, summary, title, location, website, linkedin } = req.body;
 
   if(!name){
     return res.status(400).json({ error: 'Name is required' });
   }
 
   try {
-    const user = await prisma.user.update({
-      where: { id: userId },
-      data: { name },
+    await prisma.user.update({
+  where: { id: userId },
+  data: { name }
+});
+
+await prisma.userProfile.upsert({
+  where: { userId },
+  update: {
+    summary,
+    title,
+    location,
+    website,
+    linkedin
+  },
+  create: {
+    userId,
+    summary,
+    title,
+    location,
+    website,
+    linkedin
+  }
+});
+
+const updatedUser = await prisma.user.findUnique({
+  where: { id: userId },
+  select: {
+    id: true,
+    name: true,
+    email: true,
+    createdAt: true,
+    updatedAt: true,
+    profile: {
       select: {
         id: true,
-        name: true,
-        email: true,
-        createdAt: true
+        userId: true,
+        summary: true,
+        title: true,
+        location: true,
+        website: true,
+        linkedin: true,
+        createdAt: true,
+        updatedAt: true
       }
-    });
-    res.json(user);
+    }
+  }
+});
+
+res.json(updatedUser);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to update user' });

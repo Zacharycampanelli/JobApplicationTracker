@@ -109,6 +109,20 @@ export const getMe = async (
         name: true,
         email: true,
         createdAt: true,
+        updatedAt: true,
+        profile: {
+          select: {
+            id: true,
+            userId: true,
+            summary: true,
+            title: true,
+            location: true,
+            website: true,
+            linkedin: true,
+            createdAt: true,
+            updatedAt: true
+          }
+        }
       },
     });
 
