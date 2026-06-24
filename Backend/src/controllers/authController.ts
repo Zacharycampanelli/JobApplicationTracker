@@ -120,7 +120,8 @@ export const getMe = async (
             website: true,
             linkedin: true,
             createdAt: true,
-            updatedAt: true
+            updatedAt: true,
+            avatarUrl: true
           }
         }
       },

@@ -10,3 +10,10 @@ export const updateProfile = (data: UpdateProfileValues) => {
     body: JSON.stringify(data)
   });
 };
+
+export const uploadProfileImage = (formData: FormData) => {
+  return api("api/users/me/avatar", {
+    method: "PATCH",
+    body: formData
+  });
+}

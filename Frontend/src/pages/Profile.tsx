@@ -14,11 +14,17 @@ import Save from "../assets/images/save.svg?react";
 import Edit from "../assets/images/edit.svg?react";
 import ResumeManager from "../features/resumes/components/ResumeManager";
 import { getAllResumes } from "../features/resumes/resumeApi";
-import { optionalNumber } from "../utils/zodUtils";
+import { optionalNumber, optionalText, optionalUrl } from "../utils/zodUtils";
 import SuccessModal from "../components/shared/SuccessModal";
+import Textarea from "../components/ui/Textarea";
 
 const profileSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
+  summary: optionalText,
+  title: optionalText,
+  location: optionalText,
+  website: optionalUrl,
+  linkedin: optionalUrl,
   resumeId: optionalNumber
 });
 
@@ -31,7 +37,8 @@ const Profile = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset
+    reset,
+    setValue
   } = useForm<ProfileFormValues, unknown, ProfileValues>({
     resolver: zodResolver(profileSchema)
   });
@@ -66,7 +73,15 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
-    reset({ name: user?.name ?? "", resumeId: undefined });
+    reset({
+      name: user?.name ?? "",
+      summary: user?.profile?.summary,
+      title: user?.profile?.title,
+      location: user?.profile?.location,
+      website: user?.profile?.website,
+      linkedin: user?.profile?.linkedin,
+      resumeId: undefined
+    });
   }, [user, reset]);
 
   const onSubmit = async (data: ProfileValues) => {
@@ -102,6 +117,33 @@ const Profile = () => {
     }
   };
 
+  const handleUrl = (url: string) => {
+    if (!url.trim()) return "";
+
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      return url;
+    }
+
+    return `http://${url}`;
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    try {
+      const updatedUser = await uploadProfileImage(formData);
+      updateUser(updatedUser);
+      setInEditMode(false);
+      setIsSuccessModalOpen(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 md:relative">
       {isMobile && <Header />}
@@ -128,54 +170,110 @@ const Profile = () => {
         </Button>
       </div>
 
-      <div className="mt-8 grid gap-6">
-        <span className="size-28 rounded-full bg-black " />
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            id="name"
-            label="FULL NAME "
-            {...register("name")}
-            defaultValue={user?.name}
-            error={errors.name?.message}
-            disabled={!inEditMode}
-          />
+      <span className="size-28 mx-auto rounded-full bg-black " />
+      <form
+        className="mt-8 flex flex-col gap-6"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <Input
+          id="name"
+          label="FULL NAME "
+          {...register("name")}
+          defaultValue={user?.name}
+          error={errors.name?.message}
+          disabled={!inEditMode}
+        />
 
-          <Input
-            id="email"
-            label="EMAIL ADDRESS"
-            defaultValue={user?.email}
-            disabled={true}
-          />
-          <span className={`${inEditMode ? "flex" : "hidden"}`}>
-            <Button icon={<Save />} type="submit" disabled={isSubmitting}>
-              Save Changes
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={requestExitEditMode}
-            >
-              Cancel
-            </Button>
-          </span>
-          <SuccessModal
-            isOpen={isSuccessModalOpen}
-            onClose={() => setIsSuccessModalOpen(false)}
-          />
-          <CancelModal
-            isOpen={isCancelModalOpen}
-            onClose={() => setIsCancelModalOpen(false)}
-            onConfirm={exitEditMode}
-          />
-          <ResumeManager
-            resumes={resumes}
-            isLoading={isLoading}
-            error={error}
-            empty={empty}
-            onResumesChanged={loadResumes}
-          />
-        </form>
-      </div>
+        <Input
+          id="email"
+          label="EMAIL ADDRESS"
+          defaultValue={user?.email}
+          disabled={true}
+        />
+        <Input
+          id="title"
+          label="TITLE"
+          {...register("title")}
+          defaultValue={user?.profile?.title ?? undefined}
+          error={errors.title?.message}
+          disabled={!inEditMode}
+        />
+        <Input
+          id="location"
+          label="LOCATION"
+          {...register("location")}
+          defaultValue={user?.profile?.location ?? undefined}
+          error={errors.location?.message}
+          disabled={!inEditMode}
+        />
+        <Input
+          id="website"
+          label="WEBSITE"
+          defaultValue={user?.profile?.website ?? undefined}
+          error={errors.website?.message}
+          disabled={!inEditMode}
+          {...register("website", {
+            onBlur: (e) => {
+              setValue("website", handleUrl(e.target.value), {
+                shouldValidate: true,
+                shouldDirty: true
+              });
+            }
+          })}
+        />
+        <Input
+          id="linkedin"
+          label="LINKEDIN"
+          defaultValue={user?.profile?.linkedin ?? undefined}
+          error={errors.linkedin?.message}
+          disabled={!inEditMode}
+          {...register("linkedin", {
+            onBlur: (e) => {
+              setValue("linkedin", handleUrl(e.target.value), {
+                shouldValidate: true,
+                shouldDirty: true
+              });
+            }
+          })}
+        />
+        <Textarea
+          id="summary"
+          label="SUMMARY"
+          {...register("summary")}
+          defaultValue={user?.profile?.summary ?? undefined}
+          error={errors.summary?.message}
+          disabled={!inEditMode}
+        />
+
+        <span className={`${inEditMode ? "flex" : "hidden"}`}>
+          <Button icon={<Save />} type="submit" disabled={isSubmitting}>
+            Save Changes
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={requestExitEditMode}
+          >
+            Cancel
+          </Button>
+        </span>
+        <SuccessModal
+          isOpen={isSuccessModalOpen}
+          onClose={() => setIsSuccessModalOpen(false)}
+        />
+        <CancelModal
+          isOpen={isCancelModalOpen}
+          onClose={() => setIsCancelModalOpen(false)}
+          onConfirm={exitEditMode}
+        />
+        <ResumeManager
+          resumes={resumes}
+          isLoading={isLoading}
+          error={error}
+          empty={empty}
+          onResumesChanged={loadResumes}
+        />
+      </form>
     </div>
   );
 };

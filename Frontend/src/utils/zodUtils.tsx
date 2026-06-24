@@ -15,6 +15,16 @@ export const optionalText = z.preprocess(
   z.string().optional()
 ).optional();
 
+export const requiredUrl = z.preprocess(
+  (value) => (value === "" || value === null ? undefined : value),
+  z.url({ error: "URL is required" })
+);
+
+export const optionalUrl = z.preprocess(
+  (value) => (value === "" || value === null ? null : value),
+  z.url().nullable().optional()
+).optional();
+
 export const requiredDate = z.preprocess(
   (value) => (value === "" || value === null ? undefined : value),
   z.coerce.date({ error: "Date applied is required" })

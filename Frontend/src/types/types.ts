@@ -6,6 +6,20 @@ export type User = {
   updatedAt: string;
   applications: JobApplication[];
   resumes: Resume[];
+  profile?: UserProfile | null;
+};
+
+export type UserProfile = {
+  id: number;
+  userId: number;
+  user: User;
+  summary?: string | null;
+  title?: string | null;
+  location?: string | null;
+  website?: string | null;
+  linkedin?: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type JobApplication = {
