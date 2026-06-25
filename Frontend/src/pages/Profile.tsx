@@ -168,7 +168,7 @@ const Profile = () => {
       </h2>
 
       <div className="flex items-center justify-between">
-        <p className="text-body-lg text-on-surface-secondary">
+        <p className="text-body-lg text-on-surface-secondary mr-12">
           Manage your digital identity and career assets.
         </p>
 
@@ -189,7 +189,7 @@ const Profile = () => {
         <img
           src={avatarSrc}
           alt={`${user?.name ?? "User"} avatar`}
-          className="size-28 mx-auto rounded-full object-cover"
+          className="size-28 mx-auto mt-4 rounded-full object-cover"
         />
       ) : (
         <span className="flex justify-center items-center size-28 mx-auto rounded-full bg-surface-container-high text-page-title text-on-surface">
@@ -203,6 +203,7 @@ const Profile = () => {
           label="PROFILE IMAGE"
           accept="image/png,image/jpeg,image/webp"
           onChange={handleAvatarUpload}
+          className="text-center mx-auto"
         />
       )}
       <form
