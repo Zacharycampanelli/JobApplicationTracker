@@ -21,6 +21,7 @@ import { optionalNumber, optionalText, optionalUrl } from "../utils/zodUtils";
 import SuccessModal from "../components/shared/SuccessModal";
 import Textarea from "../components/ui/Textarea";
 import { API_URL } from "../api/api";
+import Toggle from "../components/ui/Toggle";
 
 const profileSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
@@ -270,7 +271,8 @@ const Profile = () => {
               });
             }
           })}
-        />
+        />zod
+        <Toggle checked={false} onChange={() => console.log("hi")}></Toggle>
         <Textarea
           id="summary"
           label="SUMMARY"
