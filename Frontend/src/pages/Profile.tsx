@@ -22,6 +22,7 @@ import SuccessModal from "../components/shared/SuccessModal";
 import Textarea from "../components/ui/Textarea";
 import { API_URL } from "../api/api";
 import Toggle from "../components/ui/Toggle";
+import UserPreferences from "../features/profile/components/UserPreferences";
 
 const profileSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
@@ -272,7 +273,6 @@ const Profile = () => {
             }
           })}
         />zod
-        <Toggle checked={false} onChange={() => console.log("hi")}></Toggle>
         <Textarea
           id="summary"
           label="SUMMARY"
@@ -303,6 +303,7 @@ const Profile = () => {
           onClose={() => setIsCancelModalOpen(false)}
           onConfirm={exitEditMode}
         />
+          </form>
         <ResumeManager
           resumes={resumes}
           isLoading={isLoading}
@@ -310,7 +311,7 @@ const Profile = () => {
           empty={empty}
           onResumesChanged={loadResumes}
         />
-      </form>
+        <UserPreferences />
     </div>
   );
 };
