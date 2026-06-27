@@ -123,6 +123,17 @@ export const getMe = async (
             updatedAt: true,
             avatarUrl: true
           }
+        },
+        preferences: {
+          select: {
+            id: true,
+            userId: true,
+            publicProfileEnabled: true,
+            autoStatusUpdatesEnabled: true,
+            themePreference: true,
+            createdAt: true,
+            updatedAt: true
+          }
         }
       },
     });

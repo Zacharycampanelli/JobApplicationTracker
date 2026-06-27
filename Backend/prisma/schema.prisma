@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -13,16 +8,77 @@ datasource db {
 }
 
 model User {
+  id           Int              @id @default(autoincrement())
+  email        String           @unique
+  password     String
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  name         String           @default("User")
+  applications JobApplication[]
+  resumes      Resume[]
+  preferences  UserPreferences?
+  profile      UserProfile?
+}
+
+model JobApplication {
+  id              Int                @id @default(autoincrement())
+  title           String
+  company         String
+  appliedAt       DateTime           @default(now())
+  notes           String?
+  link            String?
+  userId          Int
+  status          JobStatus
+  resumeId        Int?
+  location        String?
+  createdAt       DateTime           @default(now())
+  firstResponseAt DateTime?
+  interviewAt     DateTime?
+  offerAt         DateTime?
+  rejectedAt      DateTime?
+  salaryMax       Int?
+  salaryMin       Int?
+  source          ApplicationSource?
+  updatedAt       DateTime           @updatedAt
+  workMode        WorkMode?
+  resume          Resume?            @relation(fields: [resumeId], references: [id])
+  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Resume {
+  id           Int              @id @default(autoincrement())
+  name         String
+  fileUrl      String
+  userId       Int
+  createdAt    DateTime         @default(now())
+  mimeType     String
+  applications JobApplication[]
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserProfile {
   id        Int      @id @default(autoincrement())
-  name      String   @default("User")
-  email     String   @unique
-  password  String
+  userId    Int      @unique
+  summary   String?
+  title     String?
+  location  String?
+  website   String?
+  linkedin  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  applications JobApplication[]
-  resumes Resume[]
+  avatarUrl String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
-  profile UserProfile?
+model UserPreferences {
+  id                       Int      @id @default(autoincrement())
+  userId                   Int      @unique
+  publicProfileEnabled     Boolean  @default(false)
+  autoStatusUpdatesEnabled Boolean  @default(false)
+  themePreference          String   @default("system")
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+  user                     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum JobStatus {
@@ -46,60 +102,4 @@ enum WorkMode {
   REMOTE
   HYBRID
   ONSITE
-}
-
-model JobApplication {
-  id        Int      @id @default(autoincrement())
-  title     String
-  company   String
-  location  String?
-  status    JobStatus
-  appliedAt DateTime @default(now())
-  notes     String?
-  link      String?
-  source    ApplicationSource?
-  workMode  WorkMode?
-  
-  resumeId  Int?
-  resume    Resume?   @relation(fields: [resumeId], references: [id], onDelete: SetNull)
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  salaryMin Int?
-  salaryMax Int?
-
-  firstResponseAt DateTime?
-  interviewAt DateTime?
-  offerAt DateTime?
-  rejectedAt DateTime?
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-}
-
-model Resume {
-  id Int @id @default(autoincrement())
-  name String
-  fileUrl String
-  mimeType String
-  userId Int
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  applications JobApplication[]
-  createdAt DateTime @default(now())
-}
-
-model UserProfile {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @unique
-  summary   String?
-  title     String?
-  location  String?
-  website   String?
-  linkedin  String?
-  avatarUrl String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

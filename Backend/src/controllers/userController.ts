@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { prisma } from '../lib/prisma';
 import type { AuthRequest } from '../middleware/authMiddleware';
 
+//
 export const getAllUsers = async (_req: Request, res: Response) => {
   try {
     const users = await prisma.user.findMany();
@@ -72,6 +73,17 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
             avatarUrl: true,
           },
         },
+        preferences: {
+          select: {
+            id: true,
+            userId: true,
+            publicProfileEnabled: true,
+            autoStatusUpdatesEnabled: true,
+            themePreference: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
       },
     });
 
@@ -84,7 +96,7 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
 
 export const uploadAvatar = async (req: AuthRequest, res: Response) => {
   const userId = req.user?.userId;
-  const avatarUrl = `/uploads/avatars/${req.file?.filename}`
+  const avatarUrl = `/uploads/avatars/${req.file?.filename}`;
 
   if (!userId) {
     return res.status(401).json({ error: 'Unauthorized' });
@@ -123,6 +135,17 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
             avatarUrl: true,
           },
         },
+        preferences: {
+          select: {
+            id: true,
+            userId: true,
+            publicProfileEnabled: true,
+            autoStatusUpdatesEnabled: true,
+            themePreference: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
       },
     });
 
@@ -130,5 +153,41 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to upload avatar' });
+  }
+};
+
+export const updateUserPreferences = async (req: AuthRequest, res: Response) => {
+  const userId = req.user?.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const {
+    publicProfileEnabled,
+    autoStatusUpdatesEnabled,
+    themePreference
+  } = req.body;
+
+  try {
+    const updatedPreferences = await prisma.userPreferences.upsert({
+      where: { userId },
+      update: {
+        publicProfileEnabled,
+        autoStatusUpdatesEnabled,
+        themePreference
+      },
+      create: {
+        userId,
+        publicProfileEnabled,
+        autoStatusUpdatesEnabled,
+        themePreference
+      }
+    });
+
+    res.json(updatedPreferences);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update user preferences' });
   }
 };

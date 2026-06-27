@@ -1,4 +1,5 @@
 import { api } from "../../api/api";
+import type { UpdatePreferencesValues } from "../../types/types";
 
 export type UpdateProfileValues = {
   name: string;
@@ -20,5 +21,12 @@ export const uploadProfileImage = (formData: FormData) => {
   return api("api/users/me/avatar", {
     method: "PATCH",
     body: formData
+  });
+};
+
+export const updateUserPreferences = (data: UpdatePreferencesValues ) => {
+  return api("api/users/me/preferences", {
+    method: "PATCH",
+    body: JSON.stringify(data)
   });
 };

@@ -1,8 +1,12 @@
-import { ReactNode, type ComponentType, type ReactElement } from "react";
+import type {
+  ComponentType,
+  ReactNode,
+  SVGProps
+} from "react";
 
 type UserPreferenceItemProps = {
   preference: string;
-  icon: ComponentType<{ className?: string }>;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
   mode: "toggle" | "dropdown" | undefined;
   isDangerous?: boolean;
   children: ReactNode;

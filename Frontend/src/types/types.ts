@@ -7,6 +7,7 @@ export type User = {
   applications: JobApplication[];
   resumes: Resume[];
   profile?: UserProfile | null;
+  preferences?: UserPreferences | null;
 };
 
 export type UserProfile = {
@@ -78,3 +79,19 @@ export type ApplicationSource =
   | "OTHER";
 
 export type WorkMode = "REMOTE" | "HYBRID" | "ONSITE";
+
+export type UserPreferences = {
+  id: number;
+  userId: number;
+  publicProfileEnabled: boolean;
+  autoStatusUpdatesEnabled: boolean;
+  themePreference: "light" | "dark" | "system";
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type UpdatePreferencesValues = {
+  publicProfileEnabled: boolean;
+  autoStatusUpdatesEnabled: boolean;
+  themePreference: "light" | "dark" | "system";
+};

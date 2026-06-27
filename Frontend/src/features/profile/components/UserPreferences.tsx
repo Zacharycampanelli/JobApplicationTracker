@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Toggle from "../../../components/ui/Toggle";
 import UserPreferenceItem from "./UserPreferenceItem";
 import ProfileNav from "../../../assets/images/profileNav.svg?react";
@@ -8,22 +7,43 @@ import Lock from "../../../assets/images/lock.svg?react";
 import Warning from "../../../assets/images/warning.svg?react";
 import ExpandableSection from "../../../components/shared/ExpandableSection";
 import Settings from "../../../assets/images/settings.svg?react";
-type PreferenceState = {
-  publicProfileEnabled: boolean;
-  automaticStatusUpdates: boolean;
-  darkMode: boolean;
-  passwordAndMFAEnabled: boolean;
-  deactivateAccountEnabled: boolean;
-};
+import { useAuthContext } from "../../../context/AuthContext";
+import { updateUserPreferences } from "../profileApi";
+import type {
+  UpdatePreferencesValues
+} from "../../../types/types";
+
 
 const UserPreferences = () => {
-  const [userPreferences, setUserPreferences] = useState<PreferenceState>({
-    publicProfileEnabled: false,
-    automaticStatusUpdates: false,
-    darkMode: false,
-    passwordAndMFAEnabled: false,
-    deactivateAccountEnabled: false
-  });
+  const { user, updateUser } = useAuthContext();
+
+
+  const handlePreferenceChange = async (
+    changes: Partial<UpdatePreferencesValues>
+  ) => {
+    if (!user) return;
+
+    const currentPreferences: UpdatePreferencesValues = {
+      publicProfileEnabled: user.preferences?.publicProfileEnabled ?? false,
+      autoStatusUpdatesEnabled:
+        user.preferences?.autoStatusUpdatesEnabled ?? false,
+      themePreference: user.preferences?.themePreference ?? "system"
+    };
+
+    try {
+      const updatedPreferences = await updateUserPreferences({
+        ...currentPreferences,
+        ...changes
+      });
+
+      updateUser({
+        ...user,
+        preferences: updatedPreferences
+      });
+    } catch (error) {
+      console.error("Failed to update preferences", error);
+    }
+  };
 
   const preferenceOptions = [
     {
@@ -34,12 +54,10 @@ const UserPreferences = () => {
       description: "",
       children: (
         <Toggle
-          id="publicProfile"
-          checked={userPreferences.publicProfileEnabled}
-          onChange={() =>
-            setUserPreferences({
-              ...userPreferences,
-              publicProfileEnabled: !userPreferences.publicProfileEnabled
+          checked={user?.preferences?.publicProfileEnabled ?? false}
+          onChange={(checked) =>
+            handlePreferenceChange({
+              publicProfileEnabled: checked
             })
           }
         />
@@ -54,11 +72,10 @@ const UserPreferences = () => {
       children: (
         <Toggle
           id="automaticStatusUpdates"
-          checked={userPreferences.automaticStatusUpdates}
-          onChange={() =>
-            setUserPreferences({
-              ...userPreferences,
-              automaticStatusUpdates: !userPreferences.automaticStatusUpdates
+          checked={user?.preferences?.autoStatusUpdatesEnabled ?? false}
+          onChange={(checked) =>
+            handlePreferenceChange({
+              autoStatusUpdatesEnabled: checked
             })
           }
         />
@@ -73,11 +90,10 @@ const UserPreferences = () => {
       children: (
         <Toggle
           id="darkMode"
-          checked={userPreferences.darkMode}
-          onChange={() =>
-            setUserPreferences({
-              ...userPreferences,
-              darkMode: !userPreferences.darkMode
+          checked={user?.preferences?.themePreference === "dark"}
+          onChange={(checked) =>
+            handlePreferenceChange({
+              themePreference: checked ? "dark" : "light"
             })
           }
         />
