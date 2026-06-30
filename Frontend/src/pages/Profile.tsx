@@ -272,7 +272,7 @@ const Profile = () => {
               });
             }
           })}
-        />zod
+        />
         <Textarea
           id="summary"
           label="SUMMARY"
