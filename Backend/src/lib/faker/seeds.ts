@@ -4,6 +4,8 @@ import { createFakeUser } from './users';
 import { createFakeResume } from './resumes';
 import { faker } from '@faker-js/faker';
 import { createFakeApplication } from './applications';
+import { createFakeProfile } from './profiles';
+import { createFakePreferences } from './preferences';
 
 async function seed() {
   await prisma.jobApplication.deleteMany();
@@ -12,7 +14,15 @@ async function seed() {
 
   for (let i = 0; i < 10; i++) {
     const user = await prisma.user.create({
-      data: await createFakeUser(),
+      data: {
+        ...(await createFakeUser()),
+        profile: {
+          create: createFakeProfile()
+        },
+        preferences: {
+          create: createFakePreferences()
+        }
+      }
     });
 
     const resumes = await Promise.all(
