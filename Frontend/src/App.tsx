@@ -12,6 +12,7 @@ import AddApplication from "./pages/AddApplication";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import EditApplication from "./pages/EditApplication";
+import PublicProfile from "./pages/PublicProfile";
 
 function App() {
   return (
@@ -19,8 +20,12 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* Main app routes with navbar */}
-          <Route element={<ProtectedRoute />}>
-            <Route element={<AppWrapper />}>
+          <Route element={<AppWrapper />}>
+            {/* Public routes */}
+            <Route path="/profiles/:id" element={<PublicProfile />} />
+
+            {/* Protected routes */}
+            <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/applications">
                 <Route index element={<Applications />} />
@@ -31,7 +36,6 @@ function App() {
               <Route path="/profile" element={<Profile />} />
             </Route>
           </Route>
-
           {/* Auth routes without navbar */}
           <Route element={<AuthWrapper />}>
             <Route path="/login" element={<Login />} />

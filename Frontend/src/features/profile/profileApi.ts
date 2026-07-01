@@ -30,3 +30,7 @@ export const updateUserPreferences = (data: UpdatePreferencesValues ) => {
     body: JSON.stringify(data)
   });
 };
+
+export const getPublicProfile = (id: number) => {
+  return api(`api/public/profiles/${id}`);
+};

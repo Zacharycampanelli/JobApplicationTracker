@@ -2,17 +2,6 @@ import { Request, Response } from 'express';
 import { prisma } from '../lib/prisma';
 import type { AuthRequest } from '../middleware/authMiddleware';
 
-//
-export const getAllUsers = async (_req: Request, res: Response) => {
-  try {
-    const users = await prisma.user.findMany();
-    res.json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to fetch users' });
-  }
-};
-
 export const updateUser = async (req: AuthRequest, res: Response) => {
   const userId = req.user?.userId;
 
@@ -163,11 +152,7 @@ export const updateUserPreferences = async (req: AuthRequest, res: Response) => 
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  const {
-    publicProfileEnabled,
-    autoStatusUpdatesEnabled,
-    themePreference
-  } = req.body;
+  const { publicProfileEnabled, autoStatusUpdatesEnabled, themePreference } = req.body;
 
   try {
     const updatedPreferences = await prisma.userPreferences.upsert({
@@ -175,14 +160,14 @@ export const updateUserPreferences = async (req: AuthRequest, res: Response) => 
       update: {
         publicProfileEnabled,
         autoStatusUpdatesEnabled,
-        themePreference
+        themePreference,
       },
       create: {
         userId,
         publicProfileEnabled,
         autoStatusUpdatesEnabled,
-        themePreference
-      }
+        themePreference,
+      },
     });
 
     res.json(updatedPreferences);

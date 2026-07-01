@@ -23,6 +23,7 @@ import Textarea from "../components/ui/Textarea";
 import { API_URL } from "../api/api";
 import Toggle from "../components/ui/Toggle";
 import UserPreferences from "../features/profile/components/UserPreferences";
+import SharedProfileView from "../features/profile/components/SharedProfileView";
 
 const profileSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
@@ -187,131 +188,139 @@ const Profile = () => {
           />
         </Button>
       </div>
-      {avatarSrc ? (
-        <img
-          src={avatarSrc}
-          alt={`${user?.name ?? "User"} avatar`}
-          className="size-28 mx-auto mt-4 rounded-full object-cover"
-        />
-      ) : (
-        <span className="flex justify-center items-center size-28 mx-auto rounded-full bg-surface-container-high text-page-title text-on-surface">
-          {user?.name?.charAt(0).toUpperCase() ?? "U"}
-        </span>
-      )}
-      {inEditMode && (
-        <Input
-          type="file"
-          id="avatar"
-          label="PROFILE IMAGE"
-          accept="image/png,image/jpeg,image/webp"
-          onChange={handleAvatarUpload}
-          className="text-center mx-auto"
-        />
-      )}
-      <form
-        className="mt-8 flex flex-col gap-6"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <Input
-          id="name"
-          label="FULL NAME "
-          {...register("name")}
-          defaultValue={user?.name}
-          error={errors.name?.message}
-          disabled={!inEditMode}
-        />
+      {inEditMode ? (
+        <>
+          {avatarSrc ? (
+            <img
+              src={avatarSrc}
+              alt={`${user?.name ?? "User"} avatar`}
+              className="size-28 mx-auto mt-4 rounded-full object-cover"
+            />
+          ) : (
+            <span className="flex justify-center items-center size-28 mx-auto rounded-full bg-surface-container-high text-page-title text-on-surface">
+              {user?.name?.charAt(0).toUpperCase() ?? "U"}
+            </span>
+          )}
 
-        <Input
-          id="email"
-          label="EMAIL ADDRESS"
-          defaultValue={user?.email}
-          disabled={true}
-        />
-        <Input
-          id="title"
-          label="TITLE"
-          {...register("title")}
-          defaultValue={user?.profile?.title ?? undefined}
-          error={errors.title?.message}
-          disabled={!inEditMode}
-        />
-        <Input
-          id="location"
-          label="LOCATION"
-          {...register("location")}
-          defaultValue={user?.profile?.location ?? undefined}
-          error={errors.location?.message}
-          disabled={!inEditMode}
-        />
-        <Input
-          id="website"
-          label="WEBSITE"
-          defaultValue={user?.profile?.website ?? undefined}
-          error={errors.website?.message}
-          disabled={!inEditMode}
-          {...register("website", {
-            onBlur: (e) => {
-              setValue("website", handleUrl(e.target.value), {
-                shouldValidate: true,
-                shouldDirty: true
-              });
-            }
-          })}
-        />
-        <Input
-          id="linkedin"
-          label="LINKEDIN"
-          defaultValue={user?.profile?.linkedin ?? undefined}
-          error={errors.linkedin?.message}
-          disabled={!inEditMode}
-          {...register("linkedin", {
-            onBlur: (e) => {
-              setValue("linkedin", handleUrl(e.target.value), {
-                shouldValidate: true,
-                shouldDirty: true
-              });
-            }
-          })}
-        />
-        <Textarea
-          id="summary"
-          label="SUMMARY"
-          {...register("summary")}
-          defaultValue={user?.profile?.summary ?? undefined}
-          error={errors.summary?.message}
-          disabled={!inEditMode}
-        />
+          <Input
+            type="file"
+            id="avatar"
+            label="PROFILE IMAGE"
+            accept="image/png,image/jpeg,image/webp"
+            onChange={handleAvatarUpload}
+            className="text-center mx-auto"
+          />
 
-        <span className={`${inEditMode ? "flex" : "hidden"}`}>
-          <Button icon={<Save />} type="submit" disabled={isSubmitting}>
-            Save Changes
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={requestExitEditMode}
+          <form
+            className="mt-8 flex flex-col gap-6"
+            onSubmit={handleSubmit(onSubmit)}
           >
-            Cancel
-          </Button>
-        </span>
-        <SuccessModal
-          isOpen={isSuccessModalOpen}
-          onClose={() => setIsSuccessModalOpen(false)}
-        />
-        <CancelModal
-          isOpen={isCancelModalOpen}
-          onClose={() => setIsCancelModalOpen(false)}
-          onConfirm={exitEditMode}
-        />
+            <Input
+              id="name"
+              label="FULL NAME "
+              {...register("name")}
+              defaultValue={user?.name}
+              error={errors.name?.message}
+            />
+
+            <Input
+              id="email"
+              label="EMAIL ADDRESS"
+              defaultValue={user?.email}
+              disabled={true}
+            />
+            <Input
+              id="title"
+              label="TITLE"
+              {...register("title")}
+              defaultValue={user?.profile?.title ?? undefined}
+              error={errors.title?.message}
+            />
+            <Input
+              id="location"
+              label="LOCATION"
+              {...register("location")}
+              defaultValue={user?.profile?.location ?? undefined}
+              error={errors.location?.message}
+            />
+            <Input
+              id="website"
+              label="WEBSITE"
+              defaultValue={user?.profile?.website ?? undefined}
+              error={errors.website?.message}
+              {...register("website", {
+                onBlur: (e) => {
+                  setValue("website", handleUrl(e.target.value), {
+                    shouldValidate: true,
+                    shouldDirty: true
+                  });
+                }
+              })}
+            />
+            <Input
+              id="linkedin"
+              label="LINKEDIN"
+              defaultValue={user?.profile?.linkedin ?? undefined}
+              error={errors.linkedin?.message}
+              {...register("linkedin", {
+                onBlur: (e) => {
+                  setValue("linkedin", handleUrl(e.target.value), {
+                    shouldValidate: true,
+                    shouldDirty: true
+                  });
+                }
+              })}
+            />
+            <Textarea
+              id="summary"
+              label="SUMMARY"
+              {...register("summary")}
+              defaultValue={user?.profile?.summary ?? undefined}
+              error={errors.summary?.message}
+            />
+
+            <Button icon={<Save />} type="submit" disabled={isSubmitting}>
+              Save Changes
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={requestExitEditMode}
+            >
+              Cancel
+            </Button>
           </form>
-        <ResumeManager
-          resumes={resumes}
-          isLoading={isLoading}
-          error={error}
-          empty={empty}
-          onResumesChanged={loadResumes}
+        </>
+      ) : (
+        <SharedProfileView
+          name={user?.name ?? ""}
+          avatarUrl={avatarSrc}
+          title={user?.profile?.title}
+          location={user?.profile?.location}
+          website={user?.profile?.website}
+          linkedin={user?.profile?.linkedin}
+          summary={user?.profile?.summary}
         />
-        <UserPreferences />
+      )}
+
+      <ResumeManager
+        resumes={resumes}
+        isLoading={isLoading}
+        error={error}
+        empty={empty}
+        onResumesChanged={loadResumes}
+      />
+      <UserPreferences />
+
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+      />
+      <CancelModal
+        isOpen={isCancelModalOpen}
+        onClose={() => setIsCancelModalOpen(false)}
+        onConfirm={exitEditMode}
+      />
     </div>
   );
 };
