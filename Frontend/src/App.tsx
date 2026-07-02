@@ -13,6 +13,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import EditApplication from "./pages/EditApplication";
 import PublicProfile from "./pages/PublicProfile";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
