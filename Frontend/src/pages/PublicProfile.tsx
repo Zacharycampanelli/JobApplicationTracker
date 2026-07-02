@@ -2,14 +2,12 @@ import SharedProfileView from "../features/profile/components/SharedProfileView"
 import { useParams } from "react-router";
 import { getPublicProfile } from "../features/profile/profileApi";
 import { useEffect, useState } from "react";
-import { useBreakpoint } from "../utils/useBreakpoint";
+import Header from "../components/layout/Header";
 
 const PublicProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [empty, setEmpty] = useState(true);
-  const isTabletUp = useBreakpoint("md");
-  const isMobile = !isTabletUp;
 
   const { id } = useParams();
 
@@ -61,6 +59,9 @@ const PublicProfile = () => {
   if (empty) return <p>No profile found</p>;
 
   return (
+    <>
+    <Header />
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 md:relative">
     <SharedProfileView
       name={profile.name}
       avatarUrl={profile.avatarUrl}
@@ -69,7 +70,9 @@ const PublicProfile = () => {
       website={profile.website}
       linkedin={profile.linkedin}
       summary={profile.summary}
-    />
+      />
+      </div>
+      </>
   );
 };
 

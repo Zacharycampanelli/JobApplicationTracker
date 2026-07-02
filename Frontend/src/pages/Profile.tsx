@@ -21,7 +21,6 @@ import { optionalNumber, optionalText, optionalUrl } from "../utils/zodUtils";
 import SuccessModal from "../components/shared/SuccessModal";
 import Textarea from "../components/ui/Textarea";
 import { API_URL } from "../api/api";
-import Toggle from "../components/ui/Toggle";
 import UserPreferences from "../features/profile/components/UserPreferences";
 import SharedProfileView from "../features/profile/components/SharedProfileView";
 
@@ -221,6 +220,7 @@ const Profile = () => {
               {...register("name")}
               defaultValue={user?.name}
               error={errors.name?.message}
+              className={!inEditMode ? 'mx-auto' : undefined}
             />
 
             <Input

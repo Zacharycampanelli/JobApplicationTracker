@@ -128,7 +128,7 @@ const UserPreferences = () => {
           key={option.preference}
           preference={option.preference}
           icon={option.icon}
-          mode={option.mode}
+          mode={option.mode as "toggle" | "dropdown" | undefined}
           isDangerous={option.isDangerous}
           children={option.children}
         />
