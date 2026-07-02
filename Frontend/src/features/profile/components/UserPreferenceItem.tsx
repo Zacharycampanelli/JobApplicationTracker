@@ -15,6 +15,8 @@ type UserPreferenceItemProps = {
 const UserPreferenceItem = ({
   preference,
   icon: Icon,
+  mode,
+  isDangerous,
   children
 }: UserPreferenceItemProps) => {
   return (

@@ -194,10 +194,10 @@ const Profile = () => {
             <img
               src={avatarSrc}
               alt={`${user?.name ?? "User"} avatar`}
-              className="size-28 mx-auto mt-4 rounded-full object-cover"
+              className="size-28 mx-auto my-8 rounded-full object-cover"
             />
           ) : (
-            <span className="flex justify-center items-center size-28 mx-auto rounded-full bg-surface-container-high text-page-title text-on-surface">
+            <span className="flex justify-center items-center size-28 mx-auto my-8 rounded-full bg-surface-container-high text-page-title text-on-surface">
               {user?.name?.charAt(0).toUpperCase() ?? "U"}
             </span>
           )}
@@ -304,7 +304,7 @@ const Profile = () => {
         />
       )}
 
-      <AccountOwnerDetails email={user?.email} createdAt={user?.profile?.createdAt} updatedAt={user?.profile?.updatedAt} />
+      <AccountOwnerDetails email={user?.email ?? ""} createdAt={user?.createdAt ?? ""} updatedAt={user?.updatedAt ?? ""} />
 
       <ResumeManager
         resumes={resumes}
