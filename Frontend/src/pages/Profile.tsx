@@ -212,7 +212,7 @@ const Profile = () => {
           />
 
           <form
-            className="mt-8 flex flex-col gap-6"
+            className="mt-8 flex flex-col gap-6 md:grid md:grid-cols-2"
             onSubmit={handleSubmit(onSubmit)}
           >
             <Input
@@ -279,17 +279,19 @@ const Profile = () => {
               defaultValue={user?.profile?.summary ?? undefined}
               error={errors.summary?.message}
             />
+            <span className="flex flex-col w-full gap-4 justify-around md:flex-row md:col-span-2">
 
-            <Button icon={<Save />} type="submit" disabled={isSubmitting}>
+            <Button icon={<Save />} type="submit" disabled={isSubmitting} className="w-48">
               Save Changes
             </Button>
             <Button
               type="button"
               variant="secondary"
               onClick={requestExitEditMode}
-            >
+              >
               Cancel
             </Button>
+              </span>
           </form>
         </>
       ) : (

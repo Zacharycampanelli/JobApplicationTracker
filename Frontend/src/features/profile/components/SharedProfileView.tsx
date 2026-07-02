@@ -32,7 +32,7 @@ const SharedProfileView = ({
         />
       )}
 
-      <dl className="flex flex-col gap-6">
+      <dl className="flex flex-col gap-6 md:grid grid-cols-2">
         <div className="flex flex-col gap-2">
           <dt className="text-label-md text-on-surface">FULL NAME</dt>
           <dd className="flex min-h-10 w-full items-center rounded-control bg-surface-container-low px-3 text-body-md text-on-surface">
