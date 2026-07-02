@@ -64,8 +64,8 @@ const ResumeManager = ({
     <Card className="bg-surface-container md:col-span-2">
       <div className="flex flex-col gap-5">
         <span className="flex items-center gap-2 text-primary">
-          <ResumeIcon />
-          <h2 className="text-card-title text-on-surface">Resume Library</h2>
+          <ResumeIcon fill="#66757d"/>
+          <h2 className="text-card-title text-on-surface-variant">Resume Library</h2>
         </span>
         {isLoading ? (
           <p className="text-body-md text-on-surface-secondary">Loading...</p>

@@ -23,6 +23,7 @@ import Textarea from "../components/ui/Textarea";
 import { API_URL } from "../api/api";
 import UserPreferences from "../features/profile/components/UserPreferences";
 import SharedProfileView from "../features/profile/components/SharedProfileView";
+import AccountOwnerDetails from "../features/profile/components/AccountOwnerDetails";
 
 const profileSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
@@ -302,6 +303,8 @@ const Profile = () => {
           summary={user?.profile?.summary}
         />
       )}
+
+      <AccountOwnerDetails email={user?.email} createdAt={user?.profile?.createdAt} updatedAt={user?.profile?.updatedAt} />
 
       <ResumeManager
         resumes={resumes}

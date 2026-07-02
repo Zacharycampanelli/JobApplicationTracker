@@ -32,7 +32,7 @@ const SharedProfileView = ({
             className="rounded-full w-24 h-24"
           />
         )}
-        <h2 className="text-page-title text-on-surface">{name}</h2>
+        <h2 className="text-page-title text-on-surface text-center">{name}</h2>
         {title && (
           <p className="text-body-lg text-on-surface-secondary">{title}</p>
         )}
@@ -41,12 +41,12 @@ const SharedProfileView = ({
         )}
         {website && (
           <a href={website} className="text-body-lg text-on-surface-secondary">
-            Website
+            {website}
           </a>
         )}
         {linkedin && (
           <a href={linkedin} className="text-body-lg text-on-surface-secondary">
-            LinkedIn
+            {linkedin}
           </a>
         )}
         {summary && (

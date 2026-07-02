@@ -48,7 +48,7 @@ const Toggle = ({
         />
       </button>
     </label>
-  );
+  );  
 };
 
 export default Toggle;

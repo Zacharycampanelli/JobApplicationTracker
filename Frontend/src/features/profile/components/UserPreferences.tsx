@@ -119,9 +119,9 @@ const UserPreferences = () => {
 
   return (
     <div className="flex flex-col gap-4 w-full mt-8 rounded-xl overflow-hidden">
-      <span className="flex text-on-surface-variant text-status items-center text-start gap-4">
+      <span className="flex text-on-surface-variant text-status items-center text-start gap-4 text-card-title px-8">
         <Settings fill="#66757d" />
-        <h3>Account Preferences</h3>
+        <h3 className="">Account Preferences</h3>
       </span>
       {preferenceOptions.map((option) => (
         <UserPreferenceItem
