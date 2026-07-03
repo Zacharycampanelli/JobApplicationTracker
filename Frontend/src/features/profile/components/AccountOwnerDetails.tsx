@@ -27,7 +27,7 @@ const AccountOwnerDetails = ({
         </h3>
       </span>
 
-      <dl className="flex flex-col gap-4 md:grid grid-cols-2">
+      <dl className="flex flex-col gap-4 md:grid grid-cols-2 xl:grid-cols-3">
         <div className="flex flex-col">
           <dt className="text-label-md text-on-surface mb-2">EMAIL ADDRESS</dt>
           <dd className="w-full bg-surface-container-low text-on-surface outline-none px-3 h-10 rounded-control text-body-md flex items-center">

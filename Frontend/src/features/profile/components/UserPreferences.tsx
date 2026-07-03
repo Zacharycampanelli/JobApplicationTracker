@@ -123,7 +123,7 @@ const UserPreferences = () => {
         <Settings fill="#66757d" />
         <h3 className="">Account Preferences</h3>
       </span>
-      <div className="flex flex-col gap-4 md:grid grid-cols-2">
+      <div className="flex flex-col gap-4 md:grid grid-cols-2 xl:grid-cols-3">
       {preferenceOptions.map((option) => (
         <UserPreferenceItem
           key={option.preference}

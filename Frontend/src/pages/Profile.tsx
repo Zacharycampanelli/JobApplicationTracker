@@ -202,26 +202,45 @@ const Profile = () => {
             </span>
           )}
 
+          <form
+            className="mt-4 flex flex-col gap-6 md:grid md:grid-cols-2 xl:grid-cols-3"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div className="md:col-span-2 xl:col-span-3">
+
+              <span className="text-label-md text-on-surface">
+    PROFILE IMAGE
+  </span>
+
+  <label
+    htmlFor="avatar"
+    className="mt-2 flex h-10 cursor-pointer items-center justify-center rounded-control bg-surface-container-low text-body-md text-on-surface"
+  >
+    Select a new image
+  </label>
           <Input
             type="file"
             id="avatar"
-            label="PROFILE IMAGE"
             accept="image/png,image/jpeg,image/webp"
             onChange={handleAvatarUpload}
-            className="text-center mx-auto"
+            className="sr-only"
           />
-
-          <form
-            className="mt-8 flex flex-col gap-6 md:grid md:grid-cols-2"
-            onSubmit={handleSubmit(onSubmit)}
-          >
+          </div>
+            <div className="flex w-full flex-col gap-2">
+              <span className="text-label-md text-on-surface">
+                ACCOUNT EMAIL
+              </span>
+              <p className="flex h-10 w-full items-center rounded-control bg-surface-container-low px-3 text-body-md text-on-surface-variant">
+                {user?.email}
+              </p>
+            </div>
             <Input
               id="name"
               label="FULL NAME "
               {...register("name")}
               defaultValue={user?.name}
               error={errors.name?.message}
-              className={!inEditMode ? 'mx-auto' : undefined}
+              className={!inEditMode ? "mx-auto" : undefined}
             />
 
             <Input
@@ -272,30 +291,40 @@ const Profile = () => {
                 }
               })}
             />
+            <div className="md:col-span-2 xl:col-span-3">
+
             <Textarea
               id="summary"
               label="SUMMARY"
               {...register("summary")}
               defaultValue={user?.profile?.summary ?? undefined}
               error={errors.summary?.message}
+              className="md:col-span-2 xl:col-span-3"
             />
-            <span className="flex flex-col w-full gap-4 justify-around md:flex-row md:col-span-2">
-
-            <Button icon={<Save />} type="submit" disabled={isSubmitting} className="w-48">
-              Save Changes
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={requestExitEditMode}
+            </div>
+            <span className="flex flex-col w-full gap-4 justify-around md:flex-row md:col-span-2 xl:col-span-3">
+              <Button
+                icon={<Save />}
+                type="submit"
+                disabled={isSubmitting}
+                className="md:w-48 xl:w-56"
               >
-              Cancel
-            </Button>
-              </span>
+                Save Changes
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={requestExitEditMode}
+                className="md:w-48 xl:w-56"
+              >
+                Cancel
+              </Button>
+            </span>
           </form>
         </>
       ) : (
         <SharedProfileView
+          email={user?.email ?? ""}
           name={user?.name ?? ""}
           avatarUrl={avatarSrc}
           title={user?.profile?.title}
@@ -306,7 +335,11 @@ const Profile = () => {
         />
       )}
 
-      <AccountOwnerDetails email={user?.email ?? ""} createdAt={user?.createdAt ?? ""} updatedAt={user?.updatedAt ?? ""} />
+      <AccountOwnerDetails
+        email={user?.email ?? ""}
+        createdAt={user?.createdAt ?? ""}
+        updatedAt={user?.updatedAt ?? ""}
+      />
 
       <ResumeManager
         resumes={resumes}

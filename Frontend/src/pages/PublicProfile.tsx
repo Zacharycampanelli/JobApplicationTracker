@@ -12,6 +12,7 @@ const PublicProfile = () => {
   const { id } = useParams();
 
   const [profile, setProfile] = useState({
+    email: "",
     name: "",
     avatarUrl: "",
     title: "",
@@ -30,14 +31,15 @@ const PublicProfile = () => {
       setEmpty(false);
       setError("");
       setProfile({
+        email: data.email ?? "",
         name: data.name ?? "",
         avatarUrl: data.profile?.avatarUrl ?? "",
-          title: data.profile?.title ?? "",
-          location: data.profile?.location ?? "",
-          website: data.profile?.website ?? "",
-          linkedin: data.profile?.linkedin ?? "",
-          summary: data.profile?.summary ?? ""
-        });
+        title: data.profile?.title ?? "",
+        location: data.profile?.location ?? "",
+        website: data.profile?.website ?? "",
+        linkedin: data.profile?.linkedin ?? "",
+        summary: data.profile?.summary ?? ""
+      });
     } catch (err) {
       setError(`Failed to load profile: ${err}`);
       setEmpty(false);
@@ -60,19 +62,20 @@ const PublicProfile = () => {
 
   return (
     <>
-    <Header />
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 md:relative">
-    <SharedProfileView
-      name={profile.name}
-      avatarUrl={profile.avatarUrl}
-      title={profile.title}
-      location={profile.location}
-      website={profile.website}
-      linkedin={profile.linkedin}
-      summary={profile.summary}
-      />
+      <Header />
+      <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 md:relative">
+        <SharedProfileView
+          email={profile.email}
+          name={profile.name}
+          avatarUrl={profile.avatarUrl}
+          title={profile.title}
+          location={profile.location}
+          website={profile.website}
+          linkedin={profile.linkedin}
+          summary={profile.summary}
+        />
       </div>
-      </>
+    </>
   );
 };
 
