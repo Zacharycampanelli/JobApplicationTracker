@@ -9,14 +9,11 @@ import ExpandableSection from "../../../components/shared/ExpandableSection";
 import Settings from "../../../assets/images/settings.svg?react";
 import { useAuthContext } from "../../../context/AuthContext";
 import { updateUserPreferences } from "../profileApi";
-import type {
-  UpdatePreferencesValues
-} from "../../../types/types";
-
+import type { UpdatePreferencesValues } from "../../../types/types";
+import { Tooltip } from "react-tooltip";
 
 const UserPreferences = () => {
   const { user, updateUser } = useAuthContext();
-
 
   const handlePreferenceChange = async (
     changes: Partial<UpdatePreferencesValues>
@@ -73,11 +70,13 @@ const UserPreferences = () => {
         <Toggle
           id="automaticStatusUpdates"
           checked={user?.preferences?.autoStatusUpdatesEnabled ?? false}
-          onChange={(checked) =>
-            handlePreferenceChange({
-              autoStatusUpdatesEnabled: checked
-            })
-          }
+          // onChange={(checked) =>
+          //   handlePreferenceChange({
+          //     autoStatusUpdatesEnabled: checked
+          //   })
+          // }`
+          onChange={() => {}}
+          disabled={true}
         />
       )
     },
@@ -91,11 +90,13 @@ const UserPreferences = () => {
         <Toggle
           id="darkMode"
           checked={user?.preferences?.themePreference === "dark"}
-          onChange={(checked) =>
-            handlePreferenceChange({
-              themePreference: checked ? "dark" : "light"
-            })
-          }
+          // onChange={(checked) =>
+          //   handlePreferenceChange({
+          //     themePreference: checked ? "dark" : "light"
+          //   })
+          // }
+          onChange={() => {}}
+          disabled={true}
         />
       )
     },
@@ -124,16 +125,27 @@ const UserPreferences = () => {
         <h3 className="">Account Preferences</h3>
       </span>
       <div className="flex flex-col gap-4 md:grid grid-cols-2 xl:grid-cols-3">
-      {preferenceOptions.map((option) => (
-        <UserPreferenceItem
-          key={option.preference}
-          preference={option.preference}
-          icon={option.icon}
-          mode={option.mode as "toggle" | "dropdown" | undefined}
-          isDangerous={option.isDangerous}
-          children={option.children}
+        {preferenceOptions.map((option) => (
+          <UserPreferenceItem
+            key={option.preference}
+            preference={option.preference}
+            icon={option.icon}
+            mode={option.mode as "toggle" | "dropdown" | undefined}
+            isDangerous={option.isDangerous}
+            children={option.children}
+            className={
+              option.preference === "Automatic status updates" ||
+              option.preference === "Dark mode"
+                ? "coming-soon"
+                : undefined
+            }
+          />
+        ))}
+        <Tooltip
+          anchorSelect=".coming-soon"
+          place="top"
+          content="Coming soon!"
         />
-      ))}
       </div>
     </div>
   );
