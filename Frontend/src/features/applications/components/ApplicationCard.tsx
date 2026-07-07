@@ -4,6 +4,7 @@ import Button from "../../../components/ui/Button";
 import CompanyLogo from "./CompanyLogo";
 import StatusClassBadge from "./StatusClassBadge";
 import type { JobApplication } from "../../../types/types";
+import { useBreakpoint } from "../../../utils/useBreakpoint";
 
 type ApplicationCardProps = {
   app: JobApplication;
@@ -12,6 +13,8 @@ type ApplicationCardProps = {
 
 const ApplicationCard = ({ app, variant = "full" }: ApplicationCardProps) => {
   const navigate = useNavigate();
+  const isTabletUp = useBreakpoint("md");
+  const isDesktopUp = useBreakpoint("xl");
   const isCompact = variant === "compact";
 
   const formatDateOnly = (date: string) => {
@@ -84,31 +87,15 @@ const ApplicationCard = ({ app, variant = "full" }: ApplicationCardProps) => {
                 {app.location ? ` • ${app.location}` : ""}
               </p>
             </div>
-
-            {app.appliedAt && (
-              <p className="mt-4 text-label-md text-on-surface-variant md:hidden">
-                Applied: {formatDateOnly(app.appliedAt)}
-              </p>
-            )}
           </div>
         </div>
-        {app.appliedAt && (
-          <div className="hidden shrink-0 text-left md:block md:min-w-28 xl:hidden">
-            <p className="text-label-md text-on-surface-secondary uppercase">
-              Applied
-            </p>
-            <p className="text-label-md text-on-surface-variant">
-              {formatDateOnly(app.appliedAt)}
-            </p>
-          </div>
-        )}
-        <StatusClassBadge status={app.status} className="xl:hidden" />
+
         {!isCompact && (
           <Button
             type="button"
             variant="ghost"
             onClick={() => navigate(`/applications/edit/${app.id}`)}
-            className="group-hover:flex md:static absolute bottom-8 right-6 xl:hidden xl:group-hover:hidden"
+            className="hidden md:inline-flex xl:hidden"
           >
             <RightArrow
               width={18}
@@ -137,6 +124,40 @@ const ApplicationCard = ({ app, variant = "full" }: ApplicationCardProps) => {
           </div>
         )}
       </div>
+      <div className="mt-3 flex items-center justify-between border-t border-outline-variant pt-3 md:hidden">
+        <div className="flex flex-col gap-2">
+          {app.appliedAt && (
+            <p className="text-label-md text-on-surface-variant">
+              Applied: {formatDateOnly(app.appliedAt)}
+            </p>
+          )}
+
+          <StatusClassBadge status={app.status} />
+        </div>
+
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={() => navigate(`/applications/edit/${app.id}`)}
+        >
+          <RightArrow width={18} height={18} />
+        </Button>
+      </div>
+      {isTabletUp && !isDesktopUp && (
+        <div className="flex w-full justify-between items-center">
+          {app.appliedAt && (
+            <div className="shrink-0 text-left min-w-28 flex ml-16">
+              <p className="text-label-md text-on-surface-secondary uppercase">
+                Applied
+              </p>
+              <p className="text-label-md text-on-surface-variant ml-6">
+                {formatDateOnly(app.appliedAt)}
+              </p>
+            </div>
+          )}
+          <StatusClassBadge status={app.status} className="mr-15" />
+        </div>
+      )}
     </div>
   );
 };

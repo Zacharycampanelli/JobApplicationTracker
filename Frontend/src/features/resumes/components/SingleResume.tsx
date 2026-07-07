@@ -59,7 +59,7 @@ const SingleResume = ({
         </span>
       </button>
       {deletable && (
-        <button onClick={handleDelete} type="button" className="md:">
+        <button onClick={handleDelete} type="button" className="text-on-surface-secondary hover:text-error transition duration-150 text-xl">
           X
         </button>
       )}

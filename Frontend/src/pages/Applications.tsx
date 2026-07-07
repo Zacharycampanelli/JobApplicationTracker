@@ -113,7 +113,7 @@ const Applications = () => {
   if (isLoading) return <p>Loading...</p>;
   if (errorMessage) return <p>{errorMessage}</p>;
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 relative">
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 relative">
       {isMobile && <Header />}
       <main className="flex flex-col pb-10 gap-6">
         <div>
@@ -127,7 +127,7 @@ const Applications = () => {
             trajectories.
           </p>
         </div>
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-3 xl:flex-row md:items-center md:justify-between">
           <div className="w-full md:min-w-96">
             <Input
               value={searchQuery}
@@ -136,9 +136,9 @@ const Applications = () => {
               startIcon={<SearchIcon />}
             />
           </div>
-          <div className="flex items-center md:justify-between gap-3">
-            <div className="flex justify-end w-full">
-              <div className="relative w-full mx-2 md:w-auto md:min-w-28">
+          <div className="flex items-center md:justify-between gap-3 md:w-full">
+            <div className="flex md:justify-center xl:justify-end w-full">
+              <div className="relative w-full mx-2">
                 <Button
                   type="button"
                   variant="secondary"
@@ -179,7 +179,7 @@ const Applications = () => {
                   </div>
                 )}
               </div>
-              <div className="relative w-full mx-2 md:w-auto">
+              <div className="relative w-full mx-2">
                 <Button
                   type="button"
                   variant="secondary"

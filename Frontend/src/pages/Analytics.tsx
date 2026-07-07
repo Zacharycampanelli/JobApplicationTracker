@@ -22,7 +22,7 @@ const Analytics = () => {
   if (errorMessage) return <p>{errorMessage}</p>;
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 relative">
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 relative">
       {isMobile && <Header />}
       <main className="flex flex-col pb-10 gap-6 md:gap-8">
         <h2 className="mt-6 text-page-title text-on-surface">
@@ -60,12 +60,8 @@ const Analytics = () => {
         </section>
 
         <section className="grid gap-4 lg:grid-cols-2">
-          <ApplicationVelocityChart
-            data={analyticsData.applicationVelocity}
-          />
-          <SourceBreakdownChart
-            data={analyticsData.sourceBreakdown}
-          />
+          <ApplicationVelocityChart data={analyticsData.applicationVelocity} />
+          <SourceBreakdownChart data={analyticsData.sourceBreakdown} />
         </section>
         <AnalyticsMetricCard
           title="Peak Activity"

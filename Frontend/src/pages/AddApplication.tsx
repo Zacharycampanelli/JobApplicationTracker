@@ -47,7 +47,7 @@ const AddApplication = () => {
   };
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 md:relative">
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 md:relative">
       {isMobile && <Header />}
       <h2 className="mt-6 mb-6 text-page-title text-on-surface">
         Application Entry
@@ -84,7 +84,7 @@ const AddApplication = () => {
         isOpen={isCancelModalOpen}
         onClose={() => setIsCancelModalOpen(false)}
         newLocation="/applications"
-        />
+      />
     </div>
   );
 };

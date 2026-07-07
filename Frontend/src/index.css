@@ -94,6 +94,7 @@
   --space-card: 2rem;
 
   /* Breakpoints  */
+  --breakpoint-xs: 23.4375rem;
   --breakpoint-sm: 40rem;
   --breakpoint-md: 48rem;
   --breakpoint-lg: 64rem;

@@ -8,7 +8,7 @@ const AppWrapper = () => {
     <div className="min-h-screen bg-surface md:flex">
       {isAuthenticated && <Navbar />}
 
-      <main className="flex-1 pb-24 md:pb-0">
+      <main className="min-w-0 flex-1 pb-24 md:pb-0">
         <div className="mx-auto w-full max-w-7xl px-4 py-6 md:px-6 md:py-8 lg:px-8">
           <Outlet />
         </div>

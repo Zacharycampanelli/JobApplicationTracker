@@ -63,7 +63,7 @@ const PublicProfile = () => {
   return (
     <>
       <Header />
-      <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 md:relative">
+      <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 md:relative">
         <SharedProfileView
           email={profile.email}
           name={profile.name}

@@ -45,11 +45,15 @@ export const ApplicationVelocityChart = ({
   };
 
   return (
-    <Card className={className}>
-      <h3 className="text-card-title text-on-surface mb-4 text-center lg:text-left">
+    <Card className={`min-w-0 ${className ?? ""}`}>
+      <h3 className="text-card-title text-on-surface mb-4 text-center xl:text-left">
         Application Velocity
       </h3>
-      <VerticalBarChart data={chartData} options={options} className="w-full h-56"/>
+      <VerticalBarChart
+        data={chartData}
+        options={options}
+        className="relative h-56 w-full min-w-0 max-w-full"
+      />
     </Card>
   );
 };

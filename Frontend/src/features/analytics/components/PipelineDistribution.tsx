@@ -58,8 +58,8 @@ const PipelineDistribution = ({
   const totalApplications = data.reduce((total, item) => total + item.value, 0);
 
   return (
-    <Card className={className}>
-      <h3 className="text-card-title text-on-surface mb-4 text-center lg:text-left">
+    <Card className={`min-w-0 ${className ?? ""}`}>
+      <h3 className="text-card-title text-on-surface mb-4 text-center xl:text-left">
         Pipeline Distribution
       </h3>
       {totalApplications === 0 ? (
@@ -73,7 +73,7 @@ const PipelineDistribution = ({
         />
       ) : (
         <div className="mx-auto flex w-full flex-col items-center">
-          <div className="relative size-56">
+          <div className="relative h-56 w-full min-w-0 max-w-full">
             <DonutChart
               data={chartData as ChartData<"doughnut">}
               options={donutOptions}

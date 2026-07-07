@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from "react";
 
 const breakpoints = {
+  xs: "(min-width: 375px)",
   sm: "(min-width: 640px)",
   md: "(min-width: 768px)",
   lg: "(min-width: 1024px)",

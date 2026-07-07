@@ -164,7 +164,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 md:relative">
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 md:relative">
       {isMobile && <Header />}
       <h2 className="mt-6 mb-6 text-page-title text-on-surface">
         Professional Portfolio
@@ -207,25 +207,24 @@ const Profile = () => {
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="md:col-span-2 xl:col-span-3">
-
               <span className="text-label-md text-on-surface">
-    PROFILE IMAGE
-  </span>
+                PROFILE IMAGE
+              </span>
 
-  <label
-    htmlFor="avatar"
-    className="mt-2 flex h-10 cursor-pointer items-center justify-center rounded-control bg-surface-container-low text-body-md text-on-surface"
-  >
-    Select a new image
-  </label>
-          <Input
-            type="file"
-            id="avatar"
-            accept="image/png,image/jpeg,image/webp"
-            onChange={handleAvatarUpload}
-            className="sr-only"
-          />
-          </div>
+              <label
+                htmlFor="avatar"
+                className="mt-2 flex h-10 cursor-pointer items-center justify-center rounded-control bg-surface-container-low text-body-md text-on-surface"
+              >
+                Select a new image
+              </label>
+              <Input
+                type="file"
+                id="avatar"
+                accept="image/png,image/jpeg,image/webp"
+                onChange={handleAvatarUpload}
+                className="sr-only"
+              />
+            </div>
             <div className="flex w-full flex-col gap-2">
               <span className="text-label-md text-on-surface">
                 ACCOUNT EMAIL
@@ -292,15 +291,14 @@ const Profile = () => {
               })}
             />
             <div className="md:col-span-2 xl:col-span-3">
-
-            <Textarea
-              id="summary"
-              label="SUMMARY"
-              {...register("summary")}
-              defaultValue={user?.profile?.summary ?? undefined}
-              error={errors.summary?.message}
-              className="md:col-span-2 xl:col-span-3"
-            />
+              <Textarea
+                id="summary"
+                label="SUMMARY"
+                {...register("summary")}
+                defaultValue={user?.profile?.summary ?? undefined}
+                error={errors.summary?.message}
+                className="md:col-span-2 xl:col-span-3"
+              />
             </div>
             <span className="flex flex-col w-full gap-4 justify-around md:flex-row md:col-span-2 xl:col-span-3">
               <Button

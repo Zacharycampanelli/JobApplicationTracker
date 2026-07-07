@@ -3,6 +3,7 @@ import DashboardNav from "../../assets/images/dashboardNav.svg?react";
 import AppsNav from "../../assets/images/appsNav.svg?react";
 import AnalyticsNav from "../../assets/images/analyticsNav.svg?react";
 import ProfileNav from "../../assets/images/profileNav.svg?react";
+import Icon from "../../assets/svg/Icon";
 
 const navItems = [
   { to: "/", label: "Dashboard", mobileLabel: "Home", icon: DashboardNav },
@@ -53,9 +54,15 @@ const Navbar = () => {
       </nav>
 
       {/* Desktop / Tablet Side Navbar */}
-      <aside className="hidden md:flex md:w-48 md:shrink-0 md:flex-col md:bg-surface-container-low md:px-4 md:py-6 xl:w-72">
+      <aside className="hidden md:flex md:w-56 md:shrink-0 md:flex-col md:bg-surface-container-low md:px-4 md:py-6 xl:w-72">
         <div className="mb-8 px-3">
-          <h1 className="text-brand text-on-surface">Job Tracker</h1>
+          <div className="flex flex-row items-center">
+
+          <Icon width={56 } height={56} />
+          <h1 className="text-brand text-on-surface ml-2 " style={{lineHeight: 1.0}}>
+            Architectural Ledger
+          </h1>
+          </div>
           <p className="mt-1 text-label-md mt-4 text-on-surface-variant">
             Track your applications
           </p>

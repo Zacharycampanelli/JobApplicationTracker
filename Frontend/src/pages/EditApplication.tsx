@@ -92,7 +92,7 @@ const EditApplication = () => {
   if (error) return <p>{error}</p>;
   if (!defaultValues) return <p>Application not found</p>;
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 md:relative">
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 md:relative">
       {isMobile && <Header />}
       <div className="flex items-center justify-between">
         <h2 className="mt-6 mb-6 text-page-title text-on-surface flex-1">

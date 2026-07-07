@@ -59,7 +59,7 @@ const Dashboard = () => {
   if (isLoading) return <p>Loading...</p>;
   if (errorMessage) return <p>{errorMessage}</p>;
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface px-6 py-4 relative">
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 relative">
       {isMobile && <Header />}
 
       <main className="flex flex-col pb-10 gap-9 items-start">
@@ -74,8 +74,8 @@ const Dashboard = () => {
             </p>
           </div>
         </div>
-        <div>
-          <div className="flex flex-col gap-6 items-center md:flex-row-reverse">
+        <div className="w-full">
+          <div className="flex flex-col gap-6 items-center md:grid md:grid-cols-2 xl:grid-cols-4">
             {/* <div className="md:flex"> */}
             {stats.map((stat, index) => (
               <StatCard
@@ -93,24 +93,25 @@ const Dashboard = () => {
             {/* <ExpandableSection title="More Stats">{}</ExpandableSection> */}
           </div>
           <div
-            className="flex flex-col justify-center items-center aspect-square w-95 relative rounded-full overflow-hidden bg-cover bg-center shrink-0 mt-6 gap-8 md:hidden"
+            className="mx-auto flex flex-col justify-center items-center aspect-square w-full max-w-95 relative rounded-full overflow-hidden bg-cover bg-center shrink-0 mt-6 gap-2 md:hidden"
             style={{
               backgroundImage: `radial-gradient(circle, rgba(37, 99, 235, 0.4) 0%, rgba(0, 0, 0, 0.5) 95%), url(${careerPlanning})`
             }}
           >
-            <div className="absolute inset-0 bg-blue-500 opacity-50 mix-blend-multiply"></div>
+            <div className="absolute inset-0 bg-blue-500 opacity-50 mix-blend-multiply">
+            </div>
+
             <h5 className="text-card-title text-white text-center z-10">
               Architect your future.
             </h5>
-            <p className="text-white text-body-lg z-10 text-justify px-10 mt-4">
-              Every entry in your ledger is a step closer to the next milestone
+<p className="text-white text-body-md xs:text-body-lg z-10 text-justify px-6 xs:px-10 mt-4">              Every entry in your ledger is a step closer to the next milestone
               in your professional journey.
             </p>
             <Button
               variant="ghost"
               className="bg-white z-10 mt-4 text-primary"
               onClick={() => navigate("/applications/add")}
-            >
+              >
               <Add />
               Quick Add
             </Button>

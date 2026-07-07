@@ -48,7 +48,7 @@ const SourceBreakdownChart = ({
   };
 
   return (
-    <Card className={className}>
+    <Card className={`min-w-0 ${className ?? ""}`}>
       <h3 className="mb-8 text-center text-card-title text-on-surface">
         Source Breakdown
       </h3>
@@ -60,7 +60,7 @@ const SourceBreakdownChart = ({
         <HorizontalBarChart
           data={chartData}
           options={options}
-          className="w-full h-56"
+          className="relative h-56 w-full min-w-0 max-w-full"
         />
       )}
     </Card>
