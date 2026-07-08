@@ -7,6 +7,10 @@ type useApplicationsProps = {
   isLoading: boolean;
   errorMessage: string | null;
   refetchApplications: () => Promise<void>;
+  moveApplication: (
+    applicationId: number,
+    newStatus: JobApplication["status"]
+  ) => void;
 };
 
 export const useApplications = (): useApplicationsProps => {
@@ -28,9 +32,32 @@ export const useApplications = (): useApplicationsProps => {
     }
   }, []);
 
+  const moveApplication = (
+    applicationId: number,
+    newStatus: JobApplication["status"]
+  ) => {
+    setApplications((prevApplications) =>
+      prevApplications.map((application) =>
+        application.id === applicationId
+          ? { ...application, status: newStatus }
+          : application
+      )
+    );
+
+    // try {
+    //   await 
+    // }
+  };
+
   useEffect(() => {
     fetchApplications();
   }, [fetchApplications]);
 
-  return { applications, isLoading, errorMessage, refetchApplications: fetchApplications };
+  return {
+    applications,
+    isLoading,
+    errorMessage,
+    refetchApplications: fetchApplications,
+    moveApplication
+  };
 };

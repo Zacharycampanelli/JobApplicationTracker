@@ -7,7 +7,6 @@ import Button from "../components/ui/Button";
 import Add from "../assets/images/add.svg?react";
 import type { JobApplication } from "../types/types";
 import { useNavigate } from "react-router";
-import ApplicationCard from "../features/applications/components/ApplicationCard";
 import {
   interviewRate,
   offerRate,
@@ -50,14 +49,10 @@ const Applications = () => {
   const isMobile = !isTabletUp;
   const navigate = useNavigate();
 
-  // For tablet and up
-  const INITIAL_VISIBLE_COUNT = 5;
-  const LOAD_MORE_COUNT = 5;
-  // On mobile, always show all, otherwise show initial count
-  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
+ 
 
   // Fetch applications when the component mounts
-  const { applications, isLoading, errorMessage } = useApplications(); // Pre-filter applications by status before passing to search
+  const { applications, isLoading, errorMessage, moveApplication } = useApplications(); // Pre-filter applications by status before passing to search
 
   const filteredByStatus = applications.filter((app: JobApplication) => {
     if (selectedFilter === "All") return true;
@@ -100,10 +95,7 @@ const Applications = () => {
     });
   }, [filteredItems, sortBy]);
 
-  const visibleApplications = isTabletUp
-    ? sortedApplications.slice(0, visibleCount)
-    : sortedApplications;
-  const hasMore = isTabletUp && visibleCount < sortedApplications.length;
+
 
   if (isLoading) return <p>Loading...</p>;
   if (errorMessage) return <p>{errorMessage}</p>;
@@ -129,24 +121,26 @@ const Applications = () => {
           setSortBy={setSortBy}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          includeStatusFilter={false}
         />
-        <div className="mt-8 flex flex-col gap-4 xl:grid xl:grid-cols-3">
+        <div className="mt-8 w-full min-w-0">
           {isLoading ? (
             <p className="text-body-md text-on-surface-variant">
               Loading Applications...
             </p>
           ) : errorMessage ? (
             <p className="text-body-md text-error">{errorMessage}</p>
-          ) : visibleApplications.length === 0 ? (
+          ) : sortedApplications.length === 0 ? (
             <p className="text-body-md text-on-surface-variant">
               No applications found.
             </p>
           ) : (
-            <KanbanBoard applications={visibleApplications} />
+            <KanbanBoard
+              applications={sortedApplications}
+              moveApplication={moveApplication}
+            />
 
-            // visibleApplications.map((app: JobApplication) => (
-            //   <ApplicationCard key={app.id} app={app} />
-            // ))
+  
           )}
         </div>
         <Button
@@ -158,16 +152,7 @@ const Applications = () => {
           <Add fill="#fff" />
           {isTabletUp ? "New Entry" : ""}
         </Button>
-        {hasMore && (
-          <Button
-            type="button"
-            onClick={() => setVisibleCount((prev) => prev + LOAD_MORE_COUNT)}
-            variant="secondary"
-            className="mx-auto mt-6"
-          >
-            Load More
-          </Button>
-        )}
+       
         <div className="hidden xl:flex xl:gap-4 ">
           {stats.map((stat, index) => {
             return (

@@ -1,8 +1,12 @@
+import { DragDropProvider, type DragEndEvent } from "@dnd-kit/react";
 import type { JobApplication } from "../../types/types";
 import type { JobStatus } from "../../types/types";
+import KanbanColumn from "./KanbanColumn";
+import { isSortable } from "@dnd-kit/react/sortable";
 
 type KanbanBoardProps = {
   applications: JobApplication[];
+  moveApplication: (applicationId: number, newStatus: JobStatus) => void
 };
 
 type BoardColumn = {
@@ -17,25 +21,50 @@ const BOARD_COLUMNS: BoardColumn[] = [
   { title: "Rejected", status: "REJECTED" }
 ];
 
-const KanbanBoard = ({ applications }: KanbanBoardProps) => {
+const isJobStatus = (value: unknown): value is JobStatus => BOARD_COLUMNS.some((column) => column.status === value)
+
+const KanbanBoard = ({ applications, moveApplication }: KanbanBoardProps) => {
+  const applicationsByStatus = BOARD_COLUMNS.map((column) => ({
+    ...column,
+    applications: applications.filter((app) => app.status === column.status)
+  }));
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    if (event.canceled) return;
+    const {source} = event.operation;
+
+    if (!isSortable(source)) return;
+
+    const {id, initialGroup, group} = source;
+
+    if(initialGroup == null || group == null) return;
+
+    if(initialGroup === group) return;
+
+    if(!isJobStatus(group)) return;
+
+    const applicationId = Number(id);
+
+    if(!Number.isInteger(applicationId)) return;
+
+    moveApplication(applicationId, group)
+  };
   return (
-    <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto">
-      {BOARD_COLUMNS.map((column) => (
-        <section className="w-[88vw] shrink-0 snap-start md:w-80">
-          {/* column contents */}
-          <KanbanColumn title={column.title} status={column.status} applications={applications} />
-          <div className="flex justify-between">
-            <h2>{column.title}</h2>
-            <p>
-              {
-                applications.filter((app) => app.status === column.status)
-                  .length
-              }
-            </p>
-          </div>
-        </section>
-      ))}
-    </div>
+    <DragDropProvider onDragEnd={handleDragEnd}>
+      <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto">
+        {applicationsByStatus.map((column) => (
+          
+            <KanbanColumn
+              key={column.status}
+              title={column.title}
+              status={column.status}
+              applications={column.applications}
+              className="w-[88vw] shrink-0 snap-start md:w-80 rounded-xl bg-surface-container p-4"
+            />
+       
+        ))}
+      </div>
+    </DragDropProvider>
   );
 };
 

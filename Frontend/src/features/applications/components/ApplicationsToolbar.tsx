@@ -13,12 +13,13 @@ type ApplicationsToolbarProps = {
   setSortBy: (sort: typeof SORT_METHODS[number]) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  includeStatusFilter?: boolean;
 }
 
 const dropdownClassName =
   "absolute left-0 top-14 z-20 w-44 rounded-control bg-surface-container-lowest shadow-menu";
 
-const ApplicationsToolbar = ({ selectedFilter, setSelectedFilter, sortBy, setSortBy, searchQuery, setSearchQuery }: ApplicationsToolbarProps) => {
+const ApplicationsToolbar = ({ selectedFilter, setSelectedFilter, sortBy, setSortBy, searchQuery, setSearchQuery, includeStatusFilter = true }: ApplicationsToolbarProps) => {
       const [isFilterOpen, setIsFilterOpen] = useState(false);
       const [isSortOpen, setIsSortOpen] = useState(false);
     
@@ -34,7 +35,7 @@ const ApplicationsToolbar = ({ selectedFilter, setSelectedFilter, sortBy, setSor
           </div>
           <div className="flex items-center md:justify-between gap-3 md:w-full">
             <div className="flex md:justify-center xl:justify-end w-full">
-              <div className="relative w-full mx-2">
+             {includeStatusFilter && <div className="relative w-full mx-2">
                 <Button
                   type="button"
                   variant="secondary"
@@ -74,7 +75,7 @@ const ApplicationsToolbar = ({ selectedFilter, setSelectedFilter, sortBy, setSor
                     ))}
                   </div>
                 )}
-              </div>
+              </div>}
               <div className="relative w-full mx-2">
                 <Button
                   type="button"
