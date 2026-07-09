@@ -6,7 +6,7 @@ import { isSortable } from "@dnd-kit/react/sortable";
 
 type KanbanBoardProps = {
   applications: JobApplication[];
-  moveApplication: (applicationId: number, newStatus: JobStatus) => void
+  moveApplication: (applicationId: number, newStatus: JobStatus) => Promise<void>
 };
 
 type BoardColumn = {
@@ -31,23 +31,24 @@ const KanbanBoard = ({ applications, moveApplication }: KanbanBoardProps) => {
 
   const handleDragEnd = (event: DragEndEvent) => {
     if (event.canceled) return;
-    const {source} = event.operation;
+    const {source, target} = event.operation;
 
     if (!isSortable(source)) return;
 
-    const {id, initialGroup, group} = source;
-
-    if(initialGroup == null || group == null) return;
-
-    if(initialGroup === group) return;
-
-    if(!isJobStatus(group)) return;
-
-    const applicationId = Number(id);
+    const applicationId = Number(source.id);
 
     if(!Number.isInteger(applicationId)) return;
 
-    moveApplication(applicationId, group)
+   
+    const newStatus = isJobStatus(target?.id) ? target.id : source.group;
+
+    if(!isJobStatus(newStatus)) return;
+
+    if(source.initialGroup === newStatus) return;
+
+    void moveApplication(applicationId, newStatus)
+
+      
   };
   return (
     <DragDropProvider onDragEnd={handleDragEnd}>

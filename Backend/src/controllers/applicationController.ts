@@ -212,6 +212,52 @@ export const updateApplication = async (req: AuthRequest, res: Response) => {
   }
 };
 
+export const updateApplicationStatus = async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Not authorized' });
+    }
+
+    const id = Number(req.params.id);
+
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'Invalid ID' });
+    }
+
+    const status = req.body.status;
+
+    const allowedStatuses = ['APPLIED', 'INTERVIEW', 'OFFER', 'REJECTED'];
+
+    if (!allowedStatuses.includes(status) || !status) {
+      return res.status(400).json({ error: 'Invalid status' });
+    }
+
+    const application = await prisma.jobApplication.findFirst({
+      where: {
+        id,
+        userId: req.user.userId,
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({ error: 'Application not found' });
+    }
+
+    const updatedApplication = await prisma.jobApplication.update({
+      where: {
+        id,
+      },
+      data: {
+        status: req.body.status,
+      },
+    });
+    res.status(200).json(updatedApplication);
+  } catch (error) {
+    console.error('Error updating application status:', error);
+    res.status(500).json({ error: 'Failed to update application status' });
+  }
+};
+
 export const deleteApplication = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user?.userId) {

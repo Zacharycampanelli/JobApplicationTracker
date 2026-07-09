@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import type { JobApplication } from "../types/types";
-import { getAllApplications } from "../features/applications/applicationApi";
+import type { JobApplication, JobStatus } from "../types/types";
+import {
+  getAllApplications,
+  updateApplicationStatus
+} from "../features/applications/applicationApi";
 
 type useApplicationsProps = {
   applications: JobApplication[];
@@ -10,7 +13,7 @@ type useApplicationsProps = {
   moveApplication: (
     applicationId: number,
     newStatus: JobApplication["status"]
-  ) => void;
+  ) => Promise<void>;
 };
 
 export const useApplications = (): useApplicationsProps => {
@@ -32,10 +35,17 @@ export const useApplications = (): useApplicationsProps => {
     }
   }, []);
 
-  const moveApplication = (
+  const moveApplication = async (
     applicationId: number,
-    newStatus: JobApplication["status"]
-  ) => {
+    newStatus: JobStatus
+  ): Promise<void> => {
+    const previousApplication = applications.find(
+      (application) => application.id === applicationId
+    );
+
+    if (!previousApplication || previousApplication.status === newStatus)
+      return;
+
     setApplications((prevApplications) =>
       prevApplications.map((application) =>
         application.id === applicationId
@@ -44,9 +54,25 @@ export const useApplications = (): useApplicationsProps => {
       )
     );
 
-    // try {
-    //   await 
-    // }
+    try {
+      const updatedApplication = await updateApplicationStatus(
+        applicationId,
+        newStatus
+      );
+      setApplications((prevApplications) =>
+        prevApplications.map((application) =>
+          application.id === applicationId ? updatedApplication : application
+        )
+      );
+    } catch (error) {
+      console.error(" Failed to update application status", error);
+      setApplications((prevApplications) =>
+        prevApplications.map((application) =>
+          application.id === applicationId ? previousApplication : application
+        )
+      );
+      setErrorMessage("Failed to update application status");
+    }
   };
 
   useEffect(() => {

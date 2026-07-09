@@ -1,4 +1,5 @@
 import { api } from "../../api/api";
+import type { JobStatus } from "../../types/types";
 import type { ApplicationValues } from "./components/ApplicationForm";
 
 export const getAllApplications = () => {
@@ -30,5 +31,12 @@ export const updateApplication = (id: number, data: ApplicationValues) => {
 export const deleteApplication = (id: number) => {
   return api(`api/applications/${id}`, {
     method: "DELETE"
+  });
+};
+
+export const updateApplicationStatus = (id: number, status: JobStatus) => {
+  return api(`api/applications/${id}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ status })
   });
 };
