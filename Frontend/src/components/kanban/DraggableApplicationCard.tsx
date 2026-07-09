@@ -1,24 +1,29 @@
-import ApplicationCard from "../../features/applications/components/ApplicationCard"
-import type { JobApplication } from "../../types/types"
-import { useSortable } from "@dnd-kit/react/sortable"
+import ApplicationCard from "../../features/applications/components/ApplicationCard";
+import type { JobApplication } from "../../types/types";
+import { useDraggable } from "@dnd-kit/react";
 
 type DraggableApplicationCardProps = {
-    app: JobApplication,
-    index: number,
-    className?: string
-}
+  app: JobApplication;
+  className?: string;
+};
 
-const DraggableApplicationCard = ({app, index, className}: DraggableApplicationCardProps) => {
-    const { ref } = useSortable({
-        id: app.id,
-        index,
-        group: app.status,
-        type: "application",
-        accept: "application"
-    })
+const DraggableApplicationCard = ({
+  app,
+  className
+}: DraggableApplicationCardProps) => {
+  const { ref, isDragging } = useDraggable({
+    id: app.id,
+    type: "application",
+    data: { status: app.status }
+  });
   return (
-    <div ref={ref} className={className}><ApplicationCard app={app} variant="compact" /></div>
-  )
-}
+    <div
+      ref={ref}
+      className={`${className ?? ""} ${isDragging ? "opacity-50" : ""}`}
+    >
+      <ApplicationCard app={app} variant="compact" />
+    </div>
+  );
+};
 
-export default DraggableApplicationCard
+export default DraggableApplicationCard;

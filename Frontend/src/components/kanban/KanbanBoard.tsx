@@ -2,7 +2,7 @@ import { DragDropProvider, type DragEndEvent } from "@dnd-kit/react";
 import type { JobApplication } from "../../types/types";
 import type { JobStatus } from "../../types/types";
 import KanbanColumn from "./KanbanColumn";
-import { isSortable } from "@dnd-kit/react/sortable";
+import { AutoScroller } from "@dnd-kit/dom";
 
 type KanbanBoardProps = {
   applications: JobApplication[];
@@ -33,26 +33,20 @@ const KanbanBoard = ({ applications, moveApplication }: KanbanBoardProps) => {
     if (event.canceled) return;
     const {source, target} = event.operation;
 
-    if (!isSortable(source)) return;
-
-    const applicationId = Number(source.id);
-
+    const applicationId = Number(source?.id);
     if(!Number.isInteger(applicationId)) return;
-
-   
-    const newStatus = isJobStatus(target?.id) ? target.id : source.group;
-
+    
+    const newStatus = target?.id as JobStatus
     if(!isJobStatus(newStatus)) return;
-
-    if(source.initialGroup === newStatus) return;
 
     void moveApplication(applicationId, newStatus)
 
       
   };
   return (
-    <DragDropProvider onDragEnd={handleDragEnd}>
-      <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto">
+    <DragDropProvider plugins={(defaults) => [...defaults.filter((plugin) => plugin !== AutoScroller), AutoScroller.configure({threshold: {x: 0.18, y: 0}, acceleration: 30
+    })]} onDragEnd={handleDragEnd}>
+      <div className="flex max-w-full snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-3">
         {applicationsByStatus.map((column) => (
           
             <KanbanColumn

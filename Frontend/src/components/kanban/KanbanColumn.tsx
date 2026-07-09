@@ -9,30 +9,38 @@ type KanbanColumnProps = {
   className: string;
 };
 
-const KanbanColumn = ({ title, status, applications, className }: KanbanColumnProps) => {
+const KanbanColumn = ({
+  title,
+  status,
+  applications,
+  className
+}: KanbanColumnProps) => {
   const { ref, isDropTarget } = useDroppable({
     id: status,
     type: "column",
-    accept: "application",
+    accept: "application"
   });
-  
-  if(applications.length === 0) {
-    return (
-      <section ref={ref} className={className}>
-        <h2 className="text-card-title text-on-surface mb-4">{title}{"    "} {applications.length}</h2>
-        <div className="space-y-3 min-h-[60vh]">
-          <p className="text-on-surface-variant text-sm">Drop an application here</p>
-        </div>
-      </section>
-    )
-  }
+
   return (
-    <section ref={ref} className={className}>
-      <h2>{title}</h2>
-      <div className="space-y-3 min-h-[60vh]">
-        {applications.map((app, index) => (
-          <DraggableApplicationCard key={app.id} app={app} index={index} className={isDropTarget ? "bg-white" : ""} /> 
-        ))}
+    <section ref={ref} className={`${className} flex max-h-[70dvh] flex-col`}>
+      <h2 className="mb-4 text-card-title text-on-surface">
+        {title} {applications.length}
+      </h2>
+
+      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-2">
+        {applications.length === 0 ? (
+          <p className="text-sm text-on-surface-variant">
+            Drop an application here
+          </p>
+        ) : (
+          applications.map((app) => (
+            <DraggableApplicationCard
+              key={app.id}
+              app={app}
+              className={isDropTarget ? "bg-white" : ""}
+            />
+          ))
+        )}
       </div>
     </section>
   );
