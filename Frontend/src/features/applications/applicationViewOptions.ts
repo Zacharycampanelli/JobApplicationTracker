@@ -1,5 +1,7 @@
 import type { JobStatus } from "../../types/types";
 
+export type ViewMode = "kanban" | "list";
+
 export const SORT_METHODS = ["Newest", "Oldest", "Title", "Company"] as const;
 export type SortMethod = (typeof SORT_METHODS)[number];
 

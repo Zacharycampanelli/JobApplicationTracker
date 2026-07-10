@@ -8,9 +8,9 @@ import {
   SORT_METHODS,
   STATUS_FILTERS,
   type SortMethod,
-  type StatusFilter as StatusFilterValue
+  type StatusFilter as StatusFilterValue,
+  type ViewMode
 } from "../applicationViewOptions";
-import type { ViewMode } from "../../../pages/ApplicationsKanban";
 import Toggle from "../../../components/ui/Toggle";
 
 type ApplicationsToolbarProps = {
@@ -42,11 +42,15 @@ const ApplicationsToolbar = ({
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
 
+  const handleModeChange = (newMode: ViewMode) => {
+    setMode(newMode);
+    localStorage.setItem("applications-view", newMode);
+  };
   return (
     <div className="flex flex-col gap-3 xl:flex-row md:items-center md:justify-between">
       <Toggle
         checked={mode === "kanban"}
-        onChange={() => setMode(mode === "kanban" ? "list" : "kanban")}
+        onChange={(checked) => handleModeChange(checked ? "kanban" : "list")}
         label="List"
         secondLabel="Kanban"
       />

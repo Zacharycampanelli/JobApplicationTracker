@@ -20,11 +20,10 @@ import ApplicationCard from "../features/applications/components/ApplicationCard
 import {
   STATUS_BY_FILTER,
   type SortMethod,
-  type StatusFilter
+  type StatusFilter,
+  type ViewMode
 } from "../features/applications/applicationViewOptions";
 import KanbanBoard from "../components/kanban/KanbanBoard";
-
-export type ViewMode = "kanban" | "list";
 
 const INITIAL_VISIBLE_COUNT = 5;
 const LOAD_MORE_COUNT = 5;
@@ -51,8 +50,14 @@ const stats = [
 const Applications = () => {
   const [selectedFilter, setSelectedFilter] = useState<StatusFilter>("All");
   const [sortBy, setSortBy] = useState<SortMethod>("Newest");
-  // Add setMode here when the view toggle control is implemented.
-  const [mode, setMode] = useState<ViewMode>("kanban");
+  const [mode, setMode] = useState<ViewMode>(() => {
+    const savedMode = localStorage.getItem("applications-view");
+
+    return savedMode === "list" || savedMode === "kanban"
+      ? savedMode
+      : "kanban";
+  });
+
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
