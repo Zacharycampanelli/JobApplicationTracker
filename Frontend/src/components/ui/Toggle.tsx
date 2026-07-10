@@ -5,6 +5,7 @@ type ToggleProps = {
   disabled?: boolean;
   label?: string;
   description?: string;
+  secondLabel?: string;
 };
 
 const Toggle = ({
@@ -13,7 +14,8 @@ const Toggle = ({
   onChange,
   disabled,
   label,
-  description
+  description,
+  secondLabel
 }: ToggleProps) => {
   return (
     <label htmlFor={id} className="flex items-center justify-between gap-4">
@@ -47,6 +49,16 @@ const Toggle = ({
           }`}
         />
       </button>
+
+      {secondLabel && (
+        <span className="flex flex-col">
+          {secondLabel && (
+            <span className="text-body-md font-semibold text-on-surface">
+              {secondLabel}
+            </span>
+          )}
+        </span>
+      )}
     </label>
   );  
 };

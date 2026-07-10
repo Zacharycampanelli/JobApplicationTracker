@@ -3,15 +3,21 @@ import { useNavigate } from "react-router";
 import RightArrow from "../../../assets/images/rightArrow.svg?react";
 import Button from "../../../components/ui/Button";
 import CompanyLogo from "./CompanyLogo";
+import StatusClassBadge from "./StatusClassBadge";
 import type { JobApplication } from "../../../types/types";
 import Handle from "../../../assets/images/handle.svg?react";
 
 type ApplicationCardProps = {
   app: JobApplication;
   dragHandleRef?: Ref<HTMLButtonElement>;
+  showStatus?: boolean;
 };
 
-const ApplicationCard = ({ app, dragHandleRef }: ApplicationCardProps) => {
+const ApplicationCard = ({
+  app,
+  dragHandleRef,
+  showStatus = false
+}: ApplicationCardProps) => {
   const navigate = useNavigate();
 
   const formatDateOnly = (date: string) => {
@@ -24,17 +30,16 @@ const ApplicationCard = ({ app, dragHandleRef }: ApplicationCardProps) => {
       <div className="flex items-start gap-4">
         <div className="flex shrink-0 flex-col items-center gap-2">
           {dragHandleRef && (
-            
-          <Button
-            ref={dragHandleRef}
-            type="button"
-            aria-label={`Drag ${app.company} application`}
-            className="cursor-grab touch-none px-2 text-on-surface-variant active:cursor-grabbing"
-            variant="ghost"
-            size="sm"
-          >
-            <Handle />
-          </Button>
+            <Button
+              ref={dragHandleRef}
+              type="button"
+              aria-label={`Drag ${app.company} application`}
+              className="cursor-grab touch-none px-2 text-on-surface-variant active:cursor-grabbing"
+              variant="ghost"
+              size="sm"
+            >
+              <Handle />
+            </Button>
           )}
           <CompanyLogo url={app.link || undefined} company={app.company} />
         </div>
@@ -44,6 +49,9 @@ const ApplicationCard = ({ app, dragHandleRef }: ApplicationCardProps) => {
           <p className="mt-1 text-label-md text-on-surface-secondary">
             {app.company}
           </p>
+          {showStatus && (
+            <StatusClassBadge className="mt-3 inline-flex" status={app.status} />
+          )}
         </div>
       </div>
       <div className="border-t border-outline-variant pt-3">

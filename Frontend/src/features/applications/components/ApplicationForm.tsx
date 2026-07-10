@@ -106,6 +106,10 @@ const ApplicationForm = ({
   const selectedResumeId = useWatch({ control, name: "resumeId" });
   return (
     <>
+      <form
+        className="flex flex-col gap-4 md:grid md:grid-cols-2"
+        onSubmit={handleSubmit(onSubmit)}
+      >
       <div className="hidden md:flex md:flex-row md:col-span-2 justify-between md:absolute md:right-8 md:top-4 md:gap-4">
         <ApplicationFormActions
           isSubmitting={isSubmitting}
@@ -113,10 +117,6 @@ const ApplicationForm = ({
           onCancel={onCancel}
         />
       </div>
-      <form
-        className="flex flex-col gap-4 md:grid md:grid-cols-2"
-        onSubmit={handleSubmit(onSubmit)}
-      >
         <Input
           id="company"
           {...register("company")}

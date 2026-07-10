@@ -1,27 +1,33 @@
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router";
 import Header from "../components/layout/Header";
-import { useBreakpoint } from "../utils/useBreakpoint";
-import { useSearch } from "../utils/useSearch";
 import Button from "../components/ui/Button";
-
 import Add from "../assets/images/add.svg?react";
 import type { JobApplication } from "../types/types";
-import { useNavigate } from "react-router";
 import {
   interviewRate,
   offerRate,
   activePipelineRate
 } from "../utils/getStats";
-import StatCard from "../components/shared/StatCard";
+import { useBreakpoint } from "../utils/useBreakpoint";
+import { useSearch } from "../utils/useSearch";
 import { useApplications } from "../utils/useApplications";
-import PipelineDistribution from "../features/analytics/components/PipelineDistribution";
 import { getAnalyticsData } from "../utils/getAnalyticsData";
+import StatCard from "../components/shared/StatCard";
+import PipelineDistribution from "../features/analytics/components/PipelineDistribution";
 import ApplicationsToolbar from "../features/applications/components/ApplicationsToolbar";
+import ApplicationCard from "../features/applications/components/ApplicationCard";
+import {
+  STATUS_BY_FILTER,
+  type SortMethod,
+  type StatusFilter
+} from "../features/applications/applicationViewOptions";
 import KanbanBoard from "../components/kanban/KanbanBoard";
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const SORT_METHODS = ["Newest", "Oldest", "Title", "Company"] as const;
-type SortMethod = (typeof SORT_METHODS)[number];
+export type ViewMode = "kanban" | "list";
+
+const INITIAL_VISIBLE_COUNT = 5;
+const LOAD_MORE_COUNT = 5;
 
 const stats = [
   {
@@ -43,30 +49,26 @@ const stats = [
 ];
 
 const Applications = () => {
-  const [selectedFilter, setSelectedFilter] = useState("All");
+  const [selectedFilter, setSelectedFilter] = useState<StatusFilter>("All");
   const [sortBy, setSortBy] = useState<SortMethod>("Newest");
+  // Add setMode here when the view toggle control is implemented.
+  const [mode, setMode] = useState<ViewMode>("kanban");
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
   const navigate = useNavigate();
 
- 
+  const { applications, isLoading, errorMessage, moveApplication } =
+    useApplications();
 
-  // Fetch applications when the component mounts
-  const { applications, isLoading, errorMessage, moveApplication } = useApplications(); // Pre-filter applications by status before passing to search
+  const filteredByStatus = useMemo(() => {
+    if (mode === "kanban" || selectedFilter === "All") {
+      return applications;
+    }
 
-  const filteredByStatus = applications.filter((app: JobApplication) => {
-    if (selectedFilter === "All") return true;
-
-    // Map the friendly dropdown text to the actual database enum values for filtering
-    const statusMap: Record<string, string> = {
-      Applied: "APPLIED",
-      Interviewing: "INTERVIEW",
-      Offer: "OFFER",
-      Rejected: "REJECTED"
-    };
-
-    return app.status === statusMap[selectedFilter];
-  });
+    const status = STATUS_BY_FILTER[selectedFilter];
+    return applications.filter((app) => app.status === status);
+  }, [applications, mode, selectedFilter]);
 
   const { searchQuery, setSearchQuery, filteredItems } = useSearch({
     items: filteredByStatus,
@@ -85,35 +87,41 @@ const Applications = () => {
           new Date(a.appliedAt).getTime() - new Date(b.appliedAt).getTime()
         );
       }
-      if (sortBy === "Title") {
-        return a.title.localeCompare(b.title);
-      }
-      if (sortBy === "Company") {
-        return a.company.localeCompare(b.company);
-      }
+      if (sortBy === "Title") return a.title.localeCompare(b.title);
+      if (sortBy === "Company") return a.company.localeCompare(b.company);
       return 0;
     });
   }, [filteredItems, sortBy]);
 
-
+  const visibleApplications = isTabletUp
+    ? sortedApplications.slice(0, visibleCount)
+    : sortedApplications;
+  const hasMore =
+    mode === "list" &&
+    isTabletUp &&
+    visibleCount < sortedApplications.length;
 
   if (isLoading) return <p>Loading...</p>;
   if (errorMessage) return <p>{errorMessage}</p>;
+
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl xl:max-w-7xl flex-col bg-surface md:px-6 py-4 relative">
+    <div
+      className={`relative mx-auto flex min-h-dvh w-full flex-col bg-surface py-4 md:px-6 ${
+        mode === "kanban" ? "max-w-5xl xl:max-w-7xl" : "max-w-5xl"
+      }`}
+    >
       {isMobile && <Header />}
-      <main className="flex flex-col pb-10 gap-6">
+      <main className="flex flex-col gap-6 pb-10">
         <div>
-          {/* <div className="flex justify-between relative"> */}
           <h2 className="mt-6 text-page-title text-on-surface">
             Active Pursuits
           </h2>
-          {/* </div> */}
           <p className="mt-4 text-body-lg text-on-surface-secondary">
             Managing {sortedApplications.length} ongoing professional
             trajectories.
           </p>
         </div>
+
         <ApplicationsToolbar
           selectedFilter={selectedFilter}
           setSelectedFilter={setSelectedFilter}
@@ -121,53 +129,65 @@ const Applications = () => {
           setSortBy={setSortBy}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          includeStatusFilter={false}
+          includeStatusFilter={mode === "list"}
+          mode={mode}
+          setMode={setMode}
         />
-        <div className="mt-8 w-full min-w-0">
-          {isLoading ? (
-            <p className="text-body-md text-on-surface-variant">
-              Loading Applications...
-            </p>
-          ) : errorMessage ? (
-            <p className="text-body-md text-error">{errorMessage}</p>
-          ) : sortedApplications.length === 0 ? (
-            <p className="text-body-md text-on-surface-variant">
-              No applications found.
-            </p>
-          ) : (
+
+        {sortedApplications.length === 0 ? (
+          <p className="mt-8 text-body-md text-on-surface-variant">
+            No applications found.
+          </p>
+        ) : mode === "kanban" ? (
+          <div className="mt-8 min-w-0 w-full">
             <KanbanBoard
               applications={sortedApplications}
               moveApplication={moveApplication}
             />
+          </div>
+        ) : (
+          <div className="mt-8 flex flex-col gap-4 xl:grid xl:grid-cols-3">
+            {visibleApplications.map((app: JobApplication) => (
+              <ApplicationCard key={app.id} app={app} showStatus />
+            ))}
+          </div>
+        )}
 
-  
-          )}
-        </div>
         <Button
           onClick={() => navigate("/applications/add")}
-          className="fixed z-10 bottom-24 right-8 px-4 py-4 h-12 md:absolute md:top-10 "
+          className="fixed bottom-24 right-8 z-10 h-12 px-4 py-4 md:absolute md:top-10"
           size="md"
           variant="primary"
         >
           <Add fill="#fff" />
           {isTabletUp ? "New Entry" : ""}
         </Button>
-       
-        <div className="hidden xl:flex xl:gap-4 ">
-          {stats.map((stat, index) => {
-            return (
-              <StatCard
-                key={index}
-                applications={applications}
-                statFunction={stat.statFunction}
-                statName={stat.statName}
-                primaryCard={stat.primary}
-                index={index}
-                suffix={stat.suffix}
-              />
-            );
-          })}
+
+        {hasMore && (
+          <Button
+            type="button"
+            onClick={() => setVisibleCount((count) => count + LOAD_MORE_COUNT)}
+            variant="secondary"
+            className="mx-auto mt-6"
+          >
+            Load More
+          </Button>
+        )}
+
+        <div className="hidden xl:flex xl:gap-4">
+          {stats.map((stat, index) => (
+            <StatCard
+              key={stat.statName}
+              applications={applications}
+              statFunction={stat.statFunction}
+              statName={stat.statName}
+              primaryCard={stat.primary}
+              index={index}
+              suffix={stat.suffix}
+            />
+          ))}
         </div>
+
         <PipelineDistribution
           data={getAnalyticsData(applications).pipelineDistribution}
         />
