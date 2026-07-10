@@ -24,7 +24,8 @@ const KanbanColumn = ({
   return (
     <section ref={ref} className={`${className} flex max-h-[70dvh] flex-col`}>
       <h2 className="mb-4 text-card-title text-on-surface">
-        {title} {applications.length}
+        {title}{" "}
+        <span className="text-on-secondary">({applications.length})</span>
       </h2>
 
       <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-2">

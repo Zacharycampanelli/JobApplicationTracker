@@ -100,7 +100,7 @@ const Applications = () => {
   if (isLoading) return <p>Loading...</p>;
   if (errorMessage) return <p>{errorMessage}</p>;
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 relative">
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl xl:max-w-7xl flex-col bg-surface md:px-6 py-4 relative">
       {isMobile && <Header />}
       <main className="flex flex-col pb-10 gap-6">
         <div>

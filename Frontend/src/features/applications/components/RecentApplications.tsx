@@ -40,7 +40,7 @@ const RecentApplications = () => {
             {!isLoading &&
               !error &&
               applications.map((app) => (
-                <ApplicationCard key={app.id} app={app} variant="compact" />
+                <ApplicationCard key={app.id} app={app} />
               ))}
 
             {applications.length < 3 && (

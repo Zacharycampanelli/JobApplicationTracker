@@ -1,9 +1,12 @@
-import type { ReactElement, ButtonHTMLAttributes } from "react";
+import {
+  forwardRef,
+  type ReactElement,
+  type ButtonHTMLAttributes
+} from "react";
 import { twMerge } from "tailwind-merge";
 
 const variantStyles = {
-  primary:
-    "text-surface-container-lowest enabled:hover:opacity-90",
+  primary: "text-surface-container-lowest enabled:hover:opacity-90",
   secondary:
     "bg-surface-container-high text-on-surface enabled:hover:bg-surface-container-lowest",
   ghost: "text-on-surface-variant enabled:hover:bg-surface-container-high",
@@ -22,32 +25,39 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   icon?: ReactElement;
 };
 
-const Button = ({
-  variant = "primary",
-  size = "md",
-  icon,
-  children,
-  className = "",
-  disabled = false,
-  ...props
-}: ButtonProps) => {
-  const isPrimary = variant === "primary";
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      variant = "primary",
+      size = "md",
+      icon,
+      children,
+      className = "",
+      disabled = false,
+      ...props
+    },
+    ref
+  ) => {
+    const isPrimary = variant === "primary";
 
-  const classes = twMerge(
-    "inline-flex items-center justify-center gap-2 transition",
-    "disabled:opacity-50 disabled:cursor-not-allowed",
-    sizeStyles[size],
-    variantStyles[variant],
-    isPrimary && "btn-gradient",
-    className
-  );
+    const classes = twMerge(
+      "inline-flex items-center justify-center gap-2 transition",
+      "disabled:opacity-50 disabled:cursor-not-allowed",
+      sizeStyles[size],
+      variantStyles[variant],
+      isPrimary && "btn-gradient",
+      className
+    );
 
-  return (
-    <button className={classes} {...props} disabled={disabled}>
-      {icon && <span className="flex items-center">{icon}</span>}
-      {children}
-    </button>
-  );
-};
+    return (
+      <button className={classes} {...props} disabled={disabled} ref={ref}>
+        {icon && <span className="flex items-center">{icon}</span>}
+        {children}
+      </button>
+    );
+  }
+);
+
+Button.displayName = "Button";
 
 export default Button;

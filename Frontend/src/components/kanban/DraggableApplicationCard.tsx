@@ -1,6 +1,7 @@
 import ApplicationCard from "../../features/applications/components/ApplicationCard";
 import type { JobApplication } from "../../types/types";
 import { useDraggable } from "@dnd-kit/react";
+import Handle from "../../assets/images/handle.svg?react";
 
 type DraggableApplicationCardProps = {
   app: JobApplication;
@@ -11,7 +12,7 @@ const DraggableApplicationCard = ({
   app,
   className
 }: DraggableApplicationCardProps) => {
-  const { ref, isDragging } = useDraggable({
+  const { ref, handleRef, isDragging } = useDraggable({
     id: app.id,
     type: "application",
     data: { status: app.status }
@@ -21,7 +22,7 @@ const DraggableApplicationCard = ({
       ref={ref}
       className={`${className ?? ""} ${isDragging ? "opacity-50" : ""}`}
     >
-      <ApplicationCard app={app} variant="compact" />
+      <ApplicationCard app={app} dragHandleRef={handleRef} />
     </div>
   );
 };

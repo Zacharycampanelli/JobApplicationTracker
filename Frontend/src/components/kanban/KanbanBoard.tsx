@@ -2,11 +2,13 @@ import { DragDropProvider, type DragEndEvent } from "@dnd-kit/react";
 import type { JobApplication } from "../../types/types";
 import type { JobStatus } from "../../types/types";
 import KanbanColumn from "./KanbanColumn";
-import { AutoScroller } from "@dnd-kit/dom";
 
 type KanbanBoardProps = {
   applications: JobApplication[];
-  moveApplication: (applicationId: number, newStatus: JobStatus) => Promise<void>
+  moveApplication: (
+    applicationId: number,
+    newStatus: JobStatus
+  ) => Promise<void>;
 };
 
 type BoardColumn = {
@@ -21,7 +23,8 @@ const BOARD_COLUMNS: BoardColumn[] = [
   { title: "Rejected", status: "REJECTED" }
 ];
 
-const isJobStatus = (value: unknown): value is JobStatus => BOARD_COLUMNS.some((column) => column.status === value)
+const isJobStatus = (value: unknown): value is JobStatus =>
+  BOARD_COLUMNS.some((column) => column.status === value);
 
 const KanbanBoard = ({ applications, moveApplication }: KanbanBoardProps) => {
   const applicationsByStatus = BOARD_COLUMNS.map((column) => ({
@@ -31,32 +34,29 @@ const KanbanBoard = ({ applications, moveApplication }: KanbanBoardProps) => {
 
   const handleDragEnd = (event: DragEndEvent) => {
     if (event.canceled) return;
-    const {source, target} = event.operation;
+    const { source, target } = event.operation;
 
     const applicationId = Number(source?.id);
-    if(!Number.isInteger(applicationId)) return;
-    
-    const newStatus = target?.id as JobStatus
-    if(!isJobStatus(newStatus)) return;
+    if (!Number.isInteger(applicationId)) return;
 
-    void moveApplication(applicationId, newStatus)
+    const newStatus = target?.id as JobStatus;
+    if (!isJobStatus(newStatus)) return;
 
-      
+    void moveApplication(applicationId, newStatus);
   };
+
   return (
-    <DragDropProvider plugins={(defaults) => [...defaults.filter((plugin) => plugin !== AutoScroller), AutoScroller.configure({threshold: {x: 0.18, y: 0}, acceleration: 30
-    })]} onDragEnd={handleDragEnd}>
-      <div className="flex max-w-full snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-3">
+    <DragDropProvider onDragEnd={handleDragEnd}>
+      <div className="flex max-w-full gap-4 overflow-x-auto overscroll-x-contain pb-3">
+   
         {applicationsByStatus.map((column) => (
-          
-            <KanbanColumn
-              key={column.status}
-              title={column.title}
-              status={column.status}
-              applications={column.applications}
-              className="w-[88vw] shrink-0 snap-start md:w-80 rounded-xl bg-surface-container p-4"
-            />
-       
+          <KanbanColumn
+            key={column.status}
+            title={column.title}
+            status={column.status}
+            applications={column.applications}
+            className="w-[90vw] shrink-0 rounded-xl bg-surface-container p-4 md:w-80"
+          />
         ))}
       </div>
     </DragDropProvider>

@@ -20,7 +20,7 @@ const ApplicationFormActions = ({
         type="submit"
         size={isMobile ? "lg" : "md"}
         disabled={isSubmitting}
-        className="w-full px-4 py-2"
+        className="w-full px-4 py-6"
       >
         {isSubmitting
           ? "Submitting..."
@@ -33,7 +33,7 @@ const ApplicationFormActions = ({
         size={isMobile ? "lg" : "md"}
         variant="secondary"
         onClick={onCancel}
-        className="w-full px-4 py-2"
+        className="w-full px-4 py-6"
       >
         Cancel
       </Button>
