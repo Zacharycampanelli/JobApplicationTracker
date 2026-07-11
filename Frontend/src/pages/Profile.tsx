@@ -24,6 +24,7 @@ import { API_URL } from "../api/api";
 import UserPreferences from "../features/profile/components/UserPreferences";
 import SharedProfileView from "../features/profile/components/SharedProfileView";
 import AccountOwnerDetails from "../features/profile/components/AccountOwnerDetails";
+import { toast } from "sonner";
 
 const profileSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
@@ -102,9 +103,11 @@ const Profile = () => {
       const updatedUser = await updateProfile(profileData);
       updateUser(updatedUser);
       setInEditMode(false);
-      setIsSuccessModalOpen(true);
+      toast.success("Profile updated!");
     } catch (error) {
-      console.error(error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to update profile"
+      );
     }
   };
 
@@ -158,8 +161,11 @@ const Profile = () => {
     try {
       const updatedUser = await uploadProfileImage(formData);
       updateUser(updatedUser);
+      toast.success("Profile image updated!");
     } catch (error) {
-      console.error(error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to update profile image"
+      );
     }
   };
 

@@ -8,17 +8,17 @@ import { useEffect, useState } from "react";
 import type { Resume } from "../types/types";
 import { createApplication } from "../features/applications/applicationApi";
 import CancelModal from "../components/shared/CancelModal";
-import SuccessModal from "../components/shared/SuccessModal";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 const AddApplication = () => {
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
-
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [empty, setEmpty] = useState(true);
   const [resumes, setResumes] = useState<Resume[]>([]);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   const loadResumes = async () => {
@@ -42,8 +42,13 @@ const AddApplication = () => {
   }, []);
 
   const onSubmit = async (values: ApplicationValues) => {
+    try {
     await createApplication(values);
-    setIsSuccessModalOpen(true);
+    toast.success("Application added");
+    navigate("/applications");
+    } catch(err) {
+      toast.error(err instanceof Error ? err.message : "Failed to add application");
+    }
   };
 
   return (
@@ -63,7 +68,13 @@ const AddApplication = () => {
         emptyResumes={empty}
         onResumesChanged={loadResumes}
         onSubmit={onSubmit}
-        onCancel={() => setIsCancelModalOpen(true)}
+        onCancel={(isDirty) => {
+          if (isDirty) {
+            setIsCancelModalOpen(true);
+          } else {
+            navigate("/applications");
+          }
+        }}
         newOrEdit="new"
         defaultValues={{
           title: "",
@@ -74,11 +85,6 @@ const AddApplication = () => {
           notes: "",
           link: ""
         }}
-      />
-      <SuccessModal
-        isOpen={isSuccessModalOpen}
-        onClose={() => setIsSuccessModalOpen(false)}
-        newLocation={"/applications"}
       />
       <CancelModal
         isOpen={isCancelModalOpen}

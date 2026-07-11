@@ -19,6 +19,7 @@ const SharedProfileView = ({
   linkedin,
   summary
 }: SharedProfileViewProps) => {
+  
   return (
     <div className="mt-4 flex flex-col gap-8">
       {!avatarUrl && (

@@ -3,7 +3,7 @@ import AppWrapper from "./components/layout/AppWrapper";
 import AuthWrapper from "./components/layout/AuthWrapper";
 
 import Dashboard from "./pages/Dashboard";
-import ApplicationsKanban from "./pages/ApplicationsKanban";
+import Applications from "./pages/Applications";
 import Analytics from "./pages/Analytics";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
@@ -29,7 +29,7 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/applications">
-                <Route index element={<ApplicationsKanban />} />
+                <Route index element={<Applications />} />
                 <Route path="add" element={<AddApplication />} />
                 <Route path="edit/:id" element={<EditApplication />} />
               </Route>

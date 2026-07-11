@@ -1,6 +1,5 @@
 import Header from "../components/layout/Header";
 import { useBreakpoint } from "../utils/useBreakpoint";
-
 import { useApplications } from "../utils/useApplications";
 import AnalyticsMetricCard from "../features/analytics/components/AnalyticsMetricCard";
 import PipelineDistribution from "../features/analytics/components/PipelineDistribution";

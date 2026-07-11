@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
 import Navbar from "./Navbar";
 import { useAuthContext } from "../../context/AuthContext";
+import { Toaster } from "sonner";
 
 const AppWrapper = () => {
   const { isAuthenticated } = useAuthContext();
@@ -12,6 +13,7 @@ const AppWrapper = () => {
         <div className="mx-auto w-full max-w-7xl px-4 py-6 md:px-6 md:py-8 lg:px-8">
           <Outlet />
         </div>
+        <Toaster richColors/>
       </main>
     </div>
   );

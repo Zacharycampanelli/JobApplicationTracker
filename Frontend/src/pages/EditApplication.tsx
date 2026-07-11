@@ -14,6 +14,7 @@ import ApplicationForm from "../features/applications/components/ApplicationForm
 import Modal from "../components/ui/Modal";
 import Button from "../components/ui/Button";
 import CancelModal from "../components/shared/CancelModal";
+import { toast } from "sonner";
 
 const EditApplication = () => {
   const isTabletUp = useBreakpoint("md");
@@ -27,7 +28,6 @@ const EditApplication = () => {
   const [error, setError] = useState("");
   const [empty, setEmpty] = useState(true);
   const [resumes, setResumes] = useState<Resume[]>([]);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [defaultValues, setDefaultValues] = useState<ApplicationValues>();
@@ -70,13 +70,12 @@ const EditApplication = () => {
   }, []);
 
   const onSubmit = async (values: ApplicationValues) => {
-    console.log(values);
     try {
       setSubmitError("");
       await updateApplication(Number(id), values);
-      setIsSuccessModalOpen(true);
+      toast.success("Application updated!");
     } catch (error) {
-      setSubmitError(
+      toast.error(
         error instanceof Error ? error.message : "Failed to update application"
       );
     }
@@ -84,8 +83,15 @@ const EditApplication = () => {
 
   const handleDelete = async () => {
     if (!id) return;
-    await deleteApplication(Number(id));
-    navigate("/applications");
+    try {
+      await deleteApplication(Number(id));
+      toast.success("Application deleted!");
+      navigate("/applications");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to delete application"
+      );
+    }
   };
 
   if (isLoading) return <p>Loading...</p>;
@@ -98,14 +104,6 @@ const EditApplication = () => {
         <h2 className="mt-6 mb-6 text-page-title text-on-surface flex-1">
           Application {!isDesktop && <br />}Adjustment
         </h2>
-        {/* <Button
-          type="button"
-          variant="danger"
-          onClick={() => setIsDeleteModalOpen(true)}
-          className="w-1/3 flex-0 md:hidden"
-        >
-          Delete
-        </Button> */}
       </div>
       <p className="text-body-lg text-on-surface mb-8">
         Refine the spatial parameters of your career progression.
@@ -117,7 +115,13 @@ const EditApplication = () => {
         emptyResumes={empty}
         onResumesChanged={loadResumes}
         onSubmit={onSubmit}
-        onCancel={() => setIsCancelModalOpen(true)}
+        onCancel={(isDirty) => {
+          if (isDirty) {
+            setIsCancelModalOpen(true);
+          } else {
+            navigate("/applications");
+          }
+        }}
         newOrEdit="edit"
         defaultValues={defaultValues}
         submitError={submitError}
@@ -132,17 +136,7 @@ const EditApplication = () => {
           Delete Application
         </Button>
       </div>
-      <Modal
-        title="Success!"
-        isOpen={isSuccessModalOpen}
-        onClose={() => setIsSuccessModalOpen(false)}
-        closeAction={"/applications"}
-        closeText="Okay!"
-      >
-        <p className="text-body-md text-on-surface">
-          Application updated successfully
-        </p>
-      </Modal>
+
       <CancelModal
         isOpen={isCancelModalOpen}
         onClose={() => setIsCancelModalOpen(false)}

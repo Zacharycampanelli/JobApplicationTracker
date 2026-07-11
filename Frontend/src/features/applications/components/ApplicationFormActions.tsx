@@ -14,6 +14,7 @@ const ApplicationFormActions = ({
 }: ApplicationFormActionsProps) => {
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
+
   return (
     <div className="flex flex-col w-full justify-between md:flex-row-reverse md:justify-end md:items-center gap-3 mt-4 md:leading-6">
       <Button

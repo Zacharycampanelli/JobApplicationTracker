@@ -15,6 +15,7 @@ const KanbanColumn = ({
   applications,
   className
 }: KanbanColumnProps) => {
+  
   const { ref, isDropTarget } = useDroppable({
     id: status,
     type: "column",

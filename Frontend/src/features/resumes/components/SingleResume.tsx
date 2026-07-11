@@ -4,6 +4,7 @@ import SelectedInput from "../../../assets/images/selectedInput.svg?react";
 import { deleteResume } from "../resumeApi";
 import type React from "react";
 import { twMerge } from "tailwind-merge";
+import { toast } from "sonner";
 
 type SingleResumeProps = {
   resume: Resume;
@@ -29,9 +30,15 @@ const SingleResume = ({
 }: SingleResumeProps) => {
   const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-
-    await deleteResume(resume.id);
-    await onDeleteSuccess?.();
+    try {
+      await deleteResume(resume.id);
+      toast.success("Resume deleted!");
+      await onDeleteSuccess?.();
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to delete resume"
+      );
+    }
   };
 
   return (
@@ -59,7 +66,11 @@ const SingleResume = ({
         </span>
       </button>
       {deletable && (
-        <button onClick={handleDelete} type="button" className="text-on-surface-secondary hover:text-error transition duration-150 text-xl">
+        <button
+          onClick={handleDelete}
+          type="button"
+          className="text-on-surface-secondary hover:text-error transition duration-150 text-xl"
+        >
           X
         </button>
       )}

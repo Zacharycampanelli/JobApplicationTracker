@@ -2,6 +2,7 @@ import { DragDropProvider, type DragEndEvent } from "@dnd-kit/react";
 import type { JobApplication } from "../../types/types";
 import type { JobStatus } from "../../types/types";
 import KanbanColumn from "./KanbanColumn";
+import { toast } from "sonner";
 
 type KanbanBoardProps = {
   applications: JobApplication[];
@@ -32,7 +33,7 @@ const KanbanBoard = ({ applications, moveApplication }: KanbanBoardProps) => {
     applications: applications.filter((app) => app.status === column.status)
   }));
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     if (event.canceled) return;
     const { source, target } = event.operation;
 
@@ -42,13 +43,21 @@ const KanbanBoard = ({ applications, moveApplication }: KanbanBoardProps) => {
     const newStatus = target?.id as JobStatus;
     if (!isJobStatus(newStatus)) return;
 
-    void moveApplication(applicationId, newStatus);
+    try {
+      await moveApplication(applicationId, newStatus);
+      toast.success(`Application moved to ${newStatus}`);
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to update application status"
+      );
+    }
   };
 
   return (
     <DragDropProvider onDragEnd={handleDragEnd}>
       <div className="flex max-w-full gap-4 overflow-x-auto overscroll-x-contain pb-3">
-   
         {applicationsByStatus.map((column) => (
           <KanbanColumn
             key={column.status}

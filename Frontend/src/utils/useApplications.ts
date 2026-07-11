@@ -72,6 +72,7 @@ export const useApplications = (): useApplicationsProps => {
         )
       );
       setErrorMessage("Failed to update application status");
+      throw error;
     }
   };
 

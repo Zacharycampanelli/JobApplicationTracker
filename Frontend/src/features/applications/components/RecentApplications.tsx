@@ -5,6 +5,7 @@ import ApplicationCard from "./ApplicationCard";
 import AddApplication from "../../../assets/images/addApplication.svg?react";
 import Button from "../../../components/ui/Button";
 import { useNavigate } from "react-router";
+
 const RecentApplications = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

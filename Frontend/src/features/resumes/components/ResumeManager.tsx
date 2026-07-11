@@ -5,6 +5,7 @@ import SingleResume from "./SingleResume";
 import Add from "../../../assets/images/add.svg?react";
 import { useRef } from "react";
 import { uploadResume } from "../resumeApi";
+import { toast } from "sonner";
 
 type ResumeManagerProps = {
   isLoading: boolean;
@@ -30,6 +31,7 @@ const ResumeManager = ({
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    try{
     const file = event.target.files?.[0];
     if (!file) {
       return;
@@ -37,8 +39,14 @@ const ResumeManager = ({
     const formData = new FormData();
     formData.append("resume", file);
     await uploadResume(formData);
+    toast.success("Resume uploaded!");
     await onResumesChanged();
-  };
+  } catch (error) {
+    toast.error(
+      error instanceof Error ? error.message : "Failed to upload resume"
+    );
+  }
+};
 
   const uploadButton = (
     <>

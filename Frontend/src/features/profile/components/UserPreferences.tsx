@@ -11,6 +11,7 @@ import { useAuthContext } from "../../../context/AuthContext";
 import { updateUserPreferences } from "../profileApi";
 import type { UpdatePreferencesValues } from "../../../types/types";
 import { Tooltip } from "react-tooltip";
+import { toast } from "sonner";
 
 const UserPreferences = () => {
   const { user, updateUser } = useAuthContext();
@@ -37,8 +38,12 @@ const UserPreferences = () => {
         ...user,
         preferences: updatedPreferences
       });
+
+      toast.success("Preferences updated!");
     } catch (error) {
-      console.error("Failed to update preferences", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to update preferences"
+      );
     }
   };
 
@@ -70,11 +75,6 @@ const UserPreferences = () => {
         <Toggle
           id="automaticStatusUpdates"
           checked={user?.preferences?.autoStatusUpdatesEnabled ?? false}
-          // onChange={(checked) =>
-          //   handlePreferenceChange({
-          //     autoStatusUpdatesEnabled: checked
-          //   })
-          // }`
           onChange={() => {}}
           disabled={true}
         />
@@ -90,11 +90,6 @@ const UserPreferences = () => {
         <Toggle
           id="darkMode"
           checked={user?.preferences?.themePreference === "dark"}
-          // onChange={(checked) =>
-          //   handlePreferenceChange({
-          //     themePreference: checked ? "dark" : "light"
-          //   })
-          // }
           onChange={() => {}}
           disabled={true}
         />

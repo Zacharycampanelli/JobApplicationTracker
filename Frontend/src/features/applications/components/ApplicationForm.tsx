@@ -10,7 +10,12 @@ import Textarea from "../../../components/ui/Textarea";
 import ApplicationFormActions from "./ApplicationFormActions";
 import AdditionalFormOptions from "./AdditionalFormOptions";
 import ExpandableSection from "../../../components/shared/ExpandableSection";
-import { optionalNumber, optionalText, optionalDate, requiredDate } from "../../../utils/zodUtils";
+import {
+  optionalNumber,
+  optionalText,
+  optionalDate,
+  requiredDate
+} from "../../../utils/zodUtils";
 
 const applicationSchema = z
   .object({
@@ -73,7 +78,7 @@ type ApplicationFormProps = {
   emptyResumes: boolean;
   onResumesChanged: () => void;
   onSubmit: (values: ApplicationValues) => Promise<void>;
-  onCancel: () => void;
+  onCancel: (isDirty: boolean) => void;
   newOrEdit: "new" | "edit";
   defaultValues?: Partial<ApplicationFormValues>;
   submitError?: string;
@@ -97,7 +102,7 @@ const ApplicationForm = ({
     setValue,
     control,
     watch,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting, isDirty }
   } = useForm<ApplicationFormValues, unknown, ApplicationValues>({
     resolver: zodResolver(applicationSchema),
     defaultValues
@@ -110,13 +115,13 @@ const ApplicationForm = ({
         className="flex flex-col gap-4 md:grid md:grid-cols-2"
         onSubmit={handleSubmit(onSubmit)}
       >
-      <div className="hidden md:flex md:flex-row md:col-span-2 justify-between md:absolute md:right-8 md:top-4 md:gap-4">
-        <ApplicationFormActions
-          isSubmitting={isSubmitting}
-          newOrEdit={newOrEdit}
-          onCancel={onCancel}
-        />
-      </div>
+        <div className="hidden md:flex md:flex-row md:col-span-2 justify-between md:absolute md:right-8 md:top-4 md:gap-4">
+          <ApplicationFormActions
+            isSubmitting={isSubmitting}
+            newOrEdit={newOrEdit}
+            onCancel={() => onCancel(isDirty)}
+          />
+        </div>
         <Input
           id="company"
           {...register("company")}
@@ -215,7 +220,7 @@ const ApplicationForm = ({
           <ApplicationFormActions
             isSubmitting={isSubmitting}
             newOrEdit={newOrEdit}
-            onCancel={onCancel}
+            onCancel={() => onCancel(isDirty)}
           />
         </div>
       </form>
