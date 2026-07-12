@@ -24,6 +24,9 @@ import {
   type ViewMode
 } from "../features/applications/applicationViewOptions";
 import KanbanBoard from "../components/kanban/KanbanBoard";
+import EmptyState from "../components/shared/EmptyState";
+import LoadingState from "../components/shared/LoadingState";
+import ErrorState from "../components/shared/ErrorState";
 
 const INITIAL_VISIBLE_COUNT = 5;
 const LOAD_MORE_COUNT = 5;
@@ -104,8 +107,8 @@ const Applications = () => {
   const hasMore =
     mode === "list" && isTabletUp && visibleCount < sortedApplications.length;
 
-  if (isLoading) return <p>Loading...</p>;
-  if (errorMessage) return <p>{errorMessage}</p>;
+  if (isLoading) return <LoadingState message="Loading applications..." />;
+  if (errorMessage) return <ErrorState message={errorMessage} />;
 
   return (
     <div
@@ -137,10 +140,32 @@ const Applications = () => {
           setMode={setMode}
         />
 
-        {sortedApplications.length === 0 ? (
-          <p className="mt-8 text-body-md text-on-surface-variant">
-            No applications found.
-          </p>
+        {applications.length === 0 ? (
+          <EmptyState
+            title="No applications yet"
+            description="Add your first application to begin tracking your pipeline."
+            action={
+              <Button onClick={() => navigate("/applications/add")}>
+                Add application
+              </Button>
+            }
+          />
+        ) : sortedApplications.length === 0 ? (
+          <EmptyState
+            title="No matching applications"
+            description="Try a different search or clear your active filters."
+            action={
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedFilter("All");
+                }}
+              >
+                Clear filters
+              </Button>
+            }
+          />
         ) : mode === "kanban" ? (
           <div className="mt-8 min-w-0 w-full">
             <KanbanBoard

@@ -18,6 +18,8 @@ import SuccessApp from "../assets/images/successApp.svg?react";
 import Medal from "../assets/images/medal.svg?react";
 import Add from "../assets/images/add.svg?react";
 import RecentApplications from "../features/applications/components/RecentApplications";
+import LoadingState from "../components/shared/LoadingState";
+import ErrorState from "../components/shared/ErrorState";
 
 const stats = [
   {
@@ -56,8 +58,8 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { applications, isLoading, errorMessage } = useApplications(); // Pre-filter applications by status before passing to search
 
-  if (isLoading) return <p>Loading...</p>;
-  if (errorMessage) return <p>{errorMessage}</p>;
+  if (isLoading) return <LoadingState message="Loading dashboard..." />;
+  if (errorMessage) return <ErrorState message={errorMessage} />;
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 relative">
       {isMobile && <Header />}

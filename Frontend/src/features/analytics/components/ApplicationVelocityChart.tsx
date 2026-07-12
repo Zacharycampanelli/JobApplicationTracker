@@ -12,6 +12,8 @@ export const ApplicationVelocityChart = ({
   data,
   className
 }: ApplicationVelocityChartProps) => {
+  const hasVelocityData = data.some((item) => item.value > 0);
+
   const chartData: ChartData<"bar"> = {
     labels: data.map((item) => item.label),
     datasets: [
@@ -49,11 +51,17 @@ export const ApplicationVelocityChart = ({
       <h3 className="text-card-title text-on-surface mb-4 text-center xl:text-left">
         Application Velocity
       </h3>
-      <VerticalBarChart
-        data={chartData}
-        options={options}
-        className="relative h-56 w-full min-w-0 max-w-full"
-      />
+      {hasVelocityData ? (
+        <VerticalBarChart
+          data={chartData}
+          options={options}
+          className="relative h-56 w-full min-w-0 max-w-full"
+        />
+      ) : (
+        <p className="text-body-md text-on-surface-secondary">
+          No application activity is available for this period.
+        </p>
+      )}
     </Card>
   );
 };

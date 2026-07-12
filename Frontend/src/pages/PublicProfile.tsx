@@ -3,6 +3,9 @@ import { useParams } from "react-router";
 import { getPublicProfile } from "../features/profile/profileApi";
 import { useEffect, useState } from "react";
 import Header from "../components/layout/Header";
+import LoadingState from "../components/shared/LoadingState";
+import ErrorState from "../components/shared/ErrorState";
+import EmptyState from "../components/shared/EmptyState";
 
 const PublicProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -56,9 +59,9 @@ const PublicProfile = () => {
     console.log(profile);
   }, [profile]);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-  if (empty) return <p>No profile found</p>;
+  if (isLoading) return <LoadingState message="Loading profile..." />;
+  if (error) return <ErrorState message={error} />
+  if (empty) return <EmptyState title="No profile found" description="The requested profile could not be found." />
 
   return (
     <>

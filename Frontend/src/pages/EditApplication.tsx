@@ -15,6 +15,8 @@ import Modal from "../components/ui/Modal";
 import Button from "../components/ui/Button";
 import CancelModal from "../components/shared/CancelModal";
 import { toast } from "sonner";
+import LoadingState from "../components/shared/LoadingState";
+import ErrorState from "../components/shared/ErrorState";
 
 const EditApplication = () => {
   const isTabletUp = useBreakpoint("md");
@@ -94,9 +96,9 @@ const EditApplication = () => {
     }
   };
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-  if (!defaultValues) return <p>Application not found</p>;
+  if (isLoading) return <LoadingState message="Loading application..." />;
+  if (error) return <ErrorState message={error} />
+  if (!defaultValues) return <ErrorState message="Application not found" />;
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 md:relative">
       {isMobile && <Header />}

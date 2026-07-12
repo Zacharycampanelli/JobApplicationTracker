@@ -25,6 +25,8 @@ import UserPreferences from "../features/profile/components/UserPreferences";
 import SharedProfileView from "../features/profile/components/SharedProfileView";
 import AccountOwnerDetails from "../features/profile/components/AccountOwnerDetails";
 import { toast } from "sonner";
+import LoadingState from "../components/shared/LoadingState";
+import ErrorState from "../components/shared/ErrorState";
 
 const profileSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
@@ -164,10 +166,14 @@ const Profile = () => {
       toast.success("Profile image updated!");
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to update profile image"
+        error instanceof Error
+          ? error.message
+          : "Failed to update profile image"
       );
     }
   };
+  if (isLoading) return <LoadingState message="Loading profile..." />;
+  if (error) return <ErrorState message={error} />;
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 md:relative">
