@@ -64,18 +64,18 @@ const Dashboard = () => {
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 relative">
       {isMobile && <Header />}
 
-      <main className="flex flex-col pb-10 gap-9 items-start">
-        <div className="flex justify-between">
-          <div>
-            <h2 className="mt-6 text-page-title text-on-surface">
-              Hello, <br /> {user?.name}
-            </h2>
-            <p className="mt-4 text-body-lg text-on-surface-secondary">
-              Manage your ongoing career opportunities and architectural
-              transitions.
-            </p>
-          </div>
-        </div>
+      <main className="flex flex-col gap-6 pb-10 md:gap-8">
+        <header className="mt-6 flex flex-col gap-3">
+          <h1 className="text-page-title text-on-surface">
+            Hello, <br /> {user?.name}
+          </h1>
+
+          <p className="text-body-lg text-on-surface-secondary">
+            Manage your ongoing career opportunities and architectural
+            transitions.
+          </p>
+        </header>
+
         <div className="w-full">
           <div className="flex flex-col gap-6 items-center md:grid md:grid-cols-2 xl:grid-cols-4">
             {/* <div className="md:flex"> */}
@@ -100,20 +100,21 @@ const Dashboard = () => {
               backgroundImage: `radial-gradient(circle, rgba(37, 99, 235, 0.4) 0%, rgba(0, 0, 0, 0.5) 95%), url(${careerPlanning})`
             }}
           >
-            <div className="absolute inset-0 bg-blue-500 opacity-50 mix-blend-multiply">
-            </div>
+            <div className="absolute inset-0 bg-blue-500 opacity-50 mix-blend-multiply"></div>
 
             <h5 className="text-card-title text-white text-center z-10">
               Architect your future.
             </h5>
-<p className="text-white text-body-md xs:text-body-lg z-10 text-justify px-6 xs:px-10 mt-4">              Every entry in your ledger is a step closer to the next milestone
+            <p className="text-white text-body-md xs:text-body-lg z-10 text-justify px-6 xs:px-10 mt-4">
+              {" "}
+              Every entry in your ledger is a step closer to the next milestone
               in your professional journey.
             </p>
             <Button
               variant="ghost"
               className="bg-white z-10 mt-4 text-primary"
               onClick={() => navigate("/applications/add")}
-              >
+            >
               <Add />
               Quick Add
             </Button>

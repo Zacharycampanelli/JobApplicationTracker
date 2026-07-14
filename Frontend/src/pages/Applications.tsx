@@ -117,16 +117,14 @@ const Applications = () => {
       }`}
     >
       {isMobile && <Header />}
-      <main className="flex flex-col gap-6 pb-10">
-        <div>
-          <h2 className="mt-6 text-page-title text-on-surface">
-            Active Pursuits
-          </h2>
-          <p className="mt-4 text-body-lg text-on-surface-secondary">
+      <main className="flex flex-col gap-6 pb-10 md:gap-8">
+        <header className="mt-6 flex flex-col gap-3">
+          <h1 className="text-page-title text-on-surface">Active Pursuits</h1>
+          <p className="text-body-lg text-on-surface-secondary">
             Managing {sortedApplications.length} ongoing professional
             trajectories.
           </p>
-        </div>
+        </header>
 
         <ApplicationsToolbar
           selectedFilter={selectedFilter}
@@ -167,14 +165,14 @@ const Applications = () => {
             }
           />
         ) : mode === "kanban" ? (
-          <div className="mt-8 min-w-0 w-full">
+          <div className="min-w-0 w-full">
             <KanbanBoard
               applications={sortedApplications}
               moveApplication={moveApplication}
             />
           </div>
         ) : (
-          <div className="mt-8 flex flex-col gap-4 xl:grid xl:grid-cols-3">
+          <div className="flex flex-col gap-4 xl:grid xl:grid-cols-3">
             {visibleApplications.map((app: JobApplication) => (
               <ApplicationCard key={app.id} app={app} showStatus />
             ))}

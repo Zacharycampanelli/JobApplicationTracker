@@ -29,12 +29,15 @@ const Analytics = () => {
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 relative">
       {isMobile && <Header />}
       <main className="flex flex-col pb-10 gap-6 md:gap-8">
-        <h2 className="mt-6 text-page-title text-on-surface">
-          Performance Ledger
-        </h2>
-        <p className="mt-4 text-body-lg text-on-surface-secondary">
-          Measuring your application journey with architectural precision.
-        </p>
+        <header className="mt-6 flex flex-col gap-3">
+          <h1 className="text-page-title text-on-surface">
+            Performance Ledger
+          </h1>
+
+          <p className="text-body-lg text-on-surface-secondary">
+            Measuring your application journey with architectural precision.
+          </p>
+        </header>
         {applications.length > 0 ? (
           <>
             <section className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)] lg:items-stretch">

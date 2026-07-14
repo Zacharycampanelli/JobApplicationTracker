@@ -14,11 +14,9 @@ import { useEffect, useState } from "react";
 import Button from "../components/ui/Button";
 import CancelModal from "../components/shared/CancelModal";
 import Save from "../assets/images/save.svg?react";
-import Edit from "../assets/images/edit.svg?react";
 import ResumeManager from "../features/resumes/components/ResumeManager";
 import { getAllResumes } from "../features/resumes/resumeApi";
 import { optionalNumber, optionalText, optionalUrl } from "../utils/zodUtils";
-import SuccessModal from "../components/shared/SuccessModal";
 import Textarea from "../components/ui/Textarea";
 import { API_URL } from "../api/api";
 import UserPreferences from "../features/profile/components/UserPreferences";
@@ -56,7 +54,6 @@ const Profile = () => {
   const [error, setError] = useState("");
   const [empty, setEmpty] = useState(true);
   const [resumes, setResumes] = useState<Resume[]>([]);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [inEditMode, setInEditMode] = useState(false);
 
@@ -176,194 +173,191 @@ const Profile = () => {
   if (error) return <ErrorState message={error} />;
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 md:relative">
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface py-4 md:relative md:px-6">
       {isMobile && <Header />}
-      <h2 className="mt-6 mb-6 text-page-title text-on-surface">
-        Professional Portfolio
-      </h2>
 
-      <div className="flex items-center justify-between">
-        <p className="text-body-lg text-on-surface-secondary mr-12">
-          Manage your digital identity and career assets.
-        </p>
+      <main className="flex flex-col gap-6 pb-10 md:gap-8">
+        <header className="mt-6 flex flex-col gap-3">
+          <h1 className="text-page-title text-on-surface">
+            Professional Portfolio
+          </h1>
 
-        <Button
-          type="button"
-          variant={inEditMode ? "primary" : "secondary"}
-          onClick={() => toggleEditMode()}
-          className="size-12 absolute right-8 p-3"
-        >
-          <Edit
-            width={36}
-            height={36}
-            fill={inEditMode ? "white" : "#4c56af"}
-          />
-        </Button>
-      </div>
-      {inEditMode ? (
-        <>
-          {avatarSrc ? (
-            <img
-              src={avatarSrc}
-              alt={`${user?.name ?? "User"} avatar`}
-              className="size-28 mx-auto my-8 rounded-full object-cover"
-            />
-          ) : (
-            <span className="flex justify-center items-center size-28 mx-auto my-8 rounded-full bg-surface-container-high text-page-title text-on-surface">
-              {user?.name?.charAt(0).toUpperCase() ?? "U"}
-            </span>
-          )}
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-body-lg text-on-surface-secondary">
+              Manage your digital identity and career assets.
+            </p>
 
-          <form
-            className="mt-4 flex flex-col gap-6 md:grid md:grid-cols-2 xl:grid-cols-3"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <div className="md:col-span-2 xl:col-span-3">
-              <span className="text-label-md text-on-surface">
-                PROFILE IMAGE
+            <Button
+              type="button"
+              variant={inEditMode ? "primary" : "secondary"}
+              onClick={toggleEditMode}
+              className="shrink-0"
+            >
+              {inEditMode ? "Cancel" : "Edit"}
+            </Button>
+          </div>
+        </header>
+        {inEditMode ? (
+          <>
+            {avatarSrc ? (
+              <img
+                src={avatarSrc}
+                alt={`${user?.name ?? "User"} avatar`}
+                className="size-28 mx-auto my-8 rounded-full object-cover"
+              />
+            ) : (
+              <span className="flex justify-center items-center size-28 mx-auto my-8 rounded-full bg-surface-container-high text-page-title text-on-surface">
+                {user?.name?.charAt(0).toUpperCase() ?? "U"}
               </span>
+            )}
 
-              <label
-                htmlFor="avatar"
-                className="mt-2 flex h-10 cursor-pointer items-center justify-center rounded-control bg-surface-container-low text-body-md text-on-surface"
-              >
-                Select a new image
-              </label>
+            <form
+              className="mt-4 flex flex-col gap-6 md:grid md:grid-cols-2 xl:grid-cols-3"
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              <div className="md:col-span-2 xl:col-span-3">
+                <span className="text-label-md text-on-surface">
+                  PROFILE IMAGE
+                </span>
+
+                <label
+                  htmlFor="avatar"
+                  className="mt-2 flex h-10 cursor-pointer items-center justify-center rounded-control bg-surface-container-low text-body-md text-on-surface"
+                >
+                  Select a new image
+                </label>
+                <Input
+                  type="file"
+                  id="avatar"
+                  accept="image/png,image/jpeg,image/webp"
+                  onChange={handleAvatarUpload}
+                  className="sr-only"
+                />
+              </div>
+              <div className="flex w-full flex-col gap-2">
+                <span className="text-label-md text-on-surface">
+                  ACCOUNT EMAIL
+                </span>
+                <p className="flex h-10 w-full items-center rounded-control bg-surface-container-low px-3 text-body-md text-on-surface-variant">
+                  {user?.email}
+                </p>
+              </div>
               <Input
-                type="file"
-                id="avatar"
-                accept="image/png,image/jpeg,image/webp"
-                onChange={handleAvatarUpload}
-                className="sr-only"
+                id="name"
+                label="FULL NAME "
+                {...register("name")}
+                defaultValue={user?.name}
+                error={errors.name?.message}
+                className={!inEditMode ? "mx-auto" : undefined}
               />
-            </div>
-            <div className="flex w-full flex-col gap-2">
-              <span className="text-label-md text-on-surface">
-                ACCOUNT EMAIL
+
+              <Input
+                id="email"
+                label="EMAIL ADDRESS"
+                defaultValue={user?.email}
+                disabled={true}
+              />
+              <Input
+                id="title"
+                label="TITLE"
+                {...register("title")}
+                defaultValue={user?.profile?.title ?? undefined}
+                error={errors.title?.message}
+              />
+              <Input
+                id="location"
+                label="LOCATION"
+                {...register("location")}
+                defaultValue={user?.profile?.location ?? undefined}
+                error={errors.location?.message}
+              />
+              <Input
+                id="website"
+                label="WEBSITE"
+                defaultValue={user?.profile?.website ?? undefined}
+                error={errors.website?.message}
+                {...register("website", {
+                  onBlur: (e) => {
+                    setValue("website", handleUrl(e.target.value), {
+                      shouldValidate: true,
+                      shouldDirty: true
+                    });
+                  }
+                })}
+              />
+              <Input
+                id="linkedin"
+                label="LINKEDIN"
+                defaultValue={user?.profile?.linkedin ?? undefined}
+                error={errors.linkedin?.message}
+                {...register("linkedin", {
+                  onBlur: (e) => {
+                    setValue("linkedin", handleUrl(e.target.value), {
+                      shouldValidate: true,
+                      shouldDirty: true
+                    });
+                  }
+                })}
+              />
+              <div className="md:col-span-2 xl:col-span-3">
+                <Textarea
+                  id="summary"
+                  label="SUMMARY"
+                  {...register("summary")}
+                  defaultValue={user?.profile?.summary ?? undefined}
+                  error={errors.summary?.message}
+                  className="md:col-span-2 xl:col-span-3"
+                />
+              </div>
+              <span className="flex flex-col w-full gap-4 justify-around md:flex-row md:col-span-2 xl:col-span-3">
+                <Button
+                  icon={<Save />}
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="md:w-48 xl:w-56"
+                >
+                  Save Changes
+                </Button>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={requestExitEditMode}
+                  className="md:w-48 xl:w-56"
+                >
+                  Cancel
+                </Button>
               </span>
-              <p className="flex h-10 w-full items-center rounded-control bg-surface-container-low px-3 text-body-md text-on-surface-variant">
-                {user?.email}
-              </p>
-            </div>
-            <Input
-              id="name"
-              label="FULL NAME "
-              {...register("name")}
-              defaultValue={user?.name}
-              error={errors.name?.message}
-              className={!inEditMode ? "mx-auto" : undefined}
-            />
+            </form>
+          </>
+        ) : (
+          <SharedProfileView
+            email={user?.email ?? ""}
+            name={user?.name ?? ""}
+            avatarUrl={avatarSrc}
+            title={user?.profile?.title}
+            location={user?.profile?.location}
+            website={user?.profile?.website}
+            linkedin={user?.profile?.linkedin}
+            summary={user?.profile?.summary}
+          />
+        )}
 
-            <Input
-              id="email"
-              label="EMAIL ADDRESS"
-              defaultValue={user?.email}
-              disabled={true}
-            />
-            <Input
-              id="title"
-              label="TITLE"
-              {...register("title")}
-              defaultValue={user?.profile?.title ?? undefined}
-              error={errors.title?.message}
-            />
-            <Input
-              id="location"
-              label="LOCATION"
-              {...register("location")}
-              defaultValue={user?.profile?.location ?? undefined}
-              error={errors.location?.message}
-            />
-            <Input
-              id="website"
-              label="WEBSITE"
-              defaultValue={user?.profile?.website ?? undefined}
-              error={errors.website?.message}
-              {...register("website", {
-                onBlur: (e) => {
-                  setValue("website", handleUrl(e.target.value), {
-                    shouldValidate: true,
-                    shouldDirty: true
-                  });
-                }
-              })}
-            />
-            <Input
-              id="linkedin"
-              label="LINKEDIN"
-              defaultValue={user?.profile?.linkedin ?? undefined}
-              error={errors.linkedin?.message}
-              {...register("linkedin", {
-                onBlur: (e) => {
-                  setValue("linkedin", handleUrl(e.target.value), {
-                    shouldValidate: true,
-                    shouldDirty: true
-                  });
-                }
-              })}
-            />
-            <div className="md:col-span-2 xl:col-span-3">
-              <Textarea
-                id="summary"
-                label="SUMMARY"
-                {...register("summary")}
-                defaultValue={user?.profile?.summary ?? undefined}
-                error={errors.summary?.message}
-                className="md:col-span-2 xl:col-span-3"
-              />
-            </div>
-            <span className="flex flex-col w-full gap-4 justify-around md:flex-row md:col-span-2 xl:col-span-3">
-              <Button
-                icon={<Save />}
-                type="submit"
-                disabled={isSubmitting}
-                className="md:w-48 xl:w-56"
-              >
-                Save Changes
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={requestExitEditMode}
-                className="md:w-48 xl:w-56"
-              >
-                Cancel
-              </Button>
-            </span>
-          </form>
-        </>
-      ) : (
-        <SharedProfileView
+        <AccountOwnerDetails
           email={user?.email ?? ""}
-          name={user?.name ?? ""}
-          avatarUrl={avatarSrc}
-          title={user?.profile?.title}
-          location={user?.profile?.location}
-          website={user?.profile?.website}
-          linkedin={user?.profile?.linkedin}
-          summary={user?.profile?.summary}
+          createdAt={user?.createdAt ?? ""}
+          updatedAt={user?.updatedAt ?? ""}
         />
-      )}
 
-      <AccountOwnerDetails
-        email={user?.email ?? ""}
-        createdAt={user?.createdAt ?? ""}
-        updatedAt={user?.updatedAt ?? ""}
-      />
+        <ResumeManager
+          resumes={resumes}
+          isLoading={isLoading}
+          error={error}
+          empty={empty}
+          onResumesChanged={loadResumes}
+        />
+        <UserPreferences />
+      </main>
 
-      <ResumeManager
-        resumes={resumes}
-        isLoading={isLoading}
-        error={error}
-        empty={empty}
-        onResumesChanged={loadResumes}
-      />
-      <UserPreferences />
-
-      <SuccessModal
-        isOpen={isSuccessModalOpen}
-        onClose={() => setIsSuccessModalOpen(false)}
-      />
       <CancelModal
         isOpen={isCancelModalOpen}
         onClose={() => setIsCancelModalOpen(false)}

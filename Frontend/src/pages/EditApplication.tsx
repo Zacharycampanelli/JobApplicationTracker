@@ -97,48 +97,50 @@ const EditApplication = () => {
   };
 
   if (isLoading) return <LoadingState message="Loading application..." />;
-  if (error) return <ErrorState message={error} />
+  if (error) return <ErrorState message={error} />;
   if (!defaultValues) return <ErrorState message="Application not found" />;
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 md:relative">
       {isMobile && <Header />}
-      <div className="flex items-center justify-between">
-        <h2 className="mt-6 mb-6 text-page-title text-on-surface flex-1">
-          Application {!isDesktop && <br />}Adjustment
-        </h2>
-      </div>
-      <p className="text-body-lg text-on-surface mb-8">
-        Refine the spatial parameters of your career progression.
-      </p>
-      <ApplicationForm
-        resumes={resumes}
-        isLoadingResumes={isLoading}
-        resumeError={error}
-        emptyResumes={empty}
-        onResumesChanged={loadResumes}
-        onSubmit={onSubmit}
-        onCancel={(isDirty) => {
-          if (isDirty) {
-            setIsCancelModalOpen(true);
-          } else {
-            navigate("/applications");
-          }
-        }}
-        newOrEdit="edit"
-        defaultValues={defaultValues}
-        submitError={submitError}
-      />
-      <div className="flex md:w-full md:justify-end">
-        <Button
-          type="button"
-          variant="danger"
-          onClick={() => setIsDeleteModalOpen(true)}
-          className="w-full md:w-fit mt-3"
-        >
-          Delete Application
-        </Button>
-      </div>
+      <main className="flex flex-col gap-6 pb-10 md:gap-8">
+        <header className="mt-6 flex flex-col gap-3">
+          <h1 className="text-page-title text-on-surface">Application Entry</h1>
 
+          <p className="text-body-lg text-on-surface-secondary">
+            Log your professional journey. Maintain the ledger with precision to
+            track every opportunity in your career pipeline.
+          </p>
+        </header>
+
+        <ApplicationForm
+          resumes={resumes}
+          isLoadingResumes={isLoading}
+          resumeError={error}
+          emptyResumes={empty}
+          onResumesChanged={loadResumes}
+          onSubmit={onSubmit}
+          onCancel={(isDirty) => {
+            if (isDirty) {
+              setIsCancelModalOpen(true);
+            } else {
+              navigate("/applications");
+            }
+          }}
+          newOrEdit="edit"
+          defaultValues={defaultValues}
+          submitError={submitError}
+        />
+        <div className="flex md:w-full md:justify-end">
+          <Button
+            type="button"
+            variant="danger"
+            onClick={() => setIsDeleteModalOpen(true)}
+            className="w-full md:w-fit mt-3"
+          >
+            Delete Application
+          </Button>
+        </div>
+      </main>
       <CancelModal
         isOpen={isCancelModalOpen}
         onClose={() => setIsCancelModalOpen(false)}
