@@ -16,7 +16,7 @@ const CompanyLogo = ({ url, company }: CompanyLogoProps) => {
   if (!faviconUrl || imageError) {
     return (
       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-surface-container-high">
-        <span className="text-title-small font-semibold">
+        <span className="text-body-md font-semibold">
           {getInitials(company)}
         </span>
       </div>

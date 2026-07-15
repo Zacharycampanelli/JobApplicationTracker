@@ -31,7 +31,7 @@ const KanbanColumn = ({
 
       <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-2">
         {applications.length === 0 ? (
-          <p className="text-sm text-on-surface-variant">
+          <p className="text-body-md text-on-surface-variant">
             Drop an application here
           </p>
         ) : (

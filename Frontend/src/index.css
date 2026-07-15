@@ -79,10 +79,6 @@
   --text-card-title-line: 1.2;
   --text-card-title-weight: 700;
 
-  --text-card-meta-size: 0.875rem;
-  --text-card-meta-line: 1.5;
-  --text-card-meta-weight: 400;
-
   --text-analytics-card-size: 2.5rem;
   --text-analytics-card-line: 1.1;
   --text-analytics-card-weight: 800;
@@ -188,14 +184,6 @@
   font-size: var(--text-card-title-size);
   line-height: var(--text-card-title-line);
   font-weight: var(--text-card-title-weight);
-  letter-spacing: 0;
-}
-
-.text-card-meta {
-  font-family: var(--font-sans);
-  font-size: var(--text-card-meta-size);
-  line-height: var(--text-card-meta-line);
-  font-weight: var(--text-card-meta-weight);
   letter-spacing: 0;
 }
 
