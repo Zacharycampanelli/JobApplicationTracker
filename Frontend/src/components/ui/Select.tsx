@@ -2,9 +2,9 @@ import type { SelectHTMLAttributes } from "react";
 import { twMerge } from "tailwind-merge";
 
 const sizeStyles = {
-  sm: "h-9 rounded-control text-body-md",
-  md: "h-10 rounded-control text-body-md",
-  lg: "h-12 rounded-control text-body-lg"
+  sm: "h-9 text-body-md",
+  md: "h-10 text-body-md",
+  lg: "h-12 text-body-lg"
 };
 
 type SelectOption = {
@@ -32,11 +32,16 @@ const Select = ({
   ...props
 }: SelectProps) => {
   const baseSelectStyles =
-    "w-full appearance-none bg-surface-container-low text-on-surface placeholder:text-on-surface-variant transition-colors outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50 disabled:cursor-not-allowed pl-3 pr-10 py-2";
+    "w-full appearance-none rounded-control bg-surface-container-low px-3 pr-10 " +
+    "text-on-surface outline-none " +
+    "transition-colors duration-150 " +
+    "focus:ring-2 focus:ring-primary/30 " +
+    "disabled:cursor-not-allowed disabled:opacity-50";
   const classes = twMerge(
     baseSelectStyles,
+    !error && "enabled:hover:bg-surface-container-high",
     sizeStyles[size],
-    error ? "bg-error-container text-on-error" : "",
+    error && "bg-error-container text-on-surface",
     className
   );
 
@@ -66,7 +71,13 @@ const Select = ({
           ))}
         </select>
 
-        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-secondary">
+        <span
+          className={twMerge(
+            "pointer-events-none absolute right-3 top-1/2 -translate-y-1/2",
+            "text-on-surface-secondary transition-colors duration-150",
+            disabled && "opacity-50"
+          )}
+        >
           ▾
         </span>
       </div>

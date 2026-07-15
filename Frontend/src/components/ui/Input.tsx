@@ -4,9 +4,9 @@ import Lock from "../../assets/images/lock.svg?react";
 import { twMerge } from "tailwind-merge";
 
 const sizeStyles = {
-  sm: "h-9 rounded-control text-body-md",
-  md: "h-10 rounded-control text-body-md",
-  lg: "h-12 rounded-control text-body-lg"
+  sm: "h-9 text-body-md",
+  md: "h-10 text-body-md",
+  lg: "h-12 text-body-lg"
 };
 
 type InputProps = Omit<
