@@ -41,7 +41,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const isPrimary = variant === "primary";
 
     const classes = twMerge(
-      "inline-flex items-center justify-center gap-2 transition-colors duration-150",
+      "inline-flex items-center justify-center gap-2",
+      "transition-[color,background-color,opacity] duration-150",
+       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
       "disabled:opacity-50 disabled:cursor-not-allowed",
       sizeStyles[size],
       variantStyles[variant],

@@ -78,7 +78,6 @@ const Dashboard = () => {
 
         <div className="w-full">
           <div className="flex flex-col gap-6 items-center md:grid md:grid-cols-2 xl:grid-cols-4">
-            {/* <div className="md:flex"> */}
             {stats.map((stat, index) => (
               <StatCard
                 key={index}
@@ -92,7 +91,6 @@ const Dashboard = () => {
                 className={`${stat.className} w-54 h-48`}
               />
             ))}
-            {/* <ExpandableSection title="More Stats">{}</ExpandableSection> */}
           </div>
           <div
             className="mx-auto flex flex-col justify-center items-center aspect-square w-full max-w-95 relative rounded-full overflow-hidden bg-cover bg-center shrink-0 mt-6 gap-2 md:hidden"
