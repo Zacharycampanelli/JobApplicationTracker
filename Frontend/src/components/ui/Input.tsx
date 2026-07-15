@@ -9,7 +9,10 @@ const sizeStyles = {
   lg: "h-12 rounded-control text-body-lg"
 };
 
-type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size"> & {
+type InputProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "type" | "size"
+> & {
   label?: string;
   error?: string;
   type?: "text" | "password" | "email" | "number" | "search" | "date" | "file";
@@ -37,13 +40,18 @@ const Input = ({
 
   const hasEndIcon = Boolean(endIcon || isPassword);
   const baseInputStyles =
-    "w-full bg-surface-container-low text-on-surface placeholder:text-on-surface-variant transition-colors outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50 disabled:cursor-not-allowed px-3";
+    "w-full rounded-control bg-surface-container-low px-3 " +
+    "text-on-surface placeholder:text-on-surface-variant " +
+    "outline-none transition-colors duration-150 " +
+    "focus:ring-2 focus:ring-primary/30 " +
+    "disabled:cursor-not-allowed disabled:opacity-50";
   const classes = twMerge(
     baseInputStyles,
-    startIcon ? "pl-10" : "",
-    hasEndIcon ? "pr-10" : "",
+    !error && "enabled:hover:bg-surface-container-high",
+    startIcon && "pl-10",
+    hasEndIcon && "pr-10",
     sizeStyles[size],
-    error ? "bg-error-container text-on-error" : "",
+    error && "bg-error-container text-on-surface",
     className
   );
 
@@ -55,16 +63,29 @@ const Input = ({
     endAdornment = (
       <button
         type="button"
+        disabled={disabled}
         onClick={togglePassword}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-label-md text-on-surface-variant"
+        className="absolute right-2 top-1/2 flex size-8 -translate-y-1/2
+    items-center justify-center rounded-control
+    text-on-surface-variant
+    transition-colors duration-150
+    enabled:hover:bg-surface-container-high
+    enabled:hover:text-on-surface
+    focus-visible:outline-none
+    focus-visible:ring-2
+    focus-visible:ring-primary
+    disabled:cursor-not-allowed
+    disabled:opacity-50"
         aria-label={showPassword ? "Hide password" : "Show password"}
       >
-        {showPassword ? <Lock /> : <Unlock />}
+        {showPassword ? <Unlock /> : <Lock />}
       </button>
     );
   } else if (endIcon) {
     endAdornment = (
-      <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">{endIcon}</div>
+      <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+        {endIcon}
+      </div>
     );
   }
 
@@ -93,7 +114,10 @@ const Input = ({
         {endAdornment}
       </div>
       {error && (
-        <p id={id ? `${id}-error` : undefined} className="text-label-md text-error">
+        <p
+          id={id ? `${id}-error` : undefined}
+          className="text-label-md text-error"
+        >
           {error}
         </p>
       )}
