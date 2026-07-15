@@ -5,6 +5,7 @@
   --color-primary: #4c56af;
   --color-primary-container: #e0e0ff;
   --color-primary-dim: #404a99;
+  --color-primary-dark: #343d86;
 
   /* Surfaces */
   --color-surface: #f8f9fb;
@@ -246,6 +247,14 @@
       135deg,
       var(--color-primary),
       var(--color-primary-dim)
+    );
+  }
+
+  .btn-gradient:hover:not(:disabled) {
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-dim),
+      var(--color-primary-dark)
     );
   }
 }
