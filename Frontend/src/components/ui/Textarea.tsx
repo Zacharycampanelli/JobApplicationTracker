@@ -14,7 +14,13 @@ const Textarea = ({
   ...props
 }: TextareaProps) => {
   const baseStyles =
-    "min-h-28 w-full resize-y rounded-control bg-surface-container-low px-3 py-2 text-body-md text-on-surface outline-none transition-colors placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary/30 disabled:cursor-not-allowed disabled:opacity-50";
+    "min-h-28 w-full resize-y rounded-control " +
+    "bg-surface-container-low px-3 py-2 " +
+    "text-body-md text-on-surface " +
+    "placeholder:text-on-surface-variant " +
+    "outline-none transition-colors duration-150 " +
+    "focus:ring-2 focus:ring-primary/30 " +
+    "disabled:cursor-not-allowed disabled:opacity-50";
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -27,15 +33,19 @@ const Textarea = ({
         id={id}
         className={twMerge(
           baseStyles,
-          className,
-          error ? "focus:ring-error bg-error-container text-on-error" : ""
+          !error && "enabled:hover:bg-surface-container-high",
+          error && "focus:ring-error bg-error-container text-on-surface",
+          className
         )}
         aria-invalid={Boolean(error)}
         aria-describedby={error && id ? `${id}-error` : undefined}
         {...props}
       />
       {error && (
-        <p id={`${id}-error`} className="text-label-md text-error">
+        <p
+          id={id ? `${id}-error` : undefined}
+          className="text-label-md text-error"
+        >
           {error}
         </p>
       )}

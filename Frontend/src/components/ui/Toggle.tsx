@@ -18,7 +18,7 @@ const Toggle = ({
   secondLabel
 }: ToggleProps) => {
   return (
-    <label htmlFor={id} className="flex items-center justify-between gap-4">
+    <div className="flex items-center justify-between gap-4">
       {(label || description) && (
         <span className="flex flex-col">
           {label && (
@@ -39,13 +39,31 @@ const Toggle = ({
         type="button"
         role="switch"
         aria-checked={checked}
+        aria-label={
+          secondLabel ? `${label ?? 'First option'} / ${secondLabel}` : label ?? "Toggle setting"
+        }
         disabled={disabled}
         onClick={() => onChange(!checked)}
-        className={`relative h-6 w-11 rounded-full transition ${checked ? "bg-primary" : "bg-outline-variant"} disabled:cursor-not-allowed disabled:opacity-50`}
+        className={`
+          relative h-6 w-11 rounded-full 
+          transition-colors duration-150
+          focus-visible:outline-none
+          focus-visible:ring-2
+          focus-visible:ring-primary
+          focus-visible:ring-offset-2
+          focus-visible:ring-offset-surface 
+          disabled:cursor-not-allowed
+          disabled:opacity-50
+           ${checked 
+            ? "bg-primary enabled:hover:bg-primary-dim" 
+            : "bg-outline-variant enabled:hover:bg-on-surface-variant"
+          }
+            `}
       >
         <span
-          className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${
-            checked ? "left-6" : "left-1"
+          className={`absolute left-1 top-1 h-4 w-4 rounded-full bg-white 
+            transition-transform duration-150
+            ${checked ? "translate-x-5" : "translate-x-0"
           }`}
         />
       </button>
@@ -59,7 +77,7 @@ const Toggle = ({
           )}
         </span>
       )}
-    </label>
+    </div>
   );  
 };
 
