@@ -23,7 +23,18 @@ const navItems = [
 ];
 
 const baseLinkClasses =
-  "flex items-center justify-center rounded-card text-nav-label uppercase transition-colors";
+  "flex items-center justify-center rounded-card" +
+  "text-nav-label uppercase" +
+  "transition-colors duration-150" +
+  "focus-visible:outline-2 focus-visible:outline-offset-2" +
+  "focus-visible:outline-primary";
+
+const desktopBaseLinkClasses =
+  "flex items-center rounded-card px-4 py-3 text-left " +
+  "text-nav-label uppercase " +
+  "transition-colors duration-150 " +
+  "focus-visible:outline-2 focus-visible:outline-offset-2 " +
+  "focus-visible:outline-primary";
 
 const Navbar = () => {
   return (
@@ -39,10 +50,10 @@ const Navbar = () => {
               className={({ isActive }) =>
                 [
                   baseLinkClasses,
-                  "min-h-12 px-1 py-1 gap-1 text-center flex flex-col",
+                  "min-h-12 px-1 py-1 gap-1 text-center flex flex-col rounded-card",
                   isActive
-                    ? "bg-primary text-white"
-                    : "bg-transparent text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
+                    ? "bg-primary text-white focus-visible:outline-surface-bright"
+                    : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface focus-visible:outline-primary"
                 ].join(" ")
               }
             >
@@ -57,11 +68,13 @@ const Navbar = () => {
       <aside className="hidden md:flex md:w-56 md:shrink-0 md:flex-col md:bg-surface-container-low md:px-4 md:py-6 xl:w-72">
         <div className="mb-8 px-3">
           <div className="flex flex-row items-center">
-
-          <Icon width={56 } height={56} />
-          <h1 className="text-brand text-on-surface ml-2 " style={{lineHeight: 1.0}}>
-            Architectural Ledger
-          </h1>
+            <Icon width={56} height={56} />
+            <h1
+              className="text-brand text-on-surface ml-2 "
+              style={{ lineHeight: 1.0 }}
+            >
+              Architectural Ledger
+            </h1>
           </div>
           <p className="mt-1 text-label-md mt-4 text-on-surface-variant">
             Track your applications
@@ -76,10 +89,10 @@ const Navbar = () => {
               end={to === "/"}
               className={({ isActive }) =>
                 [
-                  "flex items-center rounded-card px-4 py-3 text-left text-nav-label uppercase transition-colors",
+                  desktopBaseLinkClasses,
                   isActive
-                    ? "bg-primary text-white"
-                    : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
+                    ? "bg-primary text-white focus-visible:outline-surface-bright"
+                    : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface focus-visible:outline-primary"
                 ].join(" ")
               }
             >

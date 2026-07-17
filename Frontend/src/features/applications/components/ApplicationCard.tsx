@@ -26,7 +26,17 @@ const ApplicationCard = ({
   };
 
   return (
-    <div className="group flex w-full flex-col gap-3 rounded-2xl bg-surface-container-low p-4 shadow-sm transition-colors hover:bg-surface-container">
+    <div className="group flex w-full flex-col gap-3 rounded-card
+     bg-surface-container-low p-4 shadow-sm 
+     transition-[background-color,box-shadow,transform] duration-150
+     hover:-translate-y-0.5
+     hover:bg-surface-container-high
+     hover:shadow-raised
+     focus-within:ring-2
+     focus-within:ring-primary
+     focus-within:ring-offset-2
+     focus-within:ring-offset-surface
+     ">
       <div className="flex items-start gap-4">
         <div className="flex shrink-0 flex-col items-center gap-2">
           {dragHandleRef && (
@@ -65,7 +75,12 @@ const ApplicationCard = ({
             type="button"
             variant="ghost"
             onClick={() => navigate(`/applications/edit/${app.id}`)}
-            className="shrink-0"
+            aria-label={`Edit ${app.company} application`}
+            className="
+            shrink-0
+            group-hover:bg-surface-container-lowest
+            group-hover:text-primary
+            "
           >
             <RightArrow width={18} height={18} />
           </Button>

@@ -4,12 +4,10 @@ import { useDraggable } from "@dnd-kit/react";
 
 type DraggableApplicationCardProps = {
   app: JobApplication;
-  className?: string;
 };
 
 const DraggableApplicationCard = ({
-  app,
-  className
+  app
 }: DraggableApplicationCardProps) => {
   const { ref, handleRef, isDragging } = useDraggable({
     id: app.id,
@@ -19,7 +17,8 @@ const DraggableApplicationCard = ({
   return (
     <div
       ref={ref}
-      className={`${className ?? ""} ${isDragging ? "opacity-50" : ""}`}
+      className={`transition-opacity duration-150
+    ${isDragging ? "opacity-60" : "opacity-100"}`}
     >
       <ApplicationCard app={app} dragHandleRef={handleRef} />
     </div>
