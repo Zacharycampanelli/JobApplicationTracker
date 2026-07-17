@@ -21,9 +21,10 @@ const CancelModal = ({isOpen, onClose, newLocation, onConfirm }: CancelModalProp
         footer={
           <div className="flex gap-4">
             <Button variant="ghost" onClick={() => onClose()}>
-              Cancel
+              Keep editing
             </Button>
             <Button
+            variant="danger"
               onClick={() => {
                 onClose();
                 if (newLocation) {
@@ -34,7 +35,7 @@ const CancelModal = ({isOpen, onClose, newLocation, onConfirm }: CancelModalProp
                 }
               }}
             >
-              Yes
+              Discard changes
             </Button>
           </div>
         }

@@ -56,6 +56,7 @@ const Profile = () => {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [inEditMode, setInEditMode] = useState(false);
+  const [isAvatarUploading, setIsAvatarUploading] = useState(false);
 
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
@@ -158,6 +159,8 @@ const Profile = () => {
     formData.append("avatar", file);
 
     try {
+      setIsAvatarUploading(true);
+
       const updatedUser = await uploadProfileImage(formData);
       updateUser(updatedUser);
       toast.success("Profile image updated!");
@@ -167,6 +170,9 @@ const Profile = () => {
           ? error.message
           : "Failed to update profile image"
       );
+    } finally {
+      setIsAvatarUploading(false);
+      e.target.value = "";
     }
   };
   if (isLoading) return <LoadingState message="Loading profile..." />;
@@ -220,7 +226,7 @@ const Profile = () => {
                   PROFILE IMAGE
                 </span>
 
-                <label
+                {/* <label
                   htmlFor="avatar"
                   className="mt-2 flex h-10 cursor-pointer items-center justify-center rounded-control bg-surface-container-low text-body-md text-on-surface"
                 >
@@ -232,7 +238,35 @@ const Profile = () => {
                   accept="image/png,image/jpeg,image/webp"
                   onChange={handleAvatarUpload}
                   className="sr-only"
+                /> */}
+                <input
+                  type="file"
+                  id="avatar"
+                  accept="image/png,image/jpeg,image/webp"
+                  onChange={handleAvatarUpload}
+                  className="peer sr-only"
+                  disabled={isAvatarUploading}
                 />
+                <label
+                  htmlFor="avatar"
+                  aria-disabled={isAvatarUploading}
+                  className="
+                      mt-2 flex h-10 cursor-pointer items-center justify-center
+                      rounded-control bg-surface-container-low
+                      text-body-md text-on-surface
+                      transition-colors duration-150
+                      hover:bg-surface-container-high
+                      peer-focus-visible:ring-2
+                      peer-focus-visible:ring-primary
+                      peer-focus-visible:ring-offset-2
+                      peer-focus-visible:ring-offset-surface
+                      peer-disabled:cursor-not-allowed
+                      peer-disabled:opacity-50
+                      peer-disabled:pointer-events-none
+                      "
+                >
+                  {isAvatarUploading ? "Uploading..." : "Select a new image"}
+                </label>
               </div>
               <div className="flex w-full flex-col gap-2">
                 <span className="text-label-md text-on-surface">

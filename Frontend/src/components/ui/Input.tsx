@@ -66,16 +66,16 @@ const Input = ({
         disabled={disabled}
         onClick={togglePassword}
         className="absolute right-2 top-1/2 flex size-8 -translate-y-1/2
-    items-center justify-center rounded-control
-    text-on-surface-variant
-    transition-colors duration-150
-    enabled:hover:bg-surface-container-high
-    enabled:hover:text-on-surface
-    focus-visible:outline-none
-    focus-visible:ring-2
-    focus-visible:ring-primary
-    disabled:cursor-not-allowed
-    disabled:opacity-50"
+          items-center justify-center rounded-control
+          text-on-surface-variant
+          transition-colors duration-150
+          enabled:hover:bg-surface-container-high
+          enabled:hover:text-on-surface
+          focus-visible:outline-none
+          focus-visible:ring-2
+          focus-visible:ring-primary
+          disabled:cursor-not-allowed
+          disabled:opacity-50"
         aria-label={showPassword ? "Hide password" : "Show password"}
       >
         {showPassword ? <Unlock /> : <Lock />}
