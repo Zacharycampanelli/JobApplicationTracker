@@ -4,6 +4,8 @@ import AppsNav from "../../assets/images/appsNav.svg?react";
 import AnalyticsNav from "../../assets/images/analyticsNav.svg?react";
 import ProfileNav from "../../assets/images/profileNav.svg?react";
 import Icon from "../../assets/svg/Icon";
+import { useAuthContext } from "../../context/AuthContext";
+import Logout from "../../assets/images/logout.svg?react";
 
 const navItems = [
   { to: "/", label: "Dashboard", mobileLabel: "Home", icon: DashboardNav },
@@ -37,6 +39,7 @@ const desktopBaseLinkClasses =
   "focus-visible:outline-primary";
 
 const Navbar = () => {
+  const { logout } = useAuthContext();
   return (
     <>
       {/* Mobile Bottom Navbar */}
@@ -101,6 +104,20 @@ const Navbar = () => {
             </NavLink>
           ))}
         </nav>
+
+        <button
+          type="button"
+          onClick={logout}
+          className={[
+            desktopBaseLinkClasses,
+            "mt-auto w-full",
+            "text-on-surface-variant",
+            "hover:bg-surface-container-high hover:text-on-surface"
+          ].join(" ")}
+        >
+          <Logout className="mr-2 h-5 w-5 shrink-0" aria-hidden="true" />
+          Logout
+        </button>
       </aside>
     </>
   );

@@ -40,7 +40,6 @@ type ProfileFormValues = z.input<typeof profileSchema>;
 type ProfileValues = z.infer<typeof profileSchema>;
 
 const Profile = () => {
-  const { user, updateUser } = useAuthContext();
   const {
     register,
     handleSubmit,
@@ -50,6 +49,7 @@ const Profile = () => {
   } = useForm<ProfileFormValues, unknown, ProfileValues>({
     resolver: zodResolver(profileSchema)
   });
+  const { user, updateUser, logout } = useAuthContext();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [empty, setEmpty] = useState(true);
@@ -390,6 +390,7 @@ const Profile = () => {
           onResumesChanged={loadResumes}
         />
         <UserPreferences />
+        {isMobile && <Button type="button" variant="danger" onClick={logout} className="w-full px-8 py-6 text-card-title text-action">Logout</Button>}
       </main>
 
       <CancelModal
