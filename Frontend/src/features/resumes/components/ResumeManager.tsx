@@ -56,13 +56,23 @@ const ResumeManager = ({
     <>
       <Button
         type="button"
+        variant="secondary"
         onClick={() => fileInputRef.current?.click()}
-        className="flex items-center justify-center gap-3 rounded-card border border-dashed border-outline-variant px-4 py-5 text-body-md text-on-surface-secondary transition hover:bg-surface-container-high"
+        className="
+          h-auto min-h-24 w-full
+          flex-col gap-3
+          border border-dashed border-outline-variant
+          bg-surface-container-lowest px-4 py-5
+          text-body-md text-on-surface-secondary
+          transition-[background-color,border-color,color] duration-150
+          hover:border-primary
+          hover:bg-primary-container/40
+          hover:text-primary
+        "
       >
         <Add />
-        <span className="max-w-36 text-center text-white">
-          Upload New Asset Version
-        </span>
+
+        <span className="max-w-36 text-center">Upload New Asset Version</span>
       </Button>
       <input
         type="file"

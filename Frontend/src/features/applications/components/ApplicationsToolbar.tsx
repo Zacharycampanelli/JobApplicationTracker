@@ -26,7 +26,9 @@ type ApplicationsToolbarProps = {
 };
 
 const dropdownClassName =
-  "absolute left-0 top-14 z-20 w-44 rounded-control bg-surface-container-lowest shadow-menu";
+  "absolute left-0 top-14 z-20 w-full min-w-44" +
+  "overflow-hidden rounded-control border border-outline-variant" +
+  "p-1 bg-surface-container-lowest shadow-menu";
 
 const ApplicationsToolbar = ({
   selectedFilter,
@@ -47,7 +49,15 @@ const ApplicationsToolbar = ({
     localStorage.setItem("applications-view", newMode);
   };
   return (
-    <div className="flex flex-col gap-3 xl:flex-row md:items-center md:justify-between">
+    <div
+      className="flex flex-col gap-3 md:items-center md:justify-between xl:flex-row"
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          setIsFilterOpen(false);
+          setIsSortOpen(false);
+        }
+      }}
+    >
       <Toggle
         checked={mode === "kanban"}
         onChange={(checked) => handleModeChange(checked ? "kanban" : "list")}
@@ -70,30 +80,41 @@ const ApplicationsToolbar = ({
               <Button
                 type="button"
                 variant="secondary"
+                aria-expanded={isFilterOpen}
+                aria-controls="status-filter-options"
                 onClick={() => {
                   setIsFilterOpen((prev) => !prev);
                   setIsSortOpen(false);
                 }}
-                className="w-full"
+                className={
+                  isFilterOpen
+                    ? "w-full bg-primary-container text-primary"
+                    : "w-full"
+                }
               >
                 <span>
-                  <StatusFilter />
+                  <StatusFilter aria-hidden="true" />
                 </span>
-                <span className="text-action">{selectedFilter}</span>
+                <span>{selectedFilter}</span>
               </Button>
 
               {isFilterOpen && (
-                <div className={dropdownClassName}>
+                <div id="status-filter-options" className={dropdownClassName}>
                   {STATUS_FILTERS.map((filter) => (
                     <Button
                       variant="ghost"
                       key={filter}
                       type="button"
+                      aria-pressed={selectedFilter === filter}
                       onClick={() => {
                         setSelectedFilter(filter);
                         setIsFilterOpen(false);
                       }}
-                      className="block w-full px-3 py-2 text-left text-body-md text-on-surface hover:bg-surface-container"
+                      className={
+                        selectedFilter === filter
+                          ? "w-full justify-start bg-primary-container text-primary"
+                          : "w-full justify-start text-on-surface"
+                      }
                     >
                       <span>{filter}</span>
                     </Button>
@@ -106,32 +127,41 @@ const ApplicationsToolbar = ({
             <Button
               type="button"
               variant="secondary"
+              aria-expanded={isSortOpen}
+              aria-controls="sort-options"
               onClick={() => {
                 setIsSortOpen((prev) => !prev);
                 setIsFilterOpen(false);
               }}
-              className="w-full"
+              className={
+                isSortOpen
+                  ? "w-full bg-primary-container text-primary"
+                  : "w-full"
+              }
             >
-              <span>
-                <Calendar />
-              </span>
-              <span className="text-action">{sortBy}</span>
+              <Calendar aria-hidden="true" />
+              <span>{sortBy}</span>
             </Button>
 
             {isSortOpen && (
-              <div className={dropdownClassName}>
+              <div id="sort-options" className={dropdownClassName}>
                 {SORT_METHODS.map((method) => (
                   <Button
                     variant="ghost"
                     key={method}
                     type="button"
+                    aria-pressed={sortBy === method}
                     onClick={() => {
                       setSortBy(method);
                       setIsSortOpen(false);
                     }}
-                    className="block w-full px-3 py-2 text-left text-body-md text-on-surface hover:bg-surface-container"
+                    className={
+                      sortBy === method
+                        ? "w-full justify-start bg-primary-container text-primary"
+                        : "w-full justify-start text-on-surface"
+                    }
                   >
-                    <span>{method}</span>
+                    {method}
                   </Button>
                 ))}
               </div>

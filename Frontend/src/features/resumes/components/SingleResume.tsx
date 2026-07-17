@@ -44,14 +44,27 @@ const SingleResume = ({
   return (
     <div
       className={twMerge(
-        "flex w-full items-center gap-4 rounded-card bg-surface-container-lowest px-4 py-4 text-left shadow-menu transition",
-        selected && "outline-2 outline-primary"
+        "flex w-full items-center gap-4 rounded-card",
+        "bg-surface-container-lowest px-4 py-4 text-left shadow-menu",
+        "transition-[background-color,box-shadow] duration-150",
+        "hover:bg-surface-container-high hover:shadow-raised",
+        "focus-within:ring-2 focus-within:ring-primary",
+        "focus-within:ring-offset-2 focus-within:ring-offset-surface-container",
+        selected && "ring-2 ring-primary"
       )}
     >
       <button
         type="button"
         onClick={onClick}
-        className="flex flex-1 items-center gap-4 text-left"
+        aria-pressed={selected}
+        aria-label={`Select ${resume.name}`}
+        className="
+          flex flex-1 items-center gap-4 rounded-control text-left
+          transition-colors duration-150
+          focus-visible:outline-none
+          focus-visible:ring-2
+          focus-visible:ring-primary
+        "
       >
         <span className="shrink-0 text-primary">
           {selected ? <SelectedInput /> : <SelectInput />}
@@ -69,9 +82,18 @@ const SingleResume = ({
         <button
           onClick={handleDelete}
           type="button"
-          className="text-on-surface-secondary hover:text-error transition duration-150 text-xl"
+          aria-label={`Delete ${resume.name}`}
+          className="
+            flex size-9 shrink-0 items-center justify-center rounded-control
+            text-xl text-on-surface-secondary
+            transition-colors duration-150
+            hover:bg-error-container/30 hover:text-error
+            focus-visible:outline-none
+            focus-visible:ring-2
+            focus-visible:ring-error
+          "
         >
-          X
+          <span aria-hidden="true">×</span>
         </button>
       )}
     </div>
