@@ -12,6 +12,7 @@ export const getAllApplications = async (req: AuthRequest, res: Response) => {
       where: { userId: req.user.userId },
       select: {
         id: true,
+        publicId: true,
         title: true,
         company: true,
         location: true,
@@ -43,15 +44,15 @@ export const getSingleApplication = async (req: AuthRequest, res: Response) => {
     if (!req.user?.userId) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
-    const id = Number(req.params.id);
+    const publicId = req.params.id;
 
-    if (isNaN(id)) {
+    if (!publicId) {
       return res.status(400).json({ message: 'Invalid ID' });
     }
 
     const application = await prisma.jobApplication.findFirst({
       where: {
-        id,
+        publicId,
         userId: req.user.userId,
       },
     });
@@ -76,6 +77,7 @@ export const getRecentApplications = async (req: AuthRequest, res: Response) => 
       where: { userId: req.user.userId },
       select: {
         id: true,
+        publicId: true,
         title: true,
         company: true,
         location: true,
@@ -153,15 +155,15 @@ export const updateApplication = async (req: AuthRequest, res: Response) => {
       return res.status(401).json({ error: 'Not authorized' });
     }
 
-    const id = Number(req.params.id);
+    const publicId = req.params.id;
 
-    if (isNaN(id)) {
+    if (!publicId) {
       return res.status(400).json({ error: 'Invalid ID' });
     }
 
     const application = await prisma.jobApplication.findFirst({
       where: {
-        id,
+        publicId,
         userId: req.user.userId,
       },
     });
@@ -197,7 +199,7 @@ export const updateApplication = async (req: AuthRequest, res: Response) => {
 
     const updatedApplication = await prisma.jobApplication.update({
       where: {
-        id,
+        publicId,
       },
       data: {
         ...parsed.data,
@@ -218,9 +220,9 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
       return res.status(401).json({ error: 'Not authorized' });
     }
 
-    const id = Number(req.params.id);
+    const publicId = req.params.id;
 
-    if (isNaN(id)) {
+    if (!publicId) {
       return res.status(400).json({ error: 'Invalid ID' });
     }
 
@@ -234,7 +236,7 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
 
     const application = await prisma.jobApplication.findFirst({
       where: {
-        id,
+        publicId,
         userId: req.user.userId,
       },
     });
@@ -245,7 +247,7 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
 
     const updatedApplication = await prisma.jobApplication.update({
       where: {
-        id,
+        publicId,
       },
       data: {
         status: req.body.status,
@@ -264,15 +266,15 @@ export const deleteApplication = async (req: AuthRequest, res: Response) => {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const id = Number(req.params.id);
+    const publicId = req.params.id;
 
-    if (isNaN(id)) {
+    if (!publicId) {
       return res.status(400).json({ error: 'Invalid application ID' });
     }
 
     const application = await prisma.jobApplication.findFirst({
       where: {
-        id: id,
+        publicId,
         userId: req.user.userId,
       },
     });
@@ -281,7 +283,7 @@ export const deleteApplication = async (req: AuthRequest, res: Response) => {
     }
     await prisma.jobApplication.delete({
       where: {
-        id,
+        publicId,
       },
     });
 

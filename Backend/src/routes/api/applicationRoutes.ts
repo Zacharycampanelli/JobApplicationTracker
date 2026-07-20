@@ -12,8 +12,8 @@ import {
 
 const router = Router();
 
-router.get('/:id', protect, getSingleApplication);
 router.get('/recent', protect, getRecentApplications);
+router.get('/:id', protect, getSingleApplication);
 router.get('/', protect, getAllApplications);
 router.post('/', protect, createApplication);
 router.put('/:id', protect, updateApplication);

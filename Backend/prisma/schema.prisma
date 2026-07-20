@@ -33,6 +33,7 @@ model PasswordResetToken {
 
 model JobApplication {
   id              Int                @id @default(autoincrement())
+  publicId        String             @unique @default(cuid())
   title           String
   company         String
   appliedAt       DateTime           @default(now())
