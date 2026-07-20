@@ -115,6 +115,9 @@ const ApplicationForm = ({
         className="flex flex-col gap-4 md:grid md:grid-cols-2"
         onSubmit={handleSubmit(onSubmit)}
       >
+        <div className="flex flex-row gap-2 md:col-span-2">
+          <p className="text-label-md ml-auto mr-12">* Required Field</p>
+        </div>
         <div className="hidden md:flex md:flex-row md:col-span-2 justify-between md:absolute md:right-8 md:top-4 md:gap-4">
           <ApplicationFormActions
             isSubmitting={isSubmitting}
@@ -125,14 +128,14 @@ const ApplicationForm = ({
         <Input
           id="company"
           {...register("company")}
-          label="COMPANY NAME"
+          label="* COMPANY NAME"
           placeholder="e.g. Google"
           error={errors.company?.message}
         />
         <Input
           id="title"
           {...register("title")}
-          label="JOB TITLE"
+          label="* JOB TITLE"
           placeholder="e.g. Software Engineer"
           error={errors.title?.message}
         />
@@ -147,7 +150,7 @@ const ApplicationForm = ({
           id="status"
           {...register("status")}
           name="status"
-          label="STATUS"
+          label="* STATUS"
           options={[
             { value: "APPLIED", label: "APPLIED" },
             { value: "INTERVIEW", label: "INTERVIEW" },
@@ -159,7 +162,7 @@ const ApplicationForm = ({
         <Input
           id="appliedAt"
           {...register("appliedAt")}
-          label="DATE APPLIED"
+          label="* DATE APPLIED"
           type="date"
           placeholder="e.g. 2022-01-01"
           error={errors.appliedAt?.message}
