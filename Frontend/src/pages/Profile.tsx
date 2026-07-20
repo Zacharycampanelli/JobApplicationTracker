@@ -390,7 +390,16 @@ const Profile = () => {
           onResumesChanged={loadResumes}
         />
         <UserPreferences />
-        {isMobile && <Button type="button" variant="danger" onClick={logout} className="w-full px-8 py-6 text-card-title text-action">Logout</Button>}
+        {isMobile && (
+          <Button
+            type="button"
+            variant="danger"
+            onClick={logout}
+            className="w-full px-8 py-6 text-card-title text-action"
+          >
+            Logout
+          </Button>
+        )}
       </main>
 
       <CancelModal

@@ -17,4 +17,16 @@ export const getMe = () => {
   return api("api/auth/me");
 };
 
- 
+export const forgotPassword = (data: { email: string }) => {
+  return api("api/auth/forgot-password", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+};
+
+export const resetPassword = (data: { token: string; password: string }) => {
+  return api("api/auth/reset-password", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+};

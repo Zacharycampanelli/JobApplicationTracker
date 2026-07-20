@@ -6,8 +6,6 @@ import Dashboard from "./pages/Dashboard";
 import Applications from "./pages/Applications";
 import Analytics from "./pages/Analytics";
 import Profile from "./pages/Profile";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
 import AddApplication from "./pages/AddApplication";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
@@ -15,6 +13,7 @@ import EditApplication from "./pages/EditApplication";
 import PublicProfile from "./pages/PublicProfile";
 import NotFound from "./pages/NotFound";
 import Test from "./pages/Test";
+import AuthPage from "./pages/AuthPage";
 
 function App() {
   return (
@@ -41,8 +40,10 @@ function App() {
           </Route>
           {/* Auth routes without navbar */}
           <Route element={<AuthWrapper />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<AuthPage mode="login" />} />
+            <Route path="/register" element={<AuthPage mode="signup" />} />
+            <Route path="/forgot-password" element={<AuthPage mode="forgot-password" />} />
+            <Route path="/reset-password" element={<AuthPage mode="reset-password" />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

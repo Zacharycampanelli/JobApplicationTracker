@@ -8,7 +8,7 @@ import { useState } from "react";
 import { login as loginUser } from "../authApi";
 import { useAuthContext } from "../../../context/AuthContext";
 import Email from "../../../assets/images/email.svg?react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const loginSchema = z.object({
   email: z.email("Enter a valid email"),
@@ -66,6 +66,15 @@ const LoginForm = () => {
         error={errors.password?.message}
       />
       {loginError && <p className="text-label-md text-error">{loginError}</p>}
+
+      <div className="flex justify-end">
+        <Link
+          to="/forgot-password"
+          className="text-label-md text-primary hover:underline"
+        >
+          Forgot your password?
+        </Link>
+      </div>
 
       <div className="mt-2 flex">
         <Button
