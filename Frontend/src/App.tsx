@@ -14,6 +14,7 @@ import PublicProfile from "./pages/PublicProfile";
 import NotFound from "./pages/NotFound";
 import Test from "./pages/Test";
 import AuthPage from "./pages/AuthPage";
+import GuestRoute from "./routes/GuestRoute";
 
 function App() {
   return (
@@ -21,7 +22,6 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* Main app routes with navbar */}
-          <Route path="/test" element={<Test />} />
             <Route  element={<AppWrapper />}>
               {/* Public routes */}
               <Route path="/profiles/:id" element={<PublicProfile />} />
@@ -40,8 +40,10 @@ function App() {
           </Route>
           {/* Auth routes without navbar */}
           <Route element={<AuthWrapper />}>
-            <Route path="/login" element={<AuthPage mode="login" />} />
-            <Route path="/register" element={<AuthPage mode="signup" />} />
+            <Route element={<GuestRoute />} >
+              <Route path="/login" element={<AuthPage mode="login" />} />
+              <Route path="/register" element={<AuthPage mode="signup" />} />
+            </Route>
             <Route path="/forgot-password" element={<AuthPage mode="forgot-password" />} />
             <Route path="/reset-password" element={<AuthPage mode="reset-password" />} />
           </Route>
