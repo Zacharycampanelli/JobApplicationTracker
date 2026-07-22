@@ -20,6 +20,7 @@ import Add from "../assets/images/add.svg?react";
 import RecentApplications from "../features/applications/components/RecentApplications";
 import LoadingState from "../components/shared/LoadingState";
 import ErrorState from "../components/shared/ErrorState";
+import DailyInsight from "../features/dashboard/DailyInsight";
 
 const stats = [
   {
@@ -123,9 +124,10 @@ const Dashboard = () => {
             </p>
           )}
         </div>
-        <div className="hidden md:flex">
+        <div className="hidden md:flex md:gap-8">
           <RecentApplications />
-          <div className="w-1/2 flex flex-col gap-4">
+          <div className="flex flex-col gap-4 items-center">
+            <DailyInsight />
             <p>market outlook</p>
             <p>quick resources</p>
           </div>
