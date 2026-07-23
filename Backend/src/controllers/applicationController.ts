@@ -2,7 +2,6 @@ import { Response } from 'express';
 import { prisma } from '../lib/prisma';
 import type { AuthRequest } from '../middleware/authMiddleware';
 import { parseApplicationPayload } from '../utils/parseApplicationPayload';
-import { JobApplication } from '../../generated/prisma/browser';
 
 export const getAllApplications = async (req: AuthRequest, res: Response) => {
   try {

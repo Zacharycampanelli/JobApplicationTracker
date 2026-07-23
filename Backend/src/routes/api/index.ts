@@ -4,6 +4,7 @@ import authRoutes from './authRoutes';
 import resumeRoutes from './resumeRoutes';
 import userRoutes from './userRoutes';
 import publicProfileRoutes from './publicProfileRoutes';
+import activityRoutes from './activityRoutes';
 
 const router = Router();
 
@@ -12,5 +13,6 @@ router.use('/applications', applicationRoutes);
 router.use('/resumes', resumeRoutes);
 router.use('/users', userRoutes);
 router.use('/public', publicProfileRoutes);
+router.use('/activities', activityRoutes);
 
 export default router;
