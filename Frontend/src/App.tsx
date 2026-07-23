@@ -12,7 +12,6 @@ import { AuthProvider } from "./context/AuthContext";
 import EditApplication from "./pages/EditApplication";
 import PublicProfile from "./pages/PublicProfile";
 import NotFound from "./pages/NotFound";
-import Test from "./pages/Test";
 import AuthPage from "./pages/AuthPage";
 import GuestRoute from "./routes/GuestRoute";
 

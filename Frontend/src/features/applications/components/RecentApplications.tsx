@@ -41,7 +41,7 @@ const RecentApplications = () => {
             {!isLoading &&
               !error &&
               applications.map((app) => (
-                <ApplicationCard key={app.id} app={app} />
+                <ApplicationCard key={app.publicId} app={app} />
               ))}
 
             {applications.length < 3 && (

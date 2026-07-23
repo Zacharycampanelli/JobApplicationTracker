@@ -26,6 +26,7 @@ export type UserProfile = {
 
 export type JobApplication = {
   id: number;
+  publicId: string;
   title: string;
   company: string;
   location?: string | null;

@@ -43,7 +43,7 @@ const KanbanColumn = ({
         ) : (
           applications.map((app) => (
             <DraggableApplicationCard
-              key={app.id}
+              key={app.publicId}
               app={app}
             />
           ))

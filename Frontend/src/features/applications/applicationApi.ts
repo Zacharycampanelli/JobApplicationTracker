@@ -6,7 +6,7 @@ export const getAllApplications = () => {
   return api("api/applications");
 };
 
-export const getSingleApplication = (id: number) => {
+export const getSingleApplication = (id: string) => {
   return api(`api/applications/${id}`);
 };
 
@@ -21,20 +21,20 @@ export const createApplication = (data: ApplicationValues) => {
   });
 };
 
-export const updateApplication = (id: number, data: ApplicationValues) => {
+export const updateApplication = (id: string, data: ApplicationValues) => {
   return api(`api/applications/${id}`, {
     method: "PUT",
     body: JSON.stringify(data)
   });
 };
 
-export const deleteApplication = (id: number) => {
+export const deleteApplication = (id: string) => {
   return api(`api/applications/${id}`, {
     method: "DELETE"
   });
 };
 
-export const updateApplicationStatus = (id: number, status: JobStatus) => {
+export const updateApplicationStatus = (id: string, status: JobStatus) => {
   return api(`api/applications/${id}/status`, {
     method: "PATCH",
     body: JSON.stringify({ status })

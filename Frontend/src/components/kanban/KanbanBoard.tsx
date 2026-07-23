@@ -7,7 +7,7 @@ import { toast } from "sonner";
 type KanbanBoardProps = {
   applications: JobApplication[];
   moveApplication: (
-    applicationId: number,
+    applicationId: string,
     newStatus: JobStatus
   ) => Promise<void>;
 };
@@ -37,8 +37,8 @@ const KanbanBoard = ({ applications, moveApplication }: KanbanBoardProps) => {
     if (event.canceled) return;
     const { source, target } = event.operation;
 
-    const applicationId = Number(source?.id);
-    if (!Number.isInteger(applicationId)) return;
+    const applicationId = source?.id;
+    if (typeof applicationId !== "string") return;
 
     const newStatus = target?.id as JobStatus;
     if (!isJobStatus(newStatus)) return;

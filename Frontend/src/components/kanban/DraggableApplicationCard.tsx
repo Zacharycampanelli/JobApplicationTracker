@@ -10,7 +10,7 @@ const DraggableApplicationCard = ({
   app
 }: DraggableApplicationCardProps) => {
   const { ref, handleRef, isDragging } = useDraggable({
-    id: app.id,
+    id: app.publicId,
     type: "application",
     data: { status: app.status }
   });

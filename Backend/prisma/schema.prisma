@@ -8,17 +8,17 @@ datasource db {
 }
 
 model User {
-  id           Int              @id @default(autoincrement())
-  email        String           @unique
-  password     String
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
-  name         String           @default("User")
-  applications JobApplication[]
-  resumes      Resume[]
-  preferences  UserPreferences?
-  profile      UserProfile?
-
+  id                  Int                   @id @default(autoincrement())
+  email               String                @unique
+  password            String
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  name                String                @default("User")
+  applications        JobApplication[]
+  resumes             Resume[]
+  preferences         UserPreferences?
+  profile             UserProfile?
+  activities          ApplicationActivity[]
   passwordResetTokens PasswordResetToken[]
 }
 
@@ -32,18 +32,18 @@ model PasswordResetToken {
 }
 
 model JobApplication {
-  id              Int                @id @default(autoincrement())
-  publicId        String             @unique @default(cuid())
+  id              Int                   @id @default(autoincrement())
+  publicId        String                @unique @default(cuid())
   title           String
   company         String
-  appliedAt       DateTime           @default(now())
+  appliedAt       DateTime              @default(now())
   notes           String?
   link            String?
   userId          Int
   status          JobStatus
   resumeId        Int?
   location        String?
-  createdAt       DateTime           @default(now())
+  createdAt       DateTime              @default(now())
   firstResponseAt DateTime?
   interviewAt     DateTime?
   offerAt         DateTime?
@@ -51,10 +51,27 @@ model JobApplication {
   salaryMax       Int?
   salaryMin       Int?
   source          ApplicationSource?
-  updatedAt       DateTime           @updatedAt
+  updatedAt       DateTime              @updatedAt
   workMode        WorkMode?
-  resume          Resume?            @relation(fields: [resumeId], references: [id])
-  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resume          Resume?               @relation(fields: [resumeId], references: [id])
+  user            User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activities      ApplicationActivity[]
+}
+
+model ApplicationActivity {
+  id            Int             @id @default(autoincrement())
+  type          ActivityType
+  title         String
+  company       String
+  fromStatus    JobStatus?
+  toStatus      JobStatus?
+  createdAt     DateTime        @default(now())
+  applicationId Int?
+  application   JobApplication? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+  userId        Int
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
 }
 
 model Resume {
@@ -114,4 +131,11 @@ enum WorkMode {
   REMOTE
   HYBRID
   ONSITE
+}
+
+enum ActivityType {
+  CREATED
+  UPDATED
+  STATUS_CHANGE
+  DELETED
 }

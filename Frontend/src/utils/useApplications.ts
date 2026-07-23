@@ -11,7 +11,7 @@ type useApplicationsProps = {
   errorMessage: string | null;
   refetchApplications: () => Promise<void>;
   moveApplication: (
-    applicationId: number,
+    applicationId: string,
     newStatus: JobApplication["status"]
   ) => Promise<void>;
 };
@@ -36,11 +36,11 @@ export const useApplications = (): useApplicationsProps => {
   }, []);
 
   const moveApplication = async (
-    applicationId: number,
+    applicationId: string,
     newStatus: JobStatus
   ): Promise<void> => {
     const previousApplication = applications.find(
-      (application) => application.id === applicationId
+      (application) => application.publicId === applicationId
     );
 
     if (!previousApplication || previousApplication.status === newStatus)
@@ -48,7 +48,7 @@ export const useApplications = (): useApplicationsProps => {
 
     setApplications((prevApplications) =>
       prevApplications.map((application) =>
-        application.id === applicationId
+        application.publicId === applicationId
           ? { ...application, status: newStatus }
           : application
       )
@@ -61,14 +61,18 @@ export const useApplications = (): useApplicationsProps => {
       );
       setApplications((prevApplications) =>
         prevApplications.map((application) =>
-          application.id === applicationId ? updatedApplication : application
+          application.publicId === applicationId
+            ? updatedApplication
+            : application
         )
       );
     } catch (error) {
       console.error(" Failed to update application status", error);
       setApplications((prevApplications) =>
         prevApplications.map((application) =>
-          application.id === applicationId ? previousApplication : application
+          application.publicId === applicationId
+            ? previousApplication
+            : application
         )
       );
       setErrorMessage("Failed to update application status");

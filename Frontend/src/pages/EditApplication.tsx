@@ -38,7 +38,7 @@ const EditApplication = () => {
   useEffect(() => {
     if (!id) return;
     const getApplication = async () => {
-      const application = await getSingleApplication(Number(id));
+      const application = await getSingleApplication(id);
       setDefaultValues({
         ...application,
         appliedAt: application.appliedAt?.slice(0, 10),
@@ -74,7 +74,7 @@ const EditApplication = () => {
   const onSubmit = async (values: ApplicationValues) => {
     try {
       setSubmitError("");
-      await updateApplication(Number(id), values);
+      await updateApplication(id!, values);
       toast.success("Application updated!");
     } catch (error) {
       toast.error(
@@ -86,7 +86,7 @@ const EditApplication = () => {
   const handleDelete = async () => {
     if (!id) return;
     try {
-      await deleteApplication(Number(id));
+      await deleteApplication(id);
       toast.success("Application deleted!");
       navigate("/applications");
     } catch (error) {

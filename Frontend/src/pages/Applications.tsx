@@ -174,7 +174,7 @@ const Applications = () => {
         ) : (
           <div className="flex flex-col gap-4 xl:grid xl:grid-cols-3">
             {visibleApplications.map((app: JobApplication) => (
-              <ApplicationCard key={app.id} app={app} showStatus />
+              <ApplicationCard key={app.publicId} app={app} showStatus />
             ))}
           </div>
         )}

@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { prisma } from '../lib/prisma';
 import type { AuthRequest } from '../middleware/authMiddleware';
 import { parseApplicationPayload } from '../utils/parseApplicationPayload';
+import { JobApplication } from '../../generated/prisma/browser';
 
 export const getAllApplications = async (req: AuthRequest, res: Response) => {
   try {
@@ -135,13 +136,29 @@ export const createApplication = async (req: AuthRequest, res: Response) => {
       }
     }
 
-    const application = await prisma.jobApplication.create({
-      data: {
-        ...parsed.data,
-        resumeId: resume?.id,
-        userId: req.user.userId,
-      },
+    const userId = req.user.userId;
+
+    const application = await prisma.$transaction(async (tx) => {
+      const app = await tx.jobApplication.create({
+        data: {
+          ...parsed.data,
+          resumeId: resume?.id,
+          userId,
+        },
+      });
+
+      await tx.applicationActivity.create({
+        data: {
+          type: 'CREATED',
+          title: app.title,
+          company: app.company,
+          userId,
+          applicationId: app.id,
+        },
+      });
+      return app;
     });
+
     res.status(201).json(application);
   } catch (error) {
     console.error('Error creating application:', error);
@@ -197,16 +214,46 @@ export const updateApplication = async (req: AuthRequest, res: Response) => {
       }
     }
 
-    const updatedApplication = await prisma.jobApplication.update({
-      where: {
-        publicId,
-      },
-      data: {
-        ...parsed.data,
-        resumeId: resume?.id,
-        userId: req.user.userId,
-      },
+    const userId = req.user.userId;
+
+    const updatedApplication = await prisma.$transaction(async (tx) => {
+      const updatedApp = await tx.jobApplication.update({
+        where: {
+          publicId,
+        },
+        data: {
+          ...parsed.data,
+          resumeId: resume?.id,
+          userId,
+        },
+      });
+
+      if (updatedApp.status !== application.status) {
+        await tx.applicationActivity.create({
+          data: {
+            type: 'STATUS_CHANGE',
+            title: updatedApp.title,
+            company: updatedApp.company,
+            userId,
+            applicationId: updatedApp.id,
+            fromStatus: application.status,
+            toStatus: updatedApp.status,
+          },
+        });
+      } else {
+        await tx.applicationActivity.create({
+          data: {
+            type: 'UPDATED',
+            title: updatedApp.title,
+            company: updatedApp.company,
+            userId,
+            applicationId: updatedApp.id,
+          },
+        });
+      }
+      return updatedApp;
     });
+
     res.status(200).json(updatedApplication);
   } catch (error) {
     console.error('Error updating application:', error);
@@ -230,7 +277,7 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
 
     const allowedStatuses = ['APPLIED', 'INTERVIEW', 'OFFER', 'REJECTED'];
 
-    if (!allowedStatuses.includes(status) || !status) {
+    if (!status || !allowedStatuses.includes(status)) {
       return res.status(400).json({ error: 'Invalid status' });
     }
 
@@ -245,14 +292,35 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
       return res.status(404).json({ error: 'Application not found' });
     }
 
-    const updatedApplication = await prisma.jobApplication.update({
-      where: {
-        publicId,
-      },
-      data: {
-        status: req.body.status,
-      },
+    if (application.status === status) {
+      return res.status(200).json(application);
+    }
+    const userId = req.user.userId;
+
+    const updatedApplication = await prisma.$transaction(async (tx) => {
+      const updatedApp = await tx.jobApplication.update({
+        where: {
+          publicId,
+        },
+        data: {
+          status,
+        },
+      });
+
+      await tx.applicationActivity.create({
+        data: {
+          type: 'STATUS_CHANGE',
+          title: updatedApp.title,
+          company: updatedApp.company,
+          userId,
+          applicationId: updatedApp.id,
+          fromStatus: application.status,
+          toStatus: updatedApp.status,
+        },
+      });
+      return updatedApp;
     });
+
     res.status(200).json(updatedApplication);
   } catch (error) {
     console.error('Error updating application status:', error);
@@ -281,10 +349,27 @@ export const deleteApplication = async (req: AuthRequest, res: Response) => {
     if (!application) {
       return res.status(404).json({ error: 'Application not found' });
     }
-    await prisma.jobApplication.delete({
-      where: {
-        publicId,
-      },
+
+    const userId = req.user.userId;
+
+    const deletedApplication = await prisma.$transaction(async (tx) => {
+      await tx.applicationActivity.create({
+        data: {
+          type: 'DELETED',
+          title: application.title,
+          company: application.company,
+          userId,
+          applicationId: application.id,
+        },
+      });
+
+      const deletedApp = await tx.jobApplication.delete({
+        where: {
+          publicId,
+        },
+      });
+
+      return deletedApp;
     });
 
     res.status(200).json(application);

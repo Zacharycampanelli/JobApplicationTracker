@@ -74,7 +74,7 @@ const ApplicationCard = ({
           <Button
             type="button"
             variant="ghost"
-            onClick={() => navigate(`/applications/edit/${app.id}`)}
+            onClick={() => navigate(`/applications/edit/${app.publicId}`)}
             aria-label={`Edit ${app.company} application`}
             className="
             shrink-0
