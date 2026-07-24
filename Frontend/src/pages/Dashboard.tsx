@@ -21,6 +21,7 @@ import RecentApplications from "../features/applications/components/RecentApplic
 import LoadingState from "../components/shared/LoadingState";
 import ErrorState from "../components/shared/ErrorState";
 import DailyInsight from "../features/dashboard/DailyInsight";
+import RecentActivity from "../features/activity/components/RecentActivity";
 
 const stats = [
   {
@@ -124,10 +125,13 @@ const Dashboard = () => {
             </p>
           )}
         </div>
+        {isMobile && <RecentActivity />}
         <div className="hidden md:flex md:gap-8">
           <RecentApplications />
           <div className="flex flex-col gap-4 items-center">
             <DailyInsight />
+            <RecentActivity />
+
             <p>market outlook</p>
             <p>quick resources</p>
           </div>

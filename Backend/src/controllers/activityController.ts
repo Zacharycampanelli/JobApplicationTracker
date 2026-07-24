@@ -14,7 +14,7 @@ export const getUserRecentActivities = async (req: AuthRequest, res: Response) =
       where: {
         userId,
       },
-      take: 10,
+      take: 5,
       orderBy: {
         createdAt: 'desc',
       },

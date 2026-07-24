@@ -96,3 +96,15 @@ export type UpdatePreferencesValues = {
   autoStatusUpdatesEnabled: boolean;
   themePreference: "light" | "dark" | "system";
 };
+
+export type ApplicationActivity = {
+  id: number;
+  type: "CREATED" | "UPDATED" | "STATUS_CHANGE" | "DELETED";
+  title: string;
+  company: string;
+  fromStatus?: JobStatus | null;
+  toStatus?: JobStatus | null;
+  createdAt: string;
+  applicationId?: number | null;
+  userId: number;
+}
