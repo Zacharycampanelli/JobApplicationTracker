@@ -27,7 +27,7 @@ const RecentActivity = () => {
   }, []);
 
   return (
-    <div className="bg-surface-container-low flex flex-col gap-6 px-4 py-6 rounded-card shadow-sm">
+    <div className="bg-surface-container-low flex flex-col gap-6 p-6 rounded-card shadow-sm min-w-[90%] w-full">
       <header>
         <h3 className="text-card-title">Activity Journal</h3>
       </header>
