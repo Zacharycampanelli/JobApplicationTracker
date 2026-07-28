@@ -49,7 +49,7 @@ const StatCard = ({
         </h4>
         {Icon && (
           <div
-            className={`rounded-xl p-3 ${background} size-8 flex justify-center items-center`}
+            className={`rounded-xl p-3 ${background} size-10 flex justify-center items-center`}
           >
             <Icon className={`size-4 fill-current ${iconColor}`} />{" "}
           </div>
