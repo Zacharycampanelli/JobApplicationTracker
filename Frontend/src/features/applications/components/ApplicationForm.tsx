@@ -67,6 +67,14 @@ const applicationSchema = z
       message: "Salary range is invalid",
       path: ["salaryMax"]
     }
+  )
+  .refine(
+    (data) =>
+      data.status !== "INTERVIEW" && data.status !== "OFFER" || data.firstResponseAt != null,
+    {
+      message: "First response date is required",
+      path: ["firstResponseAt"]
+    }
   );
 export type ApplicationFormValues = z.input<typeof applicationSchema>;
 export type ApplicationValues = z.output<typeof applicationSchema>;

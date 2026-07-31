@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { prisma } from '../lib/prisma';
 import type { AuthRequest } from '../middleware/authMiddleware';
 import { parseApplicationPayload } from '../utils/parseApplicationPayload';
+import { synchronizeApplicationMilestones } from '../utils/synchronizeApplicationMilestones';
 
 export const getAllApplications = async (req: AuthRequest, res: Response) => {
   try {
@@ -294,6 +295,12 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
     if (application.status === status) {
       return res.status(200).json(application);
     }
+
+    const synchronizedData = synchronizeApplicationMilestones(
+      application,
+      status
+    )
+
     const userId = req.user.userId;
 
     const updatedApplication = await prisma.$transaction(async (tx) => {
@@ -301,9 +308,7 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
         where: {
           publicId,
         },
-        data: {
-          status,
-        },
+        data: synchronizedData,
       });
 
       await tx.applicationActivity.create({

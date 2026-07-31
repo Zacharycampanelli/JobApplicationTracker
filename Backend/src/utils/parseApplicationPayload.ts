@@ -97,6 +97,16 @@ export const parseApplicationPayload = (applicationData: any): ParseApplicationP
   if (!parsedFirstResponseAt.success) {
     return { success: false, error: parsedFirstResponseAt.error };
   }
+const normalizedFirstResponseAt = status === 'APPLIED' ? null : parsedFirstResponseAt.value;
+
+if((status === "INTERVIEW" || status === "OFFER") && normalizedFirstResponseAt == null)
+  {
+    return {
+      success: false,
+      error: "First response date is required"
+    }
+  } 
+
   const parsedInterviewAt = parseOptionalDate(interviewAt, 'interview');
   if (!parsedInterviewAt.success) {
     return { success: false, error: parsedInterviewAt.error };
@@ -111,7 +121,7 @@ export const parseApplicationPayload = (applicationData: any): ParseApplicationP
   }
 
   const appliedDateOnly = toDateOnly(parsedAppliedAt);
-  const firstResponseDateOnly = toDateOnly(parsedFirstResponseAt.value);
+  const firstResponseDateOnly = toDateOnly(normalizedFirstResponseAt);
   const interviewDateOnly = toDateOnly(parsedInterviewAt.value);
   const offerDateOnly = toDateOnly(parsedOfferAt.value);
   const rejectedDateOnly = toDateOnly(parsedRejectedAt.value);
@@ -171,7 +181,7 @@ export const parseApplicationPayload = (applicationData: any): ParseApplicationP
       source: source === null || source === '' ? null : source ? (source as ApplicationSource) : undefined,
       workMode: workMode === null || workMode === '' ? null : workMode ? (workMode as WorkMode) : undefined,
       appliedAt: parsedAppliedAt,
-      firstResponseAt: parsedFirstResponseAt.value,
+      firstResponseAt: normalizedFirstResponseAt,
       interviewAt: parsedInterviewAt.value,
       offerAt: parsedOfferAt.value,
       rejectedAt: parsedRejectedAt.value,
