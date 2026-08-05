@@ -2,6 +2,9 @@ import type { JobStatus } from "../../generated/prisma/enums";
 
 type ApplicationMilestones = { 
     firstResponseAt: Date | null;
+    interviewAt: Date | null;
+    offerAt: Date | null;
+    rejectedAt: Date | null;
 }
 
 export const synchronizeApplicationMilestones = (application: ApplicationMilestones, newStatus: JobStatus, now: Date = new Date()) => {

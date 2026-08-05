@@ -45,10 +45,11 @@ export const getSingleApplication = async (req: AuthRequest, res: Response) => {
     if (!req.user?.userId) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
+
     const publicId = req.params.id;
 
-    if (!publicId) {
-      return res.status(400).json({ message: 'Invalid ID' });
+    if (typeof publicId !== 'string') {
+      return res.status(400).json({ error: 'Invalid application ID' });
     }
 
     const application = await prisma.jobApplication.findFirst({
@@ -174,8 +175,8 @@ export const updateApplication = async (req: AuthRequest, res: Response) => {
 
     const publicId = req.params.id;
 
-    if (!publicId) {
-      return res.status(400).json({ error: 'Invalid ID' });
+    if (typeof publicId !== 'string') {
+      return res.status(400).json({ error: 'Invalid application ID' });
     }
 
     const application = await prisma.jobApplication.findFirst({
@@ -269,8 +270,8 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
 
     const publicId = req.params.id;
 
-    if (!publicId) {
-      return res.status(400).json({ error: 'Invalid ID' });
+    if (typeof publicId !== 'string') {
+      return res.status(400).json({ error: 'Invalid application ID' });
     }
 
     const status = req.body.status;
@@ -292,14 +293,15 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
       return res.status(404).json({ error: 'Application not found' });
     }
 
-    if (application.status === status) {
+    const synchronizedData = synchronizeApplicationMilestones(application, status);
+
+    const statusChanged = application.status !== status;
+
+    const firstResponseChanged = application.firstResponseAt?.getTime() !== synchronizedData.firstResponseAt?.getTime();
+
+    if (!statusChanged && !firstResponseChanged) {
       return res.status(200).json(application);
     }
-
-    const synchronizedData = synchronizeApplicationMilestones(
-      application,
-      status
-    )
 
     const userId = req.user.userId;
 
@@ -311,17 +313,19 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
         data: synchronizedData,
       });
 
-      await tx.applicationActivity.create({
-        data: {
-          type: 'STATUS_CHANGE',
-          title: updatedApp.title,
-          company: updatedApp.company,
-          userId,
-          applicationId: updatedApp.id,
-          fromStatus: application.status,
-          toStatus: updatedApp.status,
-        },
-      });
+      if (statusChanged) {
+        await tx.applicationActivity.create({
+          data: {
+            type: 'STATUS_CHANGE',
+            title: updatedApp.title,
+            company: updatedApp.company,
+            userId,
+            applicationId: updatedApp.id,
+            fromStatus: application.status,
+            toStatus: updatedApp.status,
+          },
+        });
+      }
       return updatedApp;
     });
 
@@ -340,7 +344,7 @@ export const deleteApplication = async (req: AuthRequest, res: Response) => {
 
     const publicId = req.params.id;
 
-    if (!publicId) {
+    if (typeof publicId !== 'string') {
       return res.status(400).json({ error: 'Invalid application ID' });
     }
 
