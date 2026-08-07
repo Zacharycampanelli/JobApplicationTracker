@@ -98,15 +98,14 @@ export const parseApplicationPayload = (applicationData: any): ParseApplicationP
   if (!parsedFirstResponseAt.success) {
     return { success: false, error: parsedFirstResponseAt.error };
   }
-const normalizedFirstResponseAt = status === 'APPLIED' ? null : parsedFirstResponseAt.value;
+  const normalizedFirstResponseAt = status === 'APPLIED' ? null : parsedFirstResponseAt.value;
 
-if((status === "INTERVIEW" || status === "OFFER") && normalizedFirstResponseAt == null)
-  {
+  if ((status === 'INTERVIEW' || status === 'OFFER') && normalizedFirstResponseAt == null) {
     return {
       success: false,
-      error: "First response date is required"
-    }
-  } 
+      error: 'First response date is required',
+    };
+  }
 
   const parsedInterviewAt = parseOptionalDate(interviewAt, 'interview');
   if (!parsedInterviewAt.success) {
@@ -128,8 +127,8 @@ if((status === "INTERVIEW" || status === "OFFER") && normalizedFirstResponseAt =
       offerAt: parsedOfferAt.value ?? null,
       rejectedAt: parsedRejectedAt.value ?? null,
     },
-    status as JobStatus
-  )
+    status as JobStatus,
+  );
 
   const appliedDateOnly = toDateOnly(parsedAppliedAt);
   const firstResponseDateOnly = toDateOnly(synchronizedMilestones.firstResponseAt);
@@ -150,12 +149,33 @@ if((status === "INTERVIEW" || status === "OFFER") && normalizedFirstResponseAt =
     return { success: false, error: 'Interview date cannot be before applied date' };
   }
 
+  if (
+    (status === 'INTERVIEW' || status === 'OFFER') &&
+    interviewDateOnly &&
+    firstResponseDateOnly &&
+    interviewDateOnly < firstResponseDateOnly
+  ) {
+    return { success: false, error: 'Interview date cannot be before first response date' };
+  }
+
   if (status === 'OFFER' && offerDateOnly && interviewDateOnly && offerDateOnly < interviewDateOnly) {
     return { success: false, error: 'Offer date cannot be before interview date' };
   }
 
   if (status === 'REJECTED' && rejectedDateOnly && appliedDateOnly && rejectedDateOnly < appliedDateOnly) {
     return { success: false, error: 'Rejected date cannot be before applied date' };
+  }
+
+  if (status === 'REJECTED' && rejectedDateOnly && firstResponseDateOnly && rejectedDateOnly < firstResponseDateOnly) {
+    return { success: false, error: 'Rejected date cannot be before first response date' };
+  }
+
+  if (status === 'REJECTED' && rejectedDateOnly && interviewDateOnly && rejectedDateOnly < interviewDateOnly) {
+    return { success: false, error: 'Rejected date cannot be before interview date' };
+  }
+
+  if (status === 'REJECTED' && rejectedDateOnly && offerDateOnly && rejectedDateOnly < offerDateOnly) {
+    return { success: false, error: 'Rejected date cannot be before offer date' };
   }
 
   const parsedSalaryMin = parseOptionalNumber(salaryMin, 'minimum salary');
@@ -191,7 +211,7 @@ if((status === "INTERVIEW" || status === "OFFER") && normalizedFirstResponseAt =
       notes: typeof notes === 'string' && notes.trim() ? notes.trim() : null,
       source: source === null || source === '' ? null : source ? (source as ApplicationSource) : undefined,
       workMode: workMode === null || workMode === '' ? null : workMode ? (workMode as WorkMode) : undefined,
-      appliedAt: parsedAppliedAt
+      appliedAt: parsedAppliedAt,
     },
   };
 };

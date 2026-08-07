@@ -1,108 +1,186 @@
-import { describe, expect, test } from "vitest";
-import { parseApplicationPayload } from "./parseApplicationPayload";
+import { describe, expect, test } from 'vitest';
+import { parseApplicationPayload } from './parseApplicationPayload';
 
 const makePayload = (overrides: Record<string, unknown> = {}) => ({
-  title: "Software Engineer",
-  company: "Example Company",
-  status: "APPLIED",
-  appliedAt: "2026-07-01",
-  ...overrides
+  title: 'Software Engineer',
+  company: 'Example Company',
+  status: 'APPLIED',
+  appliedAt: '2026-07-01',
+  ...overrides,
 });
 
-describe("parseApplicationPayload", () => {
-  test("clears every milestone date for APPLIED applications", () => {
+describe('parseApplicationPayload', () => {
+  test('clears every milestone date for APPLIED applications', () => {
     // Arrange
     const payload = makePayload({
-        status: "APPLIED",
-        firstResponseAt: "2026-07-05",
-        interviewAt: "2026-07-10",
-        offerAt: "2026-07-15",
-        rejectedAt: "2026-07-20"
+      status: 'APPLIED',
+      firstResponseAt: '2026-07-05',
+      interviewAt: '2026-07-10',
+      offerAt: '2026-07-15',
+      rejectedAt: '2026-07-20',
     });
 
     // Act
     const result = parseApplicationPayload(payload);
-    
+
     // Assert
-    if(!result.success){
-        throw new Error(`Expected parsing to succeed: ${result.error}`);
+    if (!result.success) {
+      throw new Error(`Expected parsing to succeed: ${result.error}`);
     }
 
     expect(result.data).toMatchObject({
-      status: "APPLIED",
+      status: 'APPLIED',
       firstResponseAt: null,
       interviewAt: null,
       offerAt: null,
       rejectedAt: null,
-    })
+    });
   });
 
-  test("Rejects an INTERVIEW application without a first response", () => {
+  test('Rejects an INTERVIEW application without a first response', () => {
     // Arrange
     const payload = makePayload({
-        status: "INTERVIEW"
+      status: 'INTERVIEW',
     });
-    
+
     // Act
     const result = parseApplicationPayload(payload);
 
     // Assert
     expect(result).toEqual({
-        success: false,
-        error: "First response date is required"
+      success: false,
+      error: 'First response date is required',
     });
-  }) 
+  });
 
-   test("retains the first response for an INTERVIEW application", () => {
+  test('retains the first response for an INTERVIEW application', () => {
     // Arrange
-  
+
     const payload = makePayload({
-      status: "INTERVIEW",
-      firstResponseAt: "2026-07-05",
+      status: 'INTERVIEW',
+      firstResponseAt: '2026-07-05',
     });
 
     // Act
     const result = parseApplicationPayload(payload);
 
     // Assert
-    if(!result.success){
-        throw new Error(`Expected parsing to succeed: ${result.error}`);
+    if (!result.success) {
+      throw new Error(`Expected parsing to succeed: ${result.error}`);
     }
-    expect(result.data.firstResponseAt).toEqual(new Date("2026-07-05"));
-
+    expect(result.data.firstResponseAt).toEqual(new Date('2026-07-05'));
   });
 
-  test("rejects an OFFER application without a first response", () => {
+  test('rejects an OFFER application without a first response', () => {
     // Arrange
     const payload = makePayload({
-        status: "OFFER"
+      status: 'OFFER',
     });
-    
+
     // Act
     const result = parseApplicationPayload(payload);
 
     // Assert
     expect(result).toEqual({
-        success: false,
-        error: "First response date is required"
+      success: false,
+      error: 'First response date is required',
     });
-  })
+  });
 
-  test("allows a REJECTED application without a first response", () => {
+  test('allows a REJECTED application without a first response', () => {
     // Arrange
     const payload = makePayload({
-        status: "REJECTED"
+      status: 'REJECTED',
     });
-    
+
     // Act
     const result = parseApplicationPayload(payload);
 
     // Assert
-    if(!result.success){
-        throw new Error(`Expected parsing to succeed: ${result.error}`);
+    if (!result.success) {
+      throw new Error(`Expected parsing to succeed: ${result.error}`);
     }
-    expect(result.data.status).toBe("REJECTED");
+    expect(result.data.status).toBe('REJECTED');
     expect(result.data.firstResponseAt).toBeNull();
     expect(result.data.rejectedAt).toBeInstanceOf(Date);
+  });
+
+  test('rejects a rejection date before the first response date', () => {
+    // Arrange
+    const payload = makePayload({
+      status: 'REJECTED',
+      appliedAt: '2026-07-01',
+      firstResponseAt: '2026-07-10',
+      rejectedAt: '2026-07-05',
+    });
+
+    // Act
+    const result = parseApplicationPayload(payload);
+
+    // Assert
+    expect(result).toEqual({
+      success: false,
+      error: 'Rejected date cannot be before first response date',
+    });
+  });
+
+  test("rejects an interview date before the first response date", () => {
+    //Arrange    
+    const payload = makePayload({
+      status: "INTERVIEW",
+      appliedAt: "2026-07-01",
+      firstResponseAt: "2026-07-10",
+      interviewAt: "2026-07-05",
+    });
+
+    //Act
+    const result = parseApplicationPayload(payload);
+    
+    //Assert
+    expect(result).toEqual({
+      success: false,
+      error: "Interview date cannot be before first response date",
+    });
+  });
+
+  test("rejects a rejection date before an existing interview date", () => {
+    //Arrange
+    const payload = makePayload({
+      status: "REJECTED",
+      appliedAt: "2026-07-01",
+      firstResponseAt: "2026-07-05",
+      interviewAt: "2026-07-15",
+      rejectedAt: "2026-07-10",
+    });
+
+    //Act
+    const result = parseApplicationPayload(payload);
+
+    //Assert
+    expect(result).toEqual({
+      success: false,
+      error: "Rejected date cannot be before interview date",
+    });
+  });
+
+  test("rejects a rejection date before an existing offer date", () => {
+    //Arrange
+    const payload = makePayload({
+      status: "REJECTED",
+      appliedAt: "2026-07-01",
+      firstResponseAt: "2026-07-05",
+      interviewAt: "2026-07-10",
+      offerAt: "2026-07-20",
+      rejectedAt: "2026-07-15",
+    });
+
+    //Act
+    const result = parseApplicationPayload(payload);
+
+    //Assert
+    expect(result).toEqual({
+      success: false,
+      error: "Rejected date cannot be before offer date",
+    });
   });
 });
