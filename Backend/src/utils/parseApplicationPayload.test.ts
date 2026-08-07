@@ -10,11 +10,14 @@ const makePayload = (overrides: Record<string, unknown> = {}) => ({
 });
 
 describe("parseApplicationPayload", () => {
-  test("normalizes first response to null for APPLIED applications", () => {
+  test("clears every milestone date for APPLIED applications", () => {
     // Arrange
     const payload = makePayload({
         status: "APPLIED",
-        firstResponseAt: "2026-07-05"
+        firstResponseAt: "2026-07-05",
+        interviewAt: "2026-07-10",
+        offerAt: "2026-07-15",
+        rejectedAt: "2026-07-20"
     });
 
     // Act
@@ -25,8 +28,13 @@ describe("parseApplicationPayload", () => {
         throw new Error(`Expected parsing to succeed: ${result.error}`);
     }
 
-    expect(result.data.status).toBe("APPLIED");
-    expect(result.data.firstResponseAt).toBeNull();
+    expect(result.data).toMatchObject({
+      status: "APPLIED",
+      firstResponseAt: null,
+      interviewAt: null,
+      offerAt: null,
+      rejectedAt: null,
+    })
   });
 
   test("Rejects an INTERVIEW application without a first response", () => {
@@ -94,6 +102,7 @@ describe("parseApplicationPayload", () => {
         throw new Error(`Expected parsing to succeed: ${result.error}`);
     }
     expect(result.data.status).toBe("REJECTED");
-    expect(result.data.firstResponseAt).toBeUndefined();
+    expect(result.data.firstResponseAt).toBeNull();
+    expect(result.data.rejectedAt).toBeInstanceOf(Date);
   });
 });

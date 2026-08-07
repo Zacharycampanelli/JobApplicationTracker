@@ -1,4 +1,5 @@
 import type { ApplicationSource, JobStatus, WorkMode } from '../../generated/prisma/enums.js';
+import { synchronizeApplicationMilestones } from './synchronizeApplicationMilestones.js';
 
 type ParsedApplicationData = {
   title: string;
@@ -120,11 +121,21 @@ if((status === "INTERVIEW" || status === "OFFER") && normalizedFirstResponseAt =
     return { success: false, error: parsedRejectedAt.error };
   }
 
+  const synchronizedMilestones = synchronizeApplicationMilestones(
+    {
+      firstResponseAt: normalizedFirstResponseAt ?? null,
+      interviewAt: parsedInterviewAt.value ?? null,
+      offerAt: parsedOfferAt.value ?? null,
+      rejectedAt: parsedRejectedAt.value ?? null,
+    },
+    status as JobStatus
+  )
+
   const appliedDateOnly = toDateOnly(parsedAppliedAt);
-  const firstResponseDateOnly = toDateOnly(normalizedFirstResponseAt);
-  const interviewDateOnly = toDateOnly(parsedInterviewAt.value);
-  const offerDateOnly = toDateOnly(parsedOfferAt.value);
-  const rejectedDateOnly = toDateOnly(parsedRejectedAt.value);
+  const firstResponseDateOnly = toDateOnly(synchronizedMilestones.firstResponseAt);
+  const interviewDateOnly = toDateOnly(synchronizedMilestones.interviewAt);
+  const offerDateOnly = toDateOnly(synchronizedMilestones.offerAt);
+  const rejectedDateOnly = toDateOnly(synchronizedMilestones.rejectedAt);
 
   if (firstResponseDateOnly && appliedDateOnly && firstResponseDateOnly < appliedDateOnly) {
     return { success: false, error: 'First response cannot be before applied date' };
@@ -172,7 +183,7 @@ if((status === "INTERVIEW" || status === "OFFER") && normalizedFirstResponseAt =
     data: {
       title,
       company,
-      status: status as JobStatus,
+      ...synchronizedMilestones,
       link: typeof link === 'string' && link.trim() ? link.trim() : null,
       salaryMin: parsedSalaryMin.value,
       salaryMax: parsedSalaryMax.value,
@@ -180,11 +191,7 @@ if((status === "INTERVIEW" || status === "OFFER") && normalizedFirstResponseAt =
       notes: typeof notes === 'string' && notes.trim() ? notes.trim() : null,
       source: source === null || source === '' ? null : source ? (source as ApplicationSource) : undefined,
       workMode: workMode === null || workMode === '' ? null : workMode ? (workMode as WorkMode) : undefined,
-      appliedAt: parsedAppliedAt,
-      firstResponseAt: normalizedFirstResponseAt,
-      interviewAt: parsedInterviewAt.value,
-      offerAt: parsedOfferAt.value,
-      rejectedAt: parsedRejectedAt.value,
+      appliedAt: parsedAppliedAt
     },
   };
 };

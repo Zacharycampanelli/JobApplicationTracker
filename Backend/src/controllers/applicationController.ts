@@ -297,9 +297,13 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
 
     const statusChanged = application.status !== status;
 
-    const firstResponseChanged = application.firstResponseAt?.getTime() !== synchronizedData.firstResponseAt?.getTime();
+    const milestonesChanged =
+      application.firstResponseAt?.getTime() !== synchronizedData.firstResponseAt?.getTime() ||
+      application.interviewAt?.getTime() !== synchronizedData.interviewAt?.getTime() ||
+      application.offerAt?.getTime() !== synchronizedData.offerAt?.getTime() ||
+      application.rejectedAt?.getTime() !== synchronizedData.rejectedAt?.getTime();
 
-    if (!statusChanged && !firstResponseChanged) {
+    if (!statusChanged && !milestonesChanged) {
       return res.status(200).json(application);
     }
 
