@@ -124,33 +124,33 @@ describe('parseApplicationPayload', () => {
     });
   });
 
-  test("rejects an interview date before the first response date", () => {
-    //Arrange    
+  test('rejects an interview date before the first response date', () => {
+    //Arrange
     const payload = makePayload({
-      status: "INTERVIEW",
-      appliedAt: "2026-07-01",
-      firstResponseAt: "2026-07-10",
-      interviewAt: "2026-07-05",
+      status: 'INTERVIEW',
+      appliedAt: '2026-07-01',
+      firstResponseAt: '2026-07-10',
+      interviewAt: '2026-07-05',
     });
 
     //Act
     const result = parseApplicationPayload(payload);
-    
+
     //Assert
     expect(result).toEqual({
       success: false,
-      error: "Interview date cannot be before first response date",
+      error: 'Interview date cannot be before first response date',
     });
   });
 
-  test("rejects a rejection date before an existing interview date", () => {
+  test('rejects a rejection date before an existing interview date', () => {
     //Arrange
     const payload = makePayload({
-      status: "REJECTED",
-      appliedAt: "2026-07-01",
-      firstResponseAt: "2026-07-05",
-      interviewAt: "2026-07-15",
-      rejectedAt: "2026-07-10",
+      status: 'REJECTED',
+      appliedAt: '2026-07-01',
+      firstResponseAt: '2026-07-05',
+      interviewAt: '2026-07-15',
+      rejectedAt: '2026-07-10',
     });
 
     //Act
@@ -159,19 +159,19 @@ describe('parseApplicationPayload', () => {
     //Assert
     expect(result).toEqual({
       success: false,
-      error: "Rejected date cannot be before interview date",
+      error: 'Rejected date cannot be before interview date',
     });
   });
 
-  test("rejects a rejection date before an existing offer date", () => {
+  test('rejects a rejection date before an existing offer date', () => {
     //Arrange
     const payload = makePayload({
-      status: "REJECTED",
-      appliedAt: "2026-07-01",
-      firstResponseAt: "2026-07-05",
-      interviewAt: "2026-07-10",
-      offerAt: "2026-07-20",
-      rejectedAt: "2026-07-15",
+      status: 'REJECTED',
+      appliedAt: '2026-07-01',
+      firstResponseAt: '2026-07-05',
+      interviewAt: '2026-07-10',
+      offerAt: '2026-07-20',
+      rejectedAt: '2026-07-15',
     });
 
     //Act
@@ -180,7 +180,7 @@ describe('parseApplicationPayload', () => {
     //Assert
     expect(result).toEqual({
       success: false,
-      error: "Rejected date cannot be before offer date",
+      error: 'Rejected date cannot be before offer date',
     });
   });
 });

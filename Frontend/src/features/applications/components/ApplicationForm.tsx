@@ -70,12 +70,103 @@ const applicationSchema = z
   )
   .refine(
     (data) =>
-      data.status !== "INTERVIEW" && data.status !== "OFFER" || data.firstResponseAt != null,
+      (data.status !== "INTERVIEW" && data.status !== "OFFER") ||
+      data.firstResponseAt != null,
     {
       message: "First response date is required",
       path: ["firstResponseAt"]
     }
-  );
+  )
+  .superRefine((data, ctx) => {
+    if (
+      data.status !== "APPLIED" &&
+      data.firstResponseAt &&
+      data.firstResponseAt < data.appliedAt
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["firstResponseAt"],
+        message: "First response date cannot be before applied date"
+      });
+    }
+    if (
+      (data.status === "INTERVIEW" || data.status === "OFFER") &&
+      data.interviewAt &&
+      data.firstResponseAt &&
+      data.interviewAt < data.firstResponseAt
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["interviewAt"],
+        message: "Interview date cannot be before first response date"
+      });
+    }
+
+    if (
+      data.status === "OFFER" &&
+      data.offerAt &&
+      data.interviewAt &&
+      data.offerAt < data.interviewAt
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["offerAt"],
+        message: "Offer date cannot be before interview date"
+      });
+    }
+
+    if (
+      data.status === "REJECTED" &&
+      data.rejectedAt &&
+      data.appliedAt &&
+      data.rejectedAt < data.appliedAt
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["rejectedAt"],
+        message: "Rejected date cannot be before applied date"
+      });
+    }
+
+    if (
+      data.status === "REJECTED" &&
+      data.rejectedAt &&
+      data.firstResponseAt &&
+      data.rejectedAt < data.firstResponseAt
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["rejectedAt"],
+        message: "Rejected date cannot be before first response date"
+      });
+    }
+
+    if (
+      data.status === "REJECTED" &&
+      data.rejectedAt &&
+      data.interviewAt &&
+      data.rejectedAt < data.interviewAt
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["rejectedAt"],
+        message: "Rejected date cannot be before interview date"
+      });
+    }
+
+    if (
+      data.status === "REJECTED" &&
+      data.rejectedAt &&
+      data.offerAt &&
+      data.rejectedAt < data.offerAt
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["rejectedAt"],
+        message: "Rejected date cannot be before offer date"
+      });
+    }
+  });
 export type ApplicationFormValues = z.input<typeof applicationSchema>;
 export type ApplicationValues = z.output<typeof applicationSchema>;
 

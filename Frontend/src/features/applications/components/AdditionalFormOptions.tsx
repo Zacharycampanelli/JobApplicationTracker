@@ -16,8 +16,8 @@ const AdditionalFormOptions = ({
 }: AdditionalFormOptionsProps) => {
   const shouldShowFirstResponse =
     status === "INTERVIEW" || status === "OFFER" || status === "REJECTED";
-  const shouldShowInterview = status === "INTERVIEW" || status === "OFFER";
-  const shouldShowOffer = status === "OFFER";
+  const shouldShowInterview = status === "INTERVIEW" || status === "OFFER" || status === "REJECTED";
+  const shouldShowOffer = status === "OFFER" || status === "REJECTED";
   const shouldShowRejected = status === "REJECTED";
 
   return (
