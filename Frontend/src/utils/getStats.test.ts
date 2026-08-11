@@ -1,21 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { activePipelineRate, applicationCount, averageResponseDays, interviewRate, offerRate, rejectionRate, responseRate } from "./getStats";
 import type { JobApplication } from "../types/types";
-
-const makeApplication = (
-  overrides: Partial<JobApplication> = {}
-): JobApplication => ({
-  id: 1,
-  publicId: "application-1",
-  title: "Software Engineer",
-  company: "Example Company",
-  status: "APPLIED",
-  appliedAt: "2026-07-01T00:00:00.000Z",
-  userId: 1,
-  createdAt: "2026-07-01T00:00:00.000Z",
-  updatedAt: "2026-07-01T00:00:00.000Z",
-  ...overrides
-});
+import { makeApplication } from "./makeApplicationTest";
 
 describe("responseRate", () => {
   test("returns 0 when there are no applications", () => {
@@ -38,7 +24,8 @@ describe("responseRate", () => {
       }),
       makeApplication({
         publicId: "application-2",
-        status: "INTERVIEW"
+        status: "INTERVIEW",
+        firstResponseAt: "2026-07-02T00:00:00.000Z"
       })
     ];
     // Act
