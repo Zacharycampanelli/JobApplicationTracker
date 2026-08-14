@@ -1,9 +1,13 @@
-import { describe, expect, test, vi } from "vitest";
+import { afterEach, describe, expect, test, vi } from "vitest";
 import { getAnalyticsData } from "./getAnalyticsData";
 import { makeApplication } from "./makeApplicationTest";
 import type { JobApplication } from "../types/types";
 
 describe("getAnalyticsData", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   test("returns safe values when given an empty application list", () => {
     const result = getAnalyticsData([]);
 
@@ -57,28 +61,27 @@ describe("getAnalyticsData", () => {
         status: "APPLIED"
       })
     ];
+
     const result = getAnalyticsData(applications);
 
-    expect(result.pipelineDistribution).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
+    expect(result.pipelineDistribution.map(({label, value}) => ({label, value}))).toEqual([
+        {
           label: "Applied",
           value: 2
-        }),
-        expect.objectContaining({
+        },
+        {
           label: "Interview",
           value: 1
-        }),
-        expect.objectContaining({
+        },
+        {
           label: "Offer",
           value: 1
-        }),
-        expect.objectContaining({
+        },
+        {
           label: "Rejected",
           value: 1
-        })
-      ])
-    );
+        }
+      ]);
   });
 
   test("Source Breakdown returns the correct source breakdown counts", () => {
@@ -98,6 +101,14 @@ describe("getAnalyticsData", () => {
       makeApplication({
         publicId: "application-4",
         source: "REFERRAL"
+      }),
+      makeApplication({
+        publicId: "application-4",
+        source: "RECRUITER"
+      }),
+      makeApplication({
+        publicId: "application-4",
+        source: "NETWORKING"
       }),
       makeApplication({
         publicId: "application-5",
@@ -133,13 +144,21 @@ describe("getAnalyticsData", () => {
           value: 1
         }),
         expect.objectContaining({
+          label: "Recruiter",
+          value: 1
+        }),
+        expect.objectContaining({
+          label: "Networking",
+          value: 1
+        }),
+        expect.objectContaining({
           label: "Other",
           value: 2
         })
       ])
     );
 
-    expect(result.sourceBreakdown).toHaveLength(5);
+    expect(result.sourceBreakdown).toHaveLength(7);
   });
 
   test("Peak activity returns the day with the most applications", () => {
@@ -173,9 +192,11 @@ describe("getAnalyticsData", () => {
     });
   });
 
-test("groups applications into the correct four-week period", () => {
-  vi.useFakeTimers()
-  vi.setSystemTime(new Date("2022-01-22T00:00:00-05:00"))
+  test("groups applications into the correct four-week period", () => {
+    // Arrange
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2022-01-22T00:00:00-05:00"));
+
     const applications: JobApplication[] = [
       makeApplication({
         publicId: "application-1",
@@ -190,16 +211,16 @@ test("groups applications into the correct four-week period", () => {
         appliedAt: "2022-01-03T00:00:00-05:00"
       })
     ];
+
+    // Act
     const result = getAnalyticsData(applications);
 
+    // Assert
     expect(result.applicationVelocity).toEqual([
-      {label: "Week 1", value: 3},
-      {label: "Week 2", value: 0},
-      {label: "Week 3", value: 0},
-      {label: "Week 4", value: 0},
+      { label: "Week 1", value: 3 },
+      { label: "Week 2", value: 0 },
+      { label: "Week 3", value: 0 },
+      { label: "Week 4", value: 0 }
     ]);
-
-    vi.useRealTimers()
   });
-  // test("getStats")
 });

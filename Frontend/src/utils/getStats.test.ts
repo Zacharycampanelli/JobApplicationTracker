@@ -274,6 +274,29 @@ describe("interviewRate", () => {
     // Assert
     expect(result).toBe(100);
   });
+
+  test("rounds percentages down to the nearest whole number", () => {
+    // Arrange
+    const applications: JobApplication[] = [
+      makeApplication({
+        publicId: "application-1",
+        status: "INTERVIEW"
+      }),
+      makeApplication({
+        publicId: "application-2",
+        status: "APPLIED"
+      }),
+      makeApplication({
+        publicId: "application-4",
+        status: "REJECTED"
+      }),
+
+    ];
+    // Act
+    const result = interviewRate(applications);
+    // Assert
+    expect(result).toBe(33);
+  })
 });
 
 describe("applicationCount", () => {
@@ -301,66 +324,6 @@ describe("applicationCount", () => {
 
     // Assert
     expect(result).toBe(3);
-  });
-});
-
-describe("interviewRate", () => {
-  test("returns 0 when there are no applications", () => {
-    // Arrange
-    const applications: JobApplication[] = [];
-
-    // Act
-    const result = interviewRate(applications);
-
-    // Assert
-    expect(result).toBe(0);
-  });
-
-  test("returns the percentage of applications in the interview stage", () => {
-    // Arrange
-    const applications: JobApplication[] = [
-      makeApplication({
-        publicId: "application-1",
-        status: "INTERVIEW"
-      }),
-      makeApplication({
-        publicId: "application-2",
-        status: "INTERVIEW"
-      }),
-      makeApplication({
-        publicId: "application-3",
-        status: "APPLIED"
-      }),
-      makeApplication({
-        publicId: "application-4",
-        status: "REJECTED"
-      })
-    ];
-
-    // Act
-    const result = interviewRate(applications);
-
-    // Assert
-    expect(result).toBe(50);
-  });
-
-  test("returns 100% if all applications are interviewing", () => {
-    // Arrange: two interview applications
-    const applications: JobApplication[] = [
-      makeApplication({
-        publicId: "application-1",
-        status: "INTERVIEW"
-      }),
-      makeApplication({
-        publicId: "application-2",
-        status: "INTERVIEW"
-      })
-    ];
-    // Act
-    const result = interviewRate(applications);
-
-    // Assert
-    expect(result).toBe(100);
   });
 });
 
@@ -431,5 +394,52 @@ describe("averageResponseDays", ()=> {
 
     // Assert
     expect(result).toBe(0);
+  })
+  test("applications with no response are ignored in the calculation", ()=> {
+    // Arrange
+    const applications: JobApplication[] = [
+      makeApplication({
+        publicId: "application-1",
+        status: "INTERVIEW",
+        appliedAt: "2022-01-01T00:00:00.000Z",
+        firstResponseAt: "2022-01-03T00:00:00.000Z"
+      }),
+      makeApplication({
+        publicId: "application-2",
+        status: "INTERVIEW",
+        appliedAt: "2022-01-01T00:00:00.000Z",
+        firstResponseAt: null
+      })
+    ];
+
+    // Act
+    const result = averageResponseDays(applications);
+
+    // Assert
+    expect(result).toBe(2);
+  })
+
+  test("averages resulting in a fraction are rounded down", ()=> {
+    // Arrange
+    const applications: JobApplication[] = [
+      makeApplication({
+        publicId: "application-1",
+        status: "INTERVIEW",
+        appliedAt: "2022-01-01T00:00:00.000Z",
+        firstResponseAt: "2022-01-03T00:00:00.000Z"
+      }),
+      makeApplication({
+        publicId: "application-2",
+        status: "INTERVIEW",
+        appliedAt: "2022-01-01T00:00:00.000Z",
+        firstResponseAt: "2022-01-04T00:00:00.000Z"
+      })
+    ];
+
+    // Act
+    const result = averageResponseDays(applications);
+
+    // Assert
+    expect(result).toBe(2);
   })
 })
