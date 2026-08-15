@@ -1,13 +1,14 @@
-import Modal from '../ui/Modal';
-import Button from '../ui/Button';
-import { useNavigate } from 'react-router';
+import { useNavigate } from "react-router";
+
+import Button from "../ui/Button";
+import Modal from "../ui/Modal";
 
 type CancelModalProps = {
     isOpen: boolean;
     onClose: () => void;
     newLocation?: string;
     onConfirm?: () => void;
-   
+
 }
 
 const CancelModal = ({isOpen, onClose, newLocation, onConfirm }: CancelModalProps) => {

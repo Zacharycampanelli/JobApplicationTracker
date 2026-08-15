@@ -1,6 +1,7 @@
+import type { FieldErrors, UseFormRegister } from "react-hook-form";
+
 import Input from "../../../components/ui/Input";
 import Select from "../../../components/ui/Select";
-import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import type { ApplicationFormValues } from "./ApplicationForm";
 
 type AdditionalFormOptionsProps = {

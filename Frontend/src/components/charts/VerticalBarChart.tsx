@@ -1,5 +1,5 @@
-import { Bar } from "react-chartjs-2";
 import type { ChartData, ChartOptions } from "chart.js";
+import { Bar } from "react-chartjs-2";
 
 type VerticalBarChartProps = {
   data: ChartData<"bar">;

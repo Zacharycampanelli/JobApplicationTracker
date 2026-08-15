@@ -1,11 +1,19 @@
+import { useNavigate } from "react-router";
+
+import Add from "../assets/images/add.svg?react";
+import careerPlanning from "../assets/images/CareerPlanning.png";
+import Medal from "../assets/images/medal.svg?react";
+import Resume from "../assets/images/resume.svg?react";
+import SuccessApp from "../assets/images/successApp.svg?react";
 import Header from "../components/layout/Header";
+import ErrorState from "../components/shared/ErrorState";
+import LoadingState from "../components/shared/LoadingState";
+import StatCard from "../components/shared/StatCard";
 import Button from "../components/ui/Button";
 import { useAuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router";
-import { useBreakpoint } from "../utils/useBreakpoint";
-import StatCard from "../components/shared/StatCard";
-import careerPlanning from "../assets/images/CareerPlanning.png";
-
+import RecentActivity from "../features/activity/components/RecentActivity";
+import RecentApplications from "../features/applications/components/RecentApplications";
+import DailyInsight from "../features/dashboard/DailyInsight";
 import {
   applicationCount,
   interviewRate,
@@ -13,15 +21,7 @@ import {
   offerRate
 } from "../utils/getStats";
 import { useApplications } from "../utils/useApplications";
-import Resume from "../assets/images/resume.svg?react";
-import SuccessApp from "../assets/images/successApp.svg?react";
-import Medal from "../assets/images/medal.svg?react";
-import Add from "../assets/images/add.svg?react";
-import RecentApplications from "../features/applications/components/RecentApplications";
-import LoadingState from "../components/shared/LoadingState";
-import ErrorState from "../components/shared/ErrorState";
-import DailyInsight from "../features/dashboard/DailyInsight";
-import RecentActivity from "../features/activity/components/RecentActivity";
+import { useBreakpoint } from "../utils/useBreakpoint";
 
 const stats = [
   {

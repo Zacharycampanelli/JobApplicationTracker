@@ -1,16 +1,16 @@
+import { Link } from "react-router";
+
+import background from "../assets/images/background.png";
+import Logo from "../assets/svg/Icon";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
 import Card from "../components/ui/Card";
 import ColorOverlay from "../components/ui/ColorOverlay";
-
-import background from "../assets/images/background.png";
-import { Link } from "react-router";
-import { useBreakpoint } from "../utils/useBreakpoint";
-import Logo from "../assets/svg/Icon";
-import LoginForm from "../features/auth/components/LoginForm";
-import RegistrationForm from "../features/auth/components/RegistrationForm";
 import ForgotPasswordForm from "../features/auth/components/ForgotPasswordForm";
+import LoginForm from "../features/auth/components/LoginForm";
 import PasswordResetForm from "../features/auth/components/PasswordResetForm";
+import RegistrationForm from "../features/auth/components/RegistrationForm";
+import { useBreakpoint } from "../utils/useBreakpoint";
 
 type AuthPageProps = {
   mode: "login" | "signup" | "forgot-password" | "reset-password";

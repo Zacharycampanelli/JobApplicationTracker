@@ -1,7 +1,8 @@
 import { useState, type InputHTMLAttributes, type ReactElement } from "react";
-import Unlock from "../../assets/images/unlock.svg?react";
-import Lock from "../../assets/images/lock.svg?react";
 import { twMerge } from "tailwind-merge";
+
+import Lock from "../../assets/images/lock.svg?react";
+import Unlock from "../../assets/images/unlock.svg?react";
 
 const sizeStyles = {
   sm: "h-9 text-body-md",

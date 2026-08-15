@@ -1,6 +1,7 @@
-import { Router } from 'express';
-import { protect } from '../../middleware/authMiddleware';
-import { getUserRecentActivities } from '../../controllers/activityController';
+import { Router } from "express";
+
+import { getUserRecentActivities } from "../../controllers/activityController";
+import { protect } from "../../middleware/authMiddleware";
 
 const router = Router();
 

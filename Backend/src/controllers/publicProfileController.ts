@@ -1,5 +1,6 @@
-import type { Request, Response } from 'express';
-import { prisma } from '../lib/prisma';
+import type { Request, Response } from "express";
+
+import { prisma } from "../lib/prisma";
 
 export const getPublicProfile = async (req: Request, res: Response) => {
   try {

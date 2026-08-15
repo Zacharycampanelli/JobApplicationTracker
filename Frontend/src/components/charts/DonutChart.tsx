@@ -1,5 +1,5 @@
-import { Doughnut } from "react-chartjs-2";
 import type { ChartData, ChartOptions } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
 
 type DoughnutChartProps = {
   data: ChartData<"doughnut">;

@@ -1,19 +1,19 @@
 import { BrowserRouter, Route, Routes } from "react-router";
+
 import AppWrapper from "./components/layout/AppWrapper";
 import AuthWrapper from "./components/layout/AuthWrapper";
-
-import Dashboard from "./pages/Dashboard";
-import Applications from "./pages/Applications";
-import Analytics from "./pages/Analytics";
-import Profile from "./pages/Profile";
-import AddApplication from "./pages/AddApplication";
-import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
-import EditApplication from "./pages/EditApplication";
-import PublicProfile from "./pages/PublicProfile";
-import NotFound from "./pages/NotFound";
+import AddApplication from "./pages/AddApplication";
+import Analytics from "./pages/Analytics";
+import Applications from "./pages/Applications";
 import AuthPage from "./pages/AuthPage";
+import Dashboard from "./pages/Dashboard";
+import EditApplication from "./pages/EditApplication";
+import NotFound from "./pages/NotFound";
+import Profile from "./pages/Profile";
+import PublicProfile from "./pages/PublicProfile";
 import GuestRoute from "./routes/GuestRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
   return (

@@ -1,7 +1,8 @@
-import { AuthRequest } from '../middleware/authMiddleware';
-import { Response } from 'express';
-import { prisma } from '../lib/prisma';
-import { unlink } from 'fs/promises';
+import { Response } from "express";
+import { unlink } from "fs/promises";
+
+import { prisma } from "../lib/prisma";
+import { AuthRequest } from "../middleware/authMiddleware";
 
 export const uploadResume = async (req: AuthRequest, res: Response) => {
   try {

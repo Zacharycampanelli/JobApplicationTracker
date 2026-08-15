@@ -1,5 +1,5 @@
-import type { ApplicationSource, JobStatus, WorkMode } from '../../generated/prisma/enums.js';
-import { synchronizeApplicationMilestones } from './synchronizeApplicationMilestones.js';
+import type { ApplicationSource, JobStatus, WorkMode } from "../../generated/prisma/enums.js";
+import { synchronizeApplicationMilestones } from "./synchronizeApplicationMilestones.js";
 
 type ParsedApplicationData = {
   title: string;

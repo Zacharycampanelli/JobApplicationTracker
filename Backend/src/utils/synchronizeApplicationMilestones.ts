@@ -1,4 +1,4 @@
-import type { JobStatus } from '../../generated/prisma/enums';
+import type { JobStatus } from "../../generated/prisma/enums";
 
 type ApplicationMilestones = {
   firstResponseAt: Date | null;

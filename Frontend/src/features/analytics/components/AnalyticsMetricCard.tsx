@@ -1,6 +1,7 @@
 import type { ComponentType, SVGProps, ReactNode } from "react";
-import Card from "../../../components/ui/Card";
 import { twMerge } from "tailwind-merge";
+
+import Card from "../../../components/ui/Card";
 
 type AnalyticsMetricCardProps = {
   title: string;

@@ -1,10 +1,11 @@
-import type { Resume } from "../../../types/types";
-import SelectInput from "../../../assets/images/selectInput.svg?react";
-import SelectedInput from "../../../assets/images/selectedInput.svg?react";
-import { deleteResume } from "../resumeApi";
 import type React from "react";
-import { twMerge } from "tailwind-merge";
 import { toast } from "sonner";
+import { twMerge } from "tailwind-merge";
+
+import SelectedInput from "../../../assets/images/selectedInput.svg?react";
+import SelectInput from "../../../assets/images/selectInput.svg?react";
+import type { Resume } from "../../../types/types";
+import { deleteResume } from "../resumeApi";
 
 type SingleResumeProps = {
   resume: Resume;

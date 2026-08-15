@@ -1,17 +1,18 @@
-import Toggle from "../../../components/ui/Toggle";
-import UserPreferenceItem from "./UserPreferenceItem";
-import ProfileNav from "../../../assets/images/profileNav.svg?react";
-import Edit from "../../../assets/images/edit.svg?react";
-import Sun from "../../../assets/images/sun.svg?react";
-import Lock from "../../../assets/images/lock.svg?react";
-import Warning from "../../../assets/images/warning.svg?react";
-import ExpandableSection from "../../../components/shared/ExpandableSection";
-import Settings from "../../../assets/images/settings.svg?react";
-import { useAuthContext } from "../../../context/AuthContext";
-import { updateUserPreferences } from "../profileApi";
-import type { UpdatePreferencesValues } from "../../../types/types";
 import { Tooltip } from "react-tooltip";
 import { toast } from "sonner";
+
+import Edit from "../../../assets/images/edit.svg?react";
+import Lock from "../../../assets/images/lock.svg?react";
+import ProfileNav from "../../../assets/images/profileNav.svg?react";
+import Settings from "../../../assets/images/settings.svg?react";
+import Sun from "../../../assets/images/sun.svg?react";
+import Warning from "../../../assets/images/warning.svg?react";
+import ExpandableSection from "../../../components/shared/ExpandableSection";
+import Toggle from "../../../components/ui/Toggle";
+import { useAuthContext } from "../../../context/AuthContext";
+import type { UpdatePreferencesValues } from "../../../types/types";
+import { updateUserPreferences } from "../profileApi";
+import UserPreferenceItem from "./UserPreferenceItem";
 
 const UserPreferences = () => {
   const { user, updateUser } = useAuthContext();

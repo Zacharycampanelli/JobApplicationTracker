@@ -11,7 +11,7 @@ export const fetchWrapper = async <T>(url: string, options: RequestInit = {}): P
     })
 
     if (!res.ok) {
-        let errorMessage = "Request Failed" 
+        let errorMessage = "Request Failed"
         try {
             const errorData = await res.json()
             errorMessage = errorData.message || errorMessage
@@ -23,4 +23,3 @@ export const fetchWrapper = async <T>(url: string, options: RequestInit = {}): P
 
     return res.json()
 }
-    

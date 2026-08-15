@@ -1,7 +1,8 @@
-import Card from "../ui/Card";
-import type { JobApplication } from "../../types/types";
-import { twMerge } from "tailwind-merge";
 import type { ComponentType, SVGProps } from "react";
+import { twMerge } from "tailwind-merge";
+
+import type { JobApplication } from "../../types/types";
+import Card from "../ui/Card";
 type StatCardProps = {
   applications: JobApplication[];
   statFunction: (applications: JobApplication[]) => number;

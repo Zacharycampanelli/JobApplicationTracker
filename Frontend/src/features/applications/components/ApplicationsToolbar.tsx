@@ -1,9 +1,11 @@
 import { useState } from "react";
-import Input from "../../../components/ui/Input";
+
+import Calendar from "../../../assets/images/calendar.svg?react";
 import SearchIcon from "../../../assets/images/search.svg?react";
 import StatusFilter from "../../../assets/images/statusFilter.svg?react";
-import Calendar from "../../../assets/images/calendar.svg?react";
 import Button from "../../../components/ui/Button";
+import Input from "../../../components/ui/Input";
+import Toggle from "../../../components/ui/Toggle";
 import {
   SORT_METHODS,
   STATUS_FILTERS,
@@ -11,7 +13,6 @@ import {
   type StatusFilter as StatusFilterValue,
   type ViewMode
 } from "../applicationViewOptions";
-import Toggle from "../../../components/ui/Toggle";
 
 type ApplicationsToolbarProps = {
   selectedFilter: StatusFilterValue;

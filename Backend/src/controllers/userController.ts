@@ -1,6 +1,7 @@
-import { Request, Response } from 'express';
-import { prisma } from '../lib/prisma';
-import type { AuthRequest } from '../middleware/authMiddleware';
+import { Request, Response } from "express";
+
+import { prisma } from "../lib/prisma";
+import type { AuthRequest } from "../middleware/authMiddleware";
 
 export const updateUser = async (req: AuthRequest, res: Response) => {
   const userId = req.user?.userId;

@@ -1,10 +1,11 @@
-import { Request, Response } from 'express';
-import { prisma } from '../lib/prisma';
-import { comparePassword, hashPassword } from '../utils/hash';
-import { generateToken } from '../utils/generateToken';
-import type { AuthRequest } from '../middleware/authMiddleware';
-import { sendPasswordResetEmail } from '../services/emailService';
-import crypto from 'node:crypto';
+import { Request, Response } from "express";
+import crypto from "node:crypto";
+
+import { prisma } from "../lib/prisma";
+import type { AuthRequest } from "../middleware/authMiddleware";
+import { sendPasswordResetEmail } from "../services/emailService";
+import { generateToken } from "../utils/generateToken";
+import { comparePassword, hashPassword } from "../utils/hash";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -180,7 +181,6 @@ export const forgotPassword = async (req: Request, res: Response) => {
   }
 };
 
-
 export const resetPassword = async (req: Request, res: Response) => {
   try {
     const { token, password } = req.body;
@@ -191,7 +191,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     if(password.length < 6){
       return res.status(400).json({ error: 'Password must be at least 6 characters long' });
     }
-    
+
     const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
     const resetRecord = await prisma.passwordResetToken.findUnique({ where: { tokenHash } });
     if (!resetRecord) {
@@ -201,7 +201,7 @@ export const resetPassword = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Reset token has expired' });
     }
     const hashedPassword = await hashPassword(password);
-    
+
     await prisma.$transaction([
       prisma.user.update({
         where: { id: resetRecord.userId },

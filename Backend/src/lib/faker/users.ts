@@ -1,5 +1,6 @@
-import { faker } from '@faker-js/faker';
-import { hashPassword } from '../../utils/hash';
+import { faker } from "@faker-js/faker";
+
+import { hashPassword } from "../../utils/hash";
 
 const DEV_PASSWORD = 'password1!';
 let i = 0;

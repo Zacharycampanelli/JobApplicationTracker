@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import type { JobApplication, JobStatus } from "../types/types";
+
 import {
   getAllApplications,
   updateApplicationStatus
 } from "../features/applications/applicationApi";
+import type { JobApplication, JobStatus } from "../types/types";
 
 type useApplicationsProps = {
   applications: JobApplication[];

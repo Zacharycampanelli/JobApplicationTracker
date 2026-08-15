@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { protect } from '../../middleware/authMiddleware';
+import { Router } from "express";
+
 import {
   getAllApplications,
   createApplication,
@@ -8,7 +8,8 @@ import {
   updateApplication,
   getRecentApplications,
   updateApplicationStatus,
-} from '../../controllers/applicationController';
+} from "../../controllers/applicationController";
+import { protect } from "../../middleware/authMiddleware";
 
 const router = Router();
 

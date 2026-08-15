@@ -1,8 +1,9 @@
-import fs from 'fs';
-import multer from 'multer';
-import path from 'path';
-import { NextFunction, Response } from 'express';
-import { AuthRequest } from './authMiddleware';
+import { NextFunction, Response } from "express";
+import fs from "fs";
+import multer from "multer";
+import path from "path";
+
+import { AuthRequest } from "./authMiddleware";
 
 // Resume upload
 const uploadDir = path.join(process.cwd(), 'uploads', 'resumes');

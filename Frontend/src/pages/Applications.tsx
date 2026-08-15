@@ -1,32 +1,33 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
-import Header from "../components/layout/Header";
-import Button from "../components/ui/Button";
+
 import Add from "../assets/images/add.svg?react";
-import type { JobApplication } from "../types/types";
-import {
-  interviewRate,
-  offerRate,
-  activePipelineRate
-} from "../utils/getStats";
-import { useBreakpoint } from "../utils/useBreakpoint";
-import { useSearch } from "../utils/useSearch";
-import { useApplications } from "../utils/useApplications";
-import { getAnalyticsData } from "../utils/getAnalyticsData";
+import KanbanBoard from "../components/kanban/KanbanBoard";
+import Header from "../components/layout/Header";
+import EmptyState from "../components/shared/EmptyState";
+import ErrorState from "../components/shared/ErrorState";
+import LoadingState from "../components/shared/LoadingState";
 import StatCard from "../components/shared/StatCard";
+import Button from "../components/ui/Button";
 import PipelineDistribution from "../features/analytics/components/PipelineDistribution";
-import ApplicationsToolbar from "../features/applications/components/ApplicationsToolbar";
-import ApplicationCard from "../features/applications/components/ApplicationCard";
 import {
   STATUS_BY_FILTER,
   type SortMethod,
   type StatusFilter,
   type ViewMode
 } from "../features/applications/applicationViewOptions";
-import KanbanBoard from "../components/kanban/KanbanBoard";
-import EmptyState from "../components/shared/EmptyState";
-import LoadingState from "../components/shared/LoadingState";
-import ErrorState from "../components/shared/ErrorState";
+import ApplicationCard from "../features/applications/components/ApplicationCard";
+import ApplicationsToolbar from "../features/applications/components/ApplicationsToolbar";
+import type { JobApplication } from "../types/types";
+import { getAnalyticsData } from "../utils/getAnalyticsData";
+import {
+  interviewRate,
+  offerRate,
+  activePipelineRate
+} from "../utils/getStats";
+import { useApplications } from "../utils/useApplications";
+import { useBreakpoint } from "../utils/useBreakpoint";
+import { useSearch } from "../utils/useSearch";
 
 const INITIAL_VISIBLE_COUNT = 5;
 const LOAD_MORE_COUNT = 5;

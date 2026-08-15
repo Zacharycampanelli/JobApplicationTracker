@@ -1,19 +1,20 @@
-import Header from "../components/layout/Header";
-import { useBreakpoint } from "../utils/useBreakpoint";
-import { useApplications } from "../utils/useApplications";
-import AnalyticsMetricCard from "../features/analytics/components/AnalyticsMetricCard";
-import PipelineDistribution from "../features/analytics/components/PipelineDistribution";
-import { getAnalyticsData } from "../utils/getAnalyticsData";
-import { ApplicationVelocityChart } from "../features/analytics/components/ApplicationVelocityChart";
-import SourceBreakdownChart from "../features/analytics/components/SourceBreakdownChart";
+import { useNavigate } from "react-router";
+
 import Application from "../assets/images/addApplication.svg?react";
 import Calendar from "../assets/images/calendar.svg?react";
+import Header from "../components/layout/Header";
 import DayIndicator from "../components/shared/DayIndicator";
 import EmptyState from "../components/shared/EmptyState";
-import Button from "../components/ui/Button";
-import { useNavigate } from "react-router";
-import LoadingState from "../components/shared/LoadingState";
 import ErrorState from "../components/shared/ErrorState";
+import LoadingState from "../components/shared/LoadingState";
+import Button from "../components/ui/Button";
+import AnalyticsMetricCard from "../features/analytics/components/AnalyticsMetricCard";
+import { ApplicationVelocityChart } from "../features/analytics/components/ApplicationVelocityChart";
+import PipelineDistribution from "../features/analytics/components/PipelineDistribution";
+import SourceBreakdownChart from "../features/analytics/components/SourceBreakdownChart";
+import { getAnalyticsData } from "../utils/getAnalyticsData";
+import { useApplications } from "../utils/useApplications";
+import { useBreakpoint } from "../utils/useBreakpoint";
 
 const Analytics = () => {
   const isTabletUp = useBreakpoint("md");

@@ -1,22 +1,23 @@
 import { useEffect, useState } from "react";
-import { useBreakpoint } from "../utils/useBreakpoint";
-import type { ApplicationValues } from "../features/applications/components/ApplicationForm";
-import type { Resume } from "../types/types";
+import { useParams, useNavigate } from "react-router";
+import { toast } from "sonner";
+
+import Header from "../components/layout/Header";
+import CancelModal from "../components/shared/CancelModal";
+import ErrorState from "../components/shared/ErrorState";
+import LoadingState from "../components/shared/LoadingState";
+import Button from "../components/ui/Button";
+import Modal from "../components/ui/Modal";
 import {
   deleteApplication,
   getSingleApplication,
   updateApplication
 } from "../features/applications/applicationApi";
-import { useParams, useNavigate } from "react-router";
-import { getAllResumes } from "../features/resumes/resumeApi";
-import Header from "../components/layout/Header";
+import type { ApplicationValues } from "../features/applications/components/ApplicationForm";
 import ApplicationForm from "../features/applications/components/ApplicationForm";
-import Modal from "../components/ui/Modal";
-import Button from "../components/ui/Button";
-import CancelModal from "../components/shared/CancelModal";
-import { toast } from "sonner";
-import LoadingState from "../components/shared/LoadingState";
-import ErrorState from "../components/shared/ErrorState";
+import { getAllResumes } from "../features/resumes/resumeApi";
+import type { Resume } from "../types/types";
+import { useBreakpoint } from "../utils/useBreakpoint";
 
 const EditApplication = () => {
   const isTabletUp = useBreakpoint("md");

@@ -1,11 +1,12 @@
-import 'dotenv/config';
-import { prisma } from '../prisma';
-import { createFakeUser } from './users';
-import { createFakeResume } from './resumes';
-import { faker } from '@faker-js/faker';
-import { createFakeApplication } from './applications';
-import { createFakeProfile } from './profiles';
-import { createFakePreferences } from './preferences';
+import "dotenv/config";
+import { faker } from "@faker-js/faker";
+
+import { prisma } from "../prisma";
+import { createFakeApplication } from "./applications";
+import { createFakePreferences } from "./preferences";
+import { createFakeProfile } from "./profiles";
+import { createFakeResume } from "./resumes";
+import { createFakeUser } from "./users";
 
 async function seed() {
   await prisma.jobApplication.deleteMany();

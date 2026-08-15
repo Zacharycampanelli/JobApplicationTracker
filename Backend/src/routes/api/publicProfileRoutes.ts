@@ -1,5 +1,6 @@
-import { Router } from 'express';
-import { getPublicProfile } from '../../controllers/publicProfileController';
+import { Router } from "express";
+
+import { getPublicProfile } from "../../controllers/publicProfileController";
 
 const router = Router();
 

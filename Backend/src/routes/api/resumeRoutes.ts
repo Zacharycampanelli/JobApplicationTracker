@@ -1,8 +1,8 @@
-import { deleteResume, getResumes, uploadResume } from '../../controllers/resumeController';
+import { Router } from "express";
 
-import { Router } from 'express';
-import { handleResumeUpload } from '../../middleware/uploadMiddleware';
-import { protect } from '../../middleware/authMiddleware';
+import { deleteResume, getResumes, uploadResume } from "../../controllers/resumeController";
+import { protect } from "../../middleware/authMiddleware";
+import { handleResumeUpload } from "../../middleware/uploadMiddleware";
 
 const router = Router();
 

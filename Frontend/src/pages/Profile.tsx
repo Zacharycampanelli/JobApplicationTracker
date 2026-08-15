@@ -1,30 +1,31 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import z from "zod";
+
+import { API_URL } from "../api/api";
+import Save from "../assets/images/save.svg?react";
 import Header from "../components/layout/Header";
-import { useBreakpoint } from "../utils/useBreakpoint";
-import { useAuthContext } from "../context/AuthContext";
+import CancelModal from "../components/shared/CancelModal";
+import ErrorState from "../components/shared/ErrorState";
+import LoadingState from "../components/shared/LoadingState";
+import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
+import Textarea from "../components/ui/Textarea";
+import { useAuthContext } from "../context/AuthContext";
+import AccountOwnerDetails from "../features/profile/components/AccountOwnerDetails";
+import SharedProfileView from "../features/profile/components/SharedProfileView";
+import UserPreferences from "../features/profile/components/UserPreferences";
 import {
   updateProfile,
   uploadProfileImage
 } from "../features/profile/profileApi";
-import type { Resume } from "../types/types";
-import z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import Button from "../components/ui/Button";
-import CancelModal from "../components/shared/CancelModal";
-import Save from "../assets/images/save.svg?react";
 import ResumeManager from "../features/resumes/components/ResumeManager";
 import { getAllResumes } from "../features/resumes/resumeApi";
+import type { Resume } from "../types/types";
+import { useBreakpoint } from "../utils/useBreakpoint";
 import { optionalNumber, optionalText, optionalUrl } from "../utils/zodUtils";
-import Textarea from "../components/ui/Textarea";
-import { API_URL } from "../api/api";
-import UserPreferences from "../features/profile/components/UserPreferences";
-import SharedProfileView from "../features/profile/components/SharedProfileView";
-import AccountOwnerDetails from "../features/profile/components/AccountOwnerDetails";
-import { toast } from "sonner";
-import LoadingState from "../components/shared/LoadingState";
-import ErrorState from "../components/shared/ErrorState";
 
 const profileSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),

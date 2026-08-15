@@ -1,5 +1,5 @@
-import { getDailyInsight } from "../../utils/dailyInsights";
 import Lightbulb from "../../assets/images/lightbulb.svg?react";
+import { getDailyInsight } from "../../utils/dailyInsights";
 
 const DailyInsight = () => {
   const insight = getDailyInsight();

@@ -1,8 +1,8 @@
-import type { ApplicationActivity } from "../../../types/types";
 import AddApplication from "../../../assets/images/addApplication.svg?react";
-import Edit from "../../../assets/images/edit.svg?react";
 import Arrows from "../../../assets/images/arrows.svg?react";
 import Delete from "../../../assets/images/delete.svg?react";
+import Edit from "../../../assets/images/edit.svg?react";
+import type { ApplicationActivity } from "../../../types/types";
 
 const ActivityItem = ({ activity }: { activity: ApplicationActivity }) => {
   const getActivityIcon = (type: ApplicationActivity["type"]) => {

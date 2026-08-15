@@ -1,6 +1,7 @@
-import { Response } from 'express';
-import { prisma } from '../lib/prisma';
-import type { AuthRequest } from '../middleware/authMiddleware';
+import { Response } from "express";
+
+import { prisma } from "../lib/prisma";
+import type { AuthRequest } from "../middleware/authMiddleware";
 
 export const getUserRecentActivities = async (req: AuthRequest, res: Response) => {
   if (!req.user) {

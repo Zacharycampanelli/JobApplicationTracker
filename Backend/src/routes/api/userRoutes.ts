@@ -1,7 +1,8 @@
-import { Router } from 'express';
-import { updateUser, uploadAvatar, updateUserPreferences } from '../../controllers/userController';
-import { protect } from '../../middleware/authMiddleware';
-import { uploadAvatarMiddleware } from '../../middleware/uploadMiddleware';
+import { Router } from "express";
+
+import { updateUser, uploadAvatar, updateUserPreferences } from "../../controllers/userController";
+import { protect } from "../../middleware/authMiddleware";
+import { uploadAvatarMiddleware } from "../../middleware/uploadMiddleware";
 
 const router = Router();
 

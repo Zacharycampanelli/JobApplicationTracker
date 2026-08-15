@@ -1,7 +1,8 @@
 import { useId, type ReactNode } from "react";
 import { useNavigate, type To } from "react-router";
-import Card from "./Card";
+
 import Button from "./Button";
+import Card from "./Card";
 
 type ModalProps = {
   isOpen: boolean;
@@ -26,7 +27,7 @@ const Modal = ({
 }: ModalProps) => {
   const navigate = useNavigate();
   const titleId = useId();
-  
+
   if (!isOpen) return null;
 
   const handleClose = () => {

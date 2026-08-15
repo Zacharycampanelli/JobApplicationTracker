@@ -1,11 +1,12 @@
 import { NavLink } from "react-router";
-import DashboardNav from "../../assets/images/dashboardNav.svg?react";
-import AppsNav from "../../assets/images/appsNav.svg?react";
+
 import AnalyticsNav from "../../assets/images/analyticsNav.svg?react";
+import AppsNav from "../../assets/images/appsNav.svg?react";
+import DashboardNav from "../../assets/images/dashboardNav.svg?react";
+import Logout from "../../assets/images/logout.svg?react";
 import ProfileNav from "../../assets/images/profileNav.svg?react";
 import Icon from "../../assets/svg/Icon";
 import { useAuthContext } from "../../context/AuthContext";
-import Logout from "../../assets/images/logout.svg?react";
 
 const navItems = [
   { to: "/", label: "Dashboard", mobileLabel: "Home", icon: DashboardNav },

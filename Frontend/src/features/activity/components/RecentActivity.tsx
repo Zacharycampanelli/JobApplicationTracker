@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
+
+import ErrorState from "../../../components/shared/ErrorState";
+import LoadingState from "../../../components/shared/LoadingState";
 import type { ApplicationActivity } from "../../../types/types";
 import { getUserRecentActivities } from "../activityApi";
 import ActivityItem from "./ActivityItem";
-import LoadingState from "../../../components/shared/LoadingState";
-import ErrorState from "../../../components/shared/ErrorState";
 
 const RecentActivity = () => {
   const [activities, setActivities] = useState<ApplicationActivity[]>([]);

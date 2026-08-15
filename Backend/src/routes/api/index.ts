@@ -1,10 +1,11 @@
-import { Router } from 'express';
-import applicationRoutes from './applicationRoutes';
-import authRoutes from './authRoutes';
-import resumeRoutes from './resumeRoutes';
-import userRoutes from './userRoutes';
-import publicProfileRoutes from './publicProfileRoutes';
-import activityRoutes from './activityRoutes';
+import { Router } from "express";
+
+import activityRoutes from "./activityRoutes";
+import applicationRoutes from "./applicationRoutes";
+import authRoutes from "./authRoutes";
+import publicProfileRoutes from "./publicProfileRoutes";
+import resumeRoutes from "./resumeRoutes";
+import userRoutes from "./userRoutes";
 
 const router = Router();
 

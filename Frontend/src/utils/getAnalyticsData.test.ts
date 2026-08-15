@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
+
+import type { JobApplication } from "../types/types";
 import { getAnalyticsData } from "./getAnalyticsData";
 import { makeApplication } from "./makeApplicationTest";
-import type { JobApplication } from "../types/types";
 
 describe("getAnalyticsData", () => {
   afterEach(() => {

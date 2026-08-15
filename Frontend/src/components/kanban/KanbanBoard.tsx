@@ -1,8 +1,9 @@
 import { DragDropProvider, type DragEndEvent } from "@dnd-kit/react";
+import { toast } from "sonner";
+
 import type { JobApplication } from "../../types/types";
 import type { JobStatus } from "../../types/types";
 import KanbanColumn from "./KanbanColumn";
-import { toast } from "sonner";
 
 type KanbanBoardProps = {
   applications: JobApplication[];

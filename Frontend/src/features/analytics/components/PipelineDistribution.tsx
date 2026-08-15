@@ -1,9 +1,10 @@
 import type { ChartData, ChartOptions } from "chart.js";
-import { useBreakpoint } from "../../../utils/useBreakpoint";
+
 import DonutChart from "../../../components/charts/DonutChart";
 import HorizontalBarChart from "../../../components/charts/HorizontalBarChart";
-import type { PipelineDistributionItem } from "../../../utils/getAnalyticsData";
 import Card from "../../../components/ui/Card";
+import type { PipelineDistributionItem } from "../../../utils/getAnalyticsData";
+import { useBreakpoint } from "../../../utils/useBreakpoint";
 
 type PipelineDistributionProps = {
   data: PipelineDistributionItem[];

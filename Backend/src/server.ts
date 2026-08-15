@@ -1,8 +1,9 @@
-import express from 'express';
-import cors from 'cors';
-import { prisma } from './lib/prisma';
-import routes from './routes';
-import path from 'node:path';
+import cors from "cors";
+import express from "express";
+import path from "node:path";
+
+import { prisma } from "./lib/prisma";
+import routes from "./routes";
 
 const app = express();
 app.use(cors());
@@ -27,8 +28,6 @@ app.get('/api/health', async (_req, res) => {
     });
   }
 });
-
-
 
 const PORT = process.env.PORT || 5001;
 

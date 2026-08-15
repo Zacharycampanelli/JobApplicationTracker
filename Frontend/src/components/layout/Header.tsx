@@ -1,5 +1,6 @@
-import Icon from "../../assets/svg/Icon";
 import { twMerge } from "tailwind-merge";
+
+import Icon from "../../assets/svg/Icon";
 
 type HeaderProps = {
   inverted? : boolean

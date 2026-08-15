@@ -1,14 +1,14 @@
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Input from "../../../components/ui/Input";
-import Button from "../../../components/ui/Button";
-
 import { useState } from "react";
-import { login as loginUser } from "../authApi";
-import { useAuthContext } from "../../../context/AuthContext";
-import Email from "../../../assets/images/email.svg?react";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
+import { z } from "zod";
+
+import Email from "../../../assets/images/email.svg?react";
+import Button from "../../../components/ui/Button";
+import Input from "../../../components/ui/Input";
+import { useAuthContext } from "../../../context/AuthContext";
+import { login as loginUser } from "../authApi";
 
 const loginSchema = z.object({
   email: z.email("Enter a valid email"),

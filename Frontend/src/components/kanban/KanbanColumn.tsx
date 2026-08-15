@@ -1,4 +1,5 @@
 import { useDroppable } from "@dnd-kit/react";
+
 import type { JobApplication, JobStatus } from "../../types/types";
 import DraggableApplicationCard from "./DraggableApplicationCard";
 
@@ -15,7 +16,6 @@ const KanbanColumn = ({
   applications,
   className
 }: KanbanColumnProps) => {
-  
   const { ref, isDropTarget } = useDroppable({
     id: status,
     type: "column",
@@ -24,7 +24,7 @@ const KanbanColumn = ({
 
   return (
     <section ref={ref} className={`
-    ${className} 
+    ${className}
     flex max-h-[70dvh] flex-col rounded-card p-2
     transition-[background-color,box-shadow] duration-150
     ${isDropTarget ? "bg-primary-container/60 ring-2 ring-primary" : "bg-transparent"}`}>
@@ -36,7 +36,7 @@ const KanbanColumn = ({
       <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-2">
         {applications.length === 0 ? (
           <p className={`text-body-md transition-colors duration-150 ${
-            isDropTarget 
+            isDropTarget
             ? "text-primary font-semibold" : "text-on-surface-variant"}`}>
             {isDropTarget ? "Release to move here" : "Drop an application here"}
           </p>

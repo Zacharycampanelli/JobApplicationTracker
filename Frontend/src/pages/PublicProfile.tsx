@@ -1,11 +1,12 @@
-import SharedProfileView from "../features/profile/components/SharedProfileView";
-import { useParams } from "react-router";
-import { getPublicProfile } from "../features/profile/profileApi";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+
 import Header from "../components/layout/Header";
-import LoadingState from "../components/shared/LoadingState";
-import ErrorState from "../components/shared/ErrorState";
 import EmptyState from "../components/shared/EmptyState";
+import ErrorState from "../components/shared/ErrorState";
+import LoadingState from "../components/shared/LoadingState";
+import SharedProfileView from "../features/profile/components/SharedProfileView";
+import { getPublicProfile } from "../features/profile/profileApi";
 
 const PublicProfile = () => {
   const [isLoading, setIsLoading] = useState(true);

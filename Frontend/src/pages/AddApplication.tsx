@@ -1,15 +1,16 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
+
+import Header from "../components/layout/Header";
+import CancelModal from "../components/shared/CancelModal";
+import { createApplication } from "../features/applications/applicationApi";
 import ApplicationForm, {
   type ApplicationValues
 } from "../features/applications/components/ApplicationForm";
-import Header from "../components/layout/Header";
-import { useBreakpoint } from "../utils/useBreakpoint";
 import { getAllResumes } from "../features/resumes/resumeApi";
-import { useEffect, useState } from "react";
 import type { Resume } from "../types/types";
-import { createApplication } from "../features/applications/applicationApi";
-import CancelModal from "../components/shared/CancelModal";
-import { toast } from "sonner";
-import { useNavigate } from "react-router";
+import { useBreakpoint } from "../utils/useBreakpoint";
 
 const AddApplication = () => {
   const isTabletUp = useBreakpoint("md");

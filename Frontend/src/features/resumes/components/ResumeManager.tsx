@@ -1,15 +1,16 @@
-import Card from "../../../components/ui/Card";
-import ResumeIcon from "../../../assets/images/resume.svg?react";
-import type { Resume } from "../../../types/types";
-import SingleResume from "./SingleResume";
-import Add from "../../../assets/images/add.svg?react";
 import { useRef } from "react";
-import { uploadResume } from "../resumeApi";
 import { toast } from "sonner";
+
+import Add from "../../../assets/images/add.svg?react";
+import ResumeIcon from "../../../assets/images/resume.svg?react";
 import EmptyState from "../../../components/shared/EmptyState";
-import Button from "../../../components/ui/Button";
-import LoadingState from "../../../components/shared/LoadingState";
 import ErrorState from "../../../components/shared/ErrorState";
+import LoadingState from "../../../components/shared/LoadingState";
+import Button from "../../../components/ui/Button";
+import Card from "../../../components/ui/Card";
+import type { Resume } from "../../../types/types";
+import { uploadResume } from "../resumeApi";
+import SingleResume from "./SingleResume";
 
 type ResumeManagerProps = {
   isLoading: boolean;

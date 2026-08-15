@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
-import { activePipelineRate, applicationCount, averageResponseDays, interviewRate, offerRate, rejectionRate, responseRate } from "./getStats";
+
 import type { JobApplication } from "../types/types";
+import { activePipelineRate, applicationCount, averageResponseDays, interviewRate, offerRate, rejectionRate, responseRate } from "./getStats";
 import { makeApplication } from "./makeApplicationTest";
 
 describe("responseRate", () => {

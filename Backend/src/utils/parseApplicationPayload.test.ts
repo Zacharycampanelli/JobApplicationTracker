@@ -1,5 +1,6 @@
-import { describe, expect, test } from 'vitest';
-import { parseApplicationPayload } from './parseApplicationPayload';
+import { describe, expect, test } from "vitest";
+
+import { parseApplicationPayload } from "./parseApplicationPayload";
 
 const makePayload = (overrides: Record<string, unknown> = {}) => ({
   title: 'Software Engineer',

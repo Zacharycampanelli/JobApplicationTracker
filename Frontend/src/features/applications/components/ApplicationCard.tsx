@@ -1,11 +1,12 @@
 import type { Ref } from "react";
 import { useNavigate } from "react-router";
+
+import Handle from "../../../assets/images/handle.svg?react";
 import RightArrow from "../../../assets/images/rightArrow.svg?react";
 import Button from "../../../components/ui/Button";
+import type { JobApplication } from "../../../types/types";
 import CompanyLogo from "./CompanyLogo";
 import StatusClassBadge from "./StatusClassBadge";
-import type { JobApplication } from "../../../types/types";
-import Handle from "../../../assets/images/handle.svg?react";
 
 type ApplicationCardProps = {
   app: JobApplication;
@@ -27,7 +28,7 @@ const ApplicationCard = ({
 
   return (
     <div className="group flex w-full flex-col gap-3 rounded-card
-     bg-surface-container-low p-4 shadow-sm 
+     bg-surface-container-low p-4 shadow-sm
      transition-[background-color,box-shadow,transform] duration-150
      hover:-translate-y-0.5
      hover:bg-surface-container-high

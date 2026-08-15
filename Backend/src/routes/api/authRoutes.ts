@@ -1,7 +1,7 @@
-import { forgotPassword, getMe, login, register, resetPassword } from '../../controllers/authController';
+import { Router } from "express";
 
-import { Router } from 'express';
-import { protect } from '../../middleware/authMiddleware';
+import { forgotPassword, getMe, login, register, resetPassword } from "../../controllers/authController";
+import { protect } from "../../middleware/authMiddleware";
 
 const router = Router();
 

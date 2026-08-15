@@ -1,7 +1,8 @@
 import { Outlet } from "react-router";
-import Navbar from "./Navbar";
-import { useAuthContext } from "../../context/AuthContext";
 import { Toaster } from "sonner";
+
+import { useAuthContext } from "../../context/AuthContext";
+import Navbar from "./Navbar";
 
 const AppWrapper = () => {
   const { isAuthenticated } = useAuthContext();

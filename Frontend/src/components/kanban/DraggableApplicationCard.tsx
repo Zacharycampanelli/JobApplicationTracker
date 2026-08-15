@@ -1,6 +1,7 @@
+import { useDraggable } from "@dnd-kit/react";
+
 import ApplicationCard from "../../features/applications/components/ApplicationCard";
 import type { JobApplication } from "../../types/types";
-import { useDraggable } from "@dnd-kit/react";
 
 type DraggableApplicationCardProps = {
   app: JobApplication;

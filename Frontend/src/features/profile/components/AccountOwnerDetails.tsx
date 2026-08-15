@@ -11,7 +11,6 @@ const AccountOwnerDetails = ({
   createdAt,
   updatedAt
 }: AccountOwnerDetailsProps) => {
-  
   const dateFormat = (dateString: string) => {
     return new Date(dateString).toLocaleString("en-US", {
       dateStyle: "medium",

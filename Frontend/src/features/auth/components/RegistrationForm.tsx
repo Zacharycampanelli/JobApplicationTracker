@@ -1,14 +1,15 @@
-import Button from "../../../components/ui/Button";
-import Email from "../../../assets/images/email.svg?react";
-import Input from "../../../components/ui/Input";
-import Person from "../../../assets/images/person.svg?react";
-import SideArrow from "../../../assets/images/sidearrow.svg?react";
-import { register as registerUser } from "../authApi";
-import { useAuthContext } from "../../../context/AuthContext";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+
+import Email from "../../../assets/images/email.svg?react";
+import Person from "../../../assets/images/person.svg?react";
+import SideArrow from "../../../assets/images/sidearrow.svg?react";
+import Button from "../../../components/ui/Button";
+import Input from "../../../components/ui/Input";
+import { useAuthContext } from "../../../context/AuthContext";
+import { register as registerUser } from "../authApi";
 
 const registrationSchema = z
   .object({

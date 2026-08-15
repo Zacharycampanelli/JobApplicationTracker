@@ -5,10 +5,10 @@ import {
   useEffect,
   useState
 } from "react";
-
-import type { User } from "../types/types";
 import { useNavigate } from "react-router";
+
 import { getMe } from "../features/auth/authApi";
+import type { User } from "../types/types";
 
 interface AuthContextType {
   user: User | null;

@@ -1,21 +1,22 @@
-import Input from "../../../components/ui/Input";
-import Link from "../../../assets/images/link.svg?react";
-import ResumeManager from "../../resumes/components/ResumeManager";
-import Select from "../../../components/ui/Select";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { Resume } from "../../../types/types";
-import Textarea from "../../../components/ui/Textarea";
-import ApplicationFormActions from "./ApplicationFormActions";
-import AdditionalFormOptions from "./AdditionalFormOptions";
+
+import Link from "../../../assets/images/link.svg?react";
 import ExpandableSection from "../../../components/shared/ExpandableSection";
+import Input from "../../../components/ui/Input";
+import Select from "../../../components/ui/Select";
+import Textarea from "../../../components/ui/Textarea";
+import type { Resume } from "../../../types/types";
 import {
   optionalNumber,
   optionalText,
   optionalDate,
   requiredDate
 } from "../../../utils/zodUtils";
+import ResumeManager from "../../resumes/components/ResumeManager";
+import AdditionalFormOptions from "./AdditionalFormOptions";
+import ApplicationFormActions from "./ApplicationFormActions";
 
 const applicationSchema = z
   .object({

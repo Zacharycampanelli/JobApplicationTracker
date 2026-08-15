@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { getRecentApplications } from "../applicationApi";
-import type { JobApplication } from "../../../types/types";
-import ApplicationCard from "./ApplicationCard";
+import { useNavigate } from "react-router";
+
 import AddApplication from "../../../assets/images/addApplication.svg?react";
 import Button from "../../../components/ui/Button";
-import { useNavigate } from "react-router";
+import type { JobApplication } from "../../../types/types";
+import { getRecentApplications } from "../applicationApi";
+import ApplicationCard from "./ApplicationCard";
 
 const RecentApplications = () => {
   const [isLoading, setIsLoading] = useState(true);

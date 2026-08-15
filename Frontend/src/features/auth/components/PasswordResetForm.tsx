@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate, useSearchParams } from "react-router";
+import { z } from "zod";
 
-import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
+import Input from "../../../components/ui/Input";
 import { resetPassword } from "../authApi";
 
 const resetPasswordSchema = z

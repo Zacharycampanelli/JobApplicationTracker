@@ -42,7 +42,7 @@ const dailyInsights = [
 
 const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 
-// Uses the date to make sure every insight is rotated through, and the update happens at midnight 
+// Uses the date to make sure every insight is rotated through, and the update happens at midnight
 export const getDailyInsight = () => {
   const today = new Date();
 

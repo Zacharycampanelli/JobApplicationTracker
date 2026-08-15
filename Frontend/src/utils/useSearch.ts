@@ -12,7 +12,7 @@ export function useSearch<T>({ items, searchKeys }: UseSearchProps<T>) {
 
   const filteredItems = useMemo(() => {
     const safeItems = items || [];
-    
+
     // If there's no search query, return all items
     if (!searchQuery.trim()) {
       return safeItems;
@@ -24,10 +24,10 @@ export function useSearch<T>({ items, searchKeys }: UseSearchProps<T>) {
       // Return true if ANY of the specified searchKeys match the query
       return searchKeys.some((key) => {
         const value = item[key];
-        
+
         // Skip null or undefined values
         if (value === null || value === undefined) return false;
-        
+
         // Convert the value to a string and check if it includes the query
         return String(value).toLowerCase().includes(query);
       });

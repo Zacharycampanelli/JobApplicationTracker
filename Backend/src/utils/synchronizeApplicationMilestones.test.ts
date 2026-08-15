@@ -1,5 +1,6 @@
-import { describe, expect, test } from 'vitest';
-import { synchronizeApplicationMilestones } from './synchronizeApplicationMilestones';
+import { describe, expect, test } from "vitest";
+
+import { synchronizeApplicationMilestones } from "./synchronizeApplicationMilestones";
 
 describe('synchronizeApplicationMilestones', () => {
   test('APPLIED clears every milestone date', () => {

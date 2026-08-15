@@ -1,11 +1,11 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
-import Input from "../../../components/ui/Input";
-import Button from "../../../components/ui/Button";
 import Email from "../../../assets/images/email.svg?react";
+import Button from "../../../components/ui/Button";
+import Input from "../../../components/ui/Input";
 import { forgotPassword } from "../authApi";
 
 const forgotPasswordSchema = z.object({

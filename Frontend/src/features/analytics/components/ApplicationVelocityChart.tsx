@@ -1,7 +1,8 @@
 import type { ChartData, ChartOptions } from "chart.js";
+
 import VerticalBarChart from "../../../components/charts/VerticalBarChart";
-import type { ApplicationVelocityItem } from "../../../utils/getAnalyticsData";
 import Card from "../../../components/ui/Card";
+import type { ApplicationVelocityItem } from "../../../utils/getAnalyticsData";
 
 type ApplicationVelocityChartProps = {
   data: ApplicationVelocityItem[];

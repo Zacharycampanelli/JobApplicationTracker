@@ -1,7 +1,8 @@
 import type { ChartData, ChartOptions } from "chart.js";
+
 import HorizontalBarChart from "../../../components/charts/HorizontalBarChart";
-import type { SourceBreakdownItem } from "../../../utils/getAnalyticsData";
 import Card from "../../../components/ui/Card";
+import type { SourceBreakdownItem } from "../../../utils/getAnalyticsData";
 
 type SourceBreakdownChartProps = {
   data: SourceBreakdownItem[];
