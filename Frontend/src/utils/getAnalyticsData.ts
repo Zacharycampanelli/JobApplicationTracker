@@ -1,3 +1,4 @@
+import type DayIndicator from "../components/shared/DayIndicator";
 import type { JobApplication } from "../types/types";
 import {
   activePipelineRate,
@@ -33,7 +34,7 @@ export type SourceBreakdownItem = {
 };
 
 export type PeakActivityItem = {
-  label: string;
+  label: string | string[];
   count: number;
 };
 
@@ -97,7 +98,7 @@ const getApplicationVelocity = (
   applications.forEach((app) => {
     const appliedDate = new Date(app.appliedAt);
     const matchingWeek = weeks.find(
-      (week) => appliedDate >= week.start && appliedDate <= week.end
+      (week) => appliedDate >= week.start && appliedDate <= week.end && appliedDate <= now
     );
 
     if (matchingWeek) {
@@ -123,9 +124,7 @@ const getSourceBreakdown = (
   }));
 };
 
-const getPeakActivity = (
-  applications: JobApplication[]
-): PeakActivityItem => {
+const getPeakActivity = (applications: JobApplication[]): PeakActivityItem => {
   const dayCounts = applications.reduce<Record<string, number>>((acc, app) => {
     const dayName = dayLabels[new Date(app.appliedAt).getDay()];
 
@@ -134,7 +133,21 @@ const getPeakActivity = (
     return acc;
   }, {});
 
-  const peakDay = Object.entries(dayCounts).sort((a, b) => b[1] - a[1])[0];
+  // find if there are multiple keys with same max value
+  const maxCount = Math.max(...Object.values(dayCounts));
+  const peakDays = dayLabels.filter(
+    (day) => dayCounts[day] === maxCount
+  );
+
+  if (peakDays.length > 1) {
+    return {
+      // return multiple peak days
+      label: peakDays,
+      count: maxCount
+    };
+  }
+
+  const peakDay = peakDays[0];
 
   if (!peakDay) {
     return {
@@ -144,8 +157,8 @@ const getPeakActivity = (
   }
 
   return {
-    label: peakDay[0],
-    count: peakDay[1]
+    label: peakDay,
+    count: maxCount
   };
 };
 

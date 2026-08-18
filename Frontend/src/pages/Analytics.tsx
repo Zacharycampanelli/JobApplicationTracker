@@ -23,6 +23,10 @@ const Analytics = () => {
   const { applications, isLoading, errorMessage } = useApplications();
   const analyticsData = getAnalyticsData(applications);
 
+  const activePeakDays = Array.isArray(analyticsData.peakActivity.label)
+    ? analyticsData.peakActivity.label
+    : [analyticsData.peakActivity.label];
+  
   if (isLoading) return <LoadingState message="Loading analytics..." />;
   if (errorMessage) return <ErrorState message={errorMessage} />;
 
@@ -77,16 +81,18 @@ const Analytics = () => {
             </section>
             <AnalyticsMetricCard
               title="Peak Activity"
-              value={analyticsData.peakActivity.label}
+              value={Array.isArray(analyticsData.peakActivity.label)
+                ? analyticsData.peakActivity.label.join(" & ")
+                : analyticsData.peakActivity.label}
               description={
                 analyticsData.peakActivity.count === 0
                   ? "Add applications to reveal your busiest day."
-                  : `${analyticsData.peakActivity.count} applications submitted on this day`
+                  : `${analyticsData.peakActivity.count} applications submitted on eachs day`
               }
               icon={Calendar}
               className="mt-10"
             >
-              <DayIndicator activeDay={analyticsData.peakActivity.label} />
+              <DayIndicator activeDays={activePeakDays} />
             </AnalyticsMetricCard>
           </>
         ) : (

@@ -9,14 +9,14 @@ const dayLabels = [
 ];
 
 type DayIndicatorProps = {
-  activeDay: string;
+  activeDays: string[];
 };
 
-const DayIndicator = ({ activeDay }: DayIndicatorProps) => {
+const DayIndicator = ({ activeDays }: DayIndicatorProps) => {
   return (
     <div className="mt-6 flex items-end justify-center gap-2">
       {dayLabels.map((day) => {
-        const isActive = day === activeDay;
+        const isActive = activeDays.includes(day);
 
         return (
           <span
