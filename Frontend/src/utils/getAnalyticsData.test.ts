@@ -108,23 +108,23 @@ describe("getAnalyticsData", () => {
         source: "REFERRAL"
       }),
       makeApplication({
-        publicId: "application-4",
+        publicId: "application-5",
         source: "RECRUITER"
       }),
       makeApplication({
-        publicId: "application-4",
+        publicId: "application-6",
         source: "NETWORKING"
       }),
       makeApplication({
-        publicId: "application-5",
+        publicId: "application-7",
         source: "OTHER"
       }),
       makeApplication({
-        publicId: "application-6",
+        publicId: "application-8",
         source: "LINKEDIN"
       }),
       makeApplication({
-        publicId: "application-7",
+        publicId: "application-9",
         source: null
       })
     ];
