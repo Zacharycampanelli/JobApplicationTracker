@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router";
+import { MemoryRouter, Route, Routes } from "react-router";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { AuthContext } from "../../../context/AuthContext";
@@ -18,20 +18,28 @@ const renderLoginForm = () => {
   const handleLogin = vi.fn();
 
   render(
-    <MemoryRouter>
-      <AuthContext.Provider
-        value={{
-          user: null,
-          token: null,
-          isAuthenticated: false,
-          isLoading: false,
-          login: handleLogin,
-          logout: vi.fn(),
-          updateUser: vi.fn()
-        }}
-      >
-        <LoginForm />
-      </AuthContext.Provider>
+    <MemoryRouter initialEntries={["/login"]}>
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            <AuthContext.Provider
+              value={{
+                user: null,
+                token: null,
+                isAuthenticated: false,
+                isLoading: false,
+                login: handleLogin,
+                logout: vi.fn(),
+                updateUser: vi.fn()
+              }}
+            >
+              <LoginForm />
+            </AuthContext.Provider>
+          }
+        />
+        <Route path="/" element={<h1>Dashboard</h1>} />
+      </Routes>
     </MemoryRouter>
   );
 
@@ -115,6 +123,12 @@ describe("LoginForm", () => {
 
     expect(handleLogin).toHaveBeenCalledTimes(1);
     expect(handleLogin).toHaveBeenCalledWith(returnedUser, "test-token");
+
+    const dashboardHeading = await screen.findByRole("heading", {
+      name: "Dashboard"
+    });
+
+    expect(dashboardHeading).toBeInTheDocument();
   });
 
   test("displays an error when the login request fails", async () => {
