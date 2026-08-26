@@ -3,8 +3,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import app from '../../app';
 import { prisma } from '../../lib/prisma';
+import { comparePassword } from '../../utils/hash';
+import { generateToken } from '../../utils/generateToken';
 
 afterEach(() => {
+  vi.clearAllMocks();
   vi.restoreAllMocks();
 });
 
@@ -18,6 +21,15 @@ vi.mock('../../lib/prisma', () => ({
       findUnique: vi.fn(),
     },
   },
+}));
+
+vi.mock('../../utils/hash', () => ({
+  comparePassword: vi.fn(),
+  hashPassword: vi.fn(),
+}));
+
+vi.mock('../../utils/generateToken', () => ({
+  generateToken: vi.fn(),
 }));
 
 describe('POST /api/auth/login', () => {
@@ -58,6 +70,62 @@ describe('POST /api/auth/login', () => {
         email: body.email,
       },
     });
+  });
+
+  it('returns 401 when the password is incorrect', async () => {
+    const body = { email: 'user1@example.com', password: 'wrong-password' };
+
+    const user = {
+      id: 1,
+      email: 'user1@example.com',
+      password: 'stored-password-hash',
+      name: 'User 1',
+      createdAt: new Date('2026-01-01'),
+      updatedAt: new Date('2026-01-01'),
+    };
+
+    vi.mocked(prisma.user.findUnique).mockResolvedValue(user);
+    vi.mocked(comparePassword).mockResolvedValue(false);
+
+    const response = await request(app).post('/api/auth/login').send(body);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ error: 'Invalid credentials' });
+    expect(comparePassword).toHaveBeenCalledWith(body.password, user.password);
+  });
+
+  it('returns the authenticated user and token for valid credentials', async () => {
+    const body = { email: 'user1@example.com', password: 'password1!' };
+
+    const user = {
+      id: 1,
+      email: 'user1@example.com',
+      password: 'password1!',
+      name: 'User 1',
+      createdAt: new Date('2026-01-01'),
+      updatedAt: new Date('2026-01-01'),
+    };
+
+    const token = 'abc123';
+
+    vi.mocked(prisma.user.findUnique).mockResolvedValue(user);
+    vi.mocked(comparePassword).mockResolvedValue(true);
+    vi.mocked(generateToken).mockReturnValue(token);
+
+    const response = await request(app).post('/api/auth/login').send(body);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      message: 'Login successful',
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt.toISOString(),
+      },
+    });
+    expect(generateToken).toHaveBeenCalledWith(user.id);
   });
 });
 
