@@ -1,13 +1,13 @@
 import request from 'supertest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-
+import jwt from 'jsonwebtoken';
 import app from '../../app';
 import { prisma } from '../../lib/prisma';
 import { comparePassword } from '../../utils/hash';
 import { generateToken } from '../../utils/generateToken';
 
 afterEach(() => {
-  vi.clearAllMocks();
+  vi.resetAllMocks();
   vi.restoreAllMocks();
 });
 
@@ -30,6 +30,12 @@ vi.mock('../../utils/hash', () => ({
 
 vi.mock('../../utils/generateToken', () => ({
   generateToken: vi.fn(),
+}));
+
+vi.mock('jsonwebtoken', () => ({
+  default: {
+    verify: vi.fn(),
+  },
 }));
 
 describe('POST /api/auth/login', () => {
@@ -138,11 +144,57 @@ describe('GET /api/auth/me', () => {
   });
 
   it('returns 401 when an invalid authorization token is provided', async () => {
+    vi.mocked(jwt.verify).mockImplementation(() => {
+      throw new Error('jwt malformed');
+    });
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const response = await request(app).get('/api/auth/me').set('Authorization', 'Bearer invalid-token');
 
     expect(response.status).toBe(401);
     expect(response.body).toEqual({ error: 'Not authorized, token failed' });
     expect(consoleErrorSpy).toHaveBeenCalled();
+  });
+
+  it('returns 404 when the authenticated user no longer exists', async () => {
+    vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1 }));
+    vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
+
+    const response = await request(app).get('/api/auth/me').set('Authorization', 'Bearer valid-token');
+
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({ error: 'User not found' });
+    expect(prisma.user.findUnique).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: 1 },
+      }),
+    );
+  });
+
+  it('returns the authenticated user', async () => {
+    vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1 }));
+    const user = {
+      id: 1,
+      name: 'User 1',
+      email: 'user1@example.com',
+      createdAt: new Date('2026-01-01'),
+      updatedAt: new Date('2026-01-02'),
+      profile: null,
+      preferences: null,
+    };
+    vi.mocked(prisma.user.findUnique).mockResolvedValue(user as never);
+
+    const response = await request(app).get('/api/auth/me').set('Authorization', 'Bearer valid-token');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt.toISOString(),
+      profile: user.profile,
+      preferences: user.preferences,
+    });
+    expect(prisma.user.findUnique).toHaveBeenCalledWith(expect.objectContaining({ where: { id: 1 } }));
   });
 });
