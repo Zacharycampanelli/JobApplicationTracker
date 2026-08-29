@@ -133,6 +133,25 @@ describe('POST /api/auth/login', () => {
     });
     expect(generateToken).toHaveBeenCalledWith(user.id);
   });
+
+  it('returns 500 when the user lookup fails', async () => {
+    const body = {
+      email: 'user1@example.com',
+      password: 'password1!',
+    };
+
+    const databaseError = new Error('Database unavailable');
+
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    vi.mocked(prisma.user.findUnique).mockRejectedValue(databaseError);
+
+    const response = await request(app).post('/api/auth/login').send(body);
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ error: 'Failed to login' });
+    expect(consoleErrorSpy).toHaveBeenCalledWith('Error logging in:', databaseError);
+  });
 });
 
 describe('GET /api/auth/me', () => {
