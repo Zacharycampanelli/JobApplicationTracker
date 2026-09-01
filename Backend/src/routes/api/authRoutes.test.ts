@@ -216,4 +216,18 @@ describe('GET /api/auth/me', () => {
     });
     expect(prisma.user.findUnique).toHaveBeenCalledWith(expect.objectContaining({ where: { id: 1 } }));
   });
+
+  it('returns 500 when user lookup fails', async () => {
+    vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1 }));
+    const databaseError = new Error('Error fetching current user');
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    vi.mocked(prisma.user.findUnique).mockRejectedValue(databaseError);
+
+    const response = await request(app).get('/api/auth/me').set('Authorization', 'Bearer valid-token');
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ error: 'Failed to fetch user' });
+    expect(consoleErrorSpy).toHaveBeenCalledWith('Error fetching current user:', databaseError);
+  });
 });
