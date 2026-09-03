@@ -1,9 +1,9 @@
-import cors from 'cors';
-import express from 'express';
-import path from 'node:path';
+import cors from "cors";
+import express from "express";
+import path from "node:path";
 
-import { prisma } from './lib/prisma';
-import routes from './routes';
+import { prisma } from "./lib/prisma";
+import routes from "./routes";
 
 const app = express();
 

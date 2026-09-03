@@ -26,7 +26,7 @@ const Analytics = () => {
   const activePeakDays = Array.isArray(analyticsData.peakActivity.label)
     ? analyticsData.peakActivity.label
     : [analyticsData.peakActivity.label];
-  
+
   if (isLoading) return <LoadingState message="Loading analytics..." />;
   if (errorMessage) return <ErrorState message={errorMessage} />;
 

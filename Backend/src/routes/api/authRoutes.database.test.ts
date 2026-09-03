@@ -1,9 +1,9 @@
-import request from 'supertest';
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import request from "supertest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-import app from '../../app';
-import { prisma } from '../../lib/prisma';
-import { hashPassword } from '../../utils/hash';
+import app from "../../app";
+import { prisma } from "../../lib/prisma";
+import { hashPassword } from "../../utils/hash";
 
 vi.mock('../../services/emailService', () => ({
   sendPasswordResetEmail: vi.fn(),

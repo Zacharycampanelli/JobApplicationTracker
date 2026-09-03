@@ -1,10 +1,11 @@
-import request from 'supertest';
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import jwt from 'jsonwebtoken';
-import app from '../../app';
-import { prisma } from '../../lib/prisma';
-import { comparePassword } from '../../utils/hash';
-import { generateToken } from '../../utils/generateToken';
+import jwt from "jsonwebtoken";
+import request from "supertest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+import app from "../../app";
+import { prisma } from "../../lib/prisma";
+import { generateToken } from "../../utils/generateToken";
+import { comparePassword } from "../../utils/hash";
 
 afterEach(() => {
   vi.resetAllMocks();
