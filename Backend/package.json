@@ -12,7 +12,7 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:db:migrate": "dotenv -e .env.test.local -o -- prisma migrate deploy",
-    "test:db": "dotenv -e .env.test.local -o -- vitest run src/routes/api/authRoutes.database.test.ts"
+    "test:db": "dotenv -e .env.test.local -o -- vitest run --config vitest.database.config.ts"
   },
   "repository": {
     "type": "git",
