@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 
 import AppWrapper from "./components/layout/AppWrapper";
 import AuthWrapper from "./components/layout/AuthWrapper";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthProvider";
 import AddApplication from "./pages/AddApplication";
 import Analytics from "./pages/Analytics";
 import Applications from "./pages/Applications";
@@ -21,11 +21,11 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* Main app routes with navbar */}
-            <Route  element={<AppWrapper />}>
-              {/* Public routes */}
-              <Route path="/profiles/:id" element={<PublicProfile />} />
+          <Route element={<AppWrapper />}>
+            {/* Public routes */}
+            <Route path="/profiles/:id" element={<PublicProfile />} />
 
-              {/* Protected routes */}
+            {/* Protected routes */}
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/applications">
@@ -39,12 +39,18 @@ function App() {
           </Route>
           {/* Auth routes without navbar */}
           <Route element={<AuthWrapper />}>
-            <Route element={<GuestRoute />} >
+            <Route element={<GuestRoute />}>
               <Route path="/login" element={<AuthPage mode="login" />} />
               <Route path="/register" element={<AuthPage mode="signup" />} />
             </Route>
-            <Route path="/forgot-password" element={<AuthPage mode="forgot-password" />} />
-            <Route path="/reset-password" element={<AuthPage mode="reset-password" />} />
+            <Route
+              path="/forgot-password"
+              element={<AuthPage mode="forgot-password" />}
+            />
+            <Route
+              path="/reset-password"
+              element={<AuthPage mode="reset-password" />}
+            />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

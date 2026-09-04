@@ -201,7 +201,6 @@ const ApplicationForm = ({
     handleSubmit,
     setValue,
     control,
-    watch,
     formState: { errors, isSubmitting, isDirty }
   } = useForm<ApplicationFormValues, unknown, ApplicationValues>({
     resolver: zodResolver(applicationSchema),
@@ -209,6 +208,8 @@ const ApplicationForm = ({
   });
 
   const selectedResumeId = useWatch({ control, name: "resumeId" });
+  const selectedStatus = useWatch({ control, name: "status" });
+
   return (
     <>
       <form
@@ -308,7 +309,7 @@ const ApplicationForm = ({
             className="flex flex-col md:col-span-2"
           >
             <AdditionalFormOptions
-              status={watch("status")}
+              status={selectedStatus}
               register={register}
               errors={errors}
             />

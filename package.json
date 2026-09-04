@@ -8,10 +8,12 @@
     "client": "cd Frontend && npm run dev",
     "dev": "concurrently \"npm:server\" \"npm:client\"",
     "installDeps": "npm install && cd Backend && npm install && cd ../Frontend && npm install",
+    "lint": "npm --prefix Frontend run lint && npm --prefix Backend run lint",
     "seedDatabase": "cd Backend && npm run seed",
     "prisma:generate": "cd Backend && npx prisma generate",
     "prisma:migrate": "cd Backend && npx prisma migrate dev",
-    "prisma:studio": "cd Backend && npx prisma studio"
+    "prisma:studio": "cd Backend && npx prisma studio",
+    "check": "npm run lint && npm --prefix Frontend run build && npm --prefix Frontend run test:run && npm --prefix Backend run test:run"
   },
   "repository": {
     "type": "git",

@@ -365,7 +365,7 @@ export const deleteApplication = async (req: AuthRequest, res: Response) => {
 
     const userId = req.user.userId;
 
-    const deletedApplication = await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx) => {
       await tx.applicationActivity.create({
         data: {
           type: 'DELETED',
@@ -376,13 +376,11 @@ export const deleteApplication = async (req: AuthRequest, res: Response) => {
         },
       });
 
-      const deletedApp = await tx.jobApplication.delete({
+      await tx.jobApplication.delete({
         where: {
           publicId,
         },
       });
-
-      return deletedApp;
     });
 
     res.status(200).json(application);

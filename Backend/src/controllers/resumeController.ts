@@ -24,6 +24,7 @@ export const uploadResume = async (req: AuthRequest, res: Response) => {
     });
     res.json(resume);
   } catch (error) {
+    console.error('Failed to upload resume:', error);
     res.status(500).json({ message: 'Failed to upload resume' });
   }
 };
@@ -41,6 +42,7 @@ export const getResumes = async (req: AuthRequest, res: Response) => {
     });
     res.json(resumes);
   } catch (error) {
+    console.error('Failed to get resumes:', error);
     res.status(500).json({ message: 'Failed to get resumes' });
   }
 };

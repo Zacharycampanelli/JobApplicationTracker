@@ -1,4 +1,3 @@
-import type DayIndicator from "../components/shared/DayIndicator";
 import type { JobApplication } from "../types/types";
 import {
   activePipelineRate,

@@ -100,7 +100,14 @@ const Profile = () => {
 
   const onSubmit = async (data: ProfileValues) => {
     try {
-      const { resumeId, ...profileData } = data;
+      const profileData = {
+        name: data.name,
+        summary: data.summary,
+        title: data.title,
+        location: data.location,
+        website: data.website,
+        linkedin: data.linkedin
+      };
       const updatedUser = await updateProfile(profileData);
       updateUser(updatedUser);
       setInEditMode(false);
@@ -226,20 +233,6 @@ const Profile = () => {
                 <span className="text-label-md text-on-surface">
                   PROFILE IMAGE
                 </span>
-
-                {/* <label
-                  htmlFor="avatar"
-                  className="mt-2 flex h-10 cursor-pointer items-center justify-center rounded-control bg-surface-container-low text-body-md text-on-surface"
-                >
-                  Select a new image
-                </label>
-                <Input
-                  type="file"
-                  id="avatar"
-                  accept="image/png,image/jpeg,image/webp"
-                  onChange={handleAvatarUpload}
-                  className="sr-only"
-                /> */}
                 <input
                   type="file"
                   id="avatar"
@@ -390,6 +383,7 @@ const Profile = () => {
           empty={empty}
           onResumesChanged={loadResumes}
         />
+
         <UserPreferences />
         {isMobile && (
           <Button

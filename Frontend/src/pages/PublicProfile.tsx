@@ -26,43 +26,45 @@ const PublicProfile = () => {
     summary: ""
   });
 
-  const loadData = async () => {
-    if (!id) return;
-    const profileId = Number(id);
-    try {
-      const data = await getPublicProfile(profileId);
-
-      setEmpty(false);
-      setError("");
-      setProfile({
-        email: data.email ?? "",
-        name: data.name ?? "",
-        avatarUrl: data.profile?.avatarUrl ?? "",
-        title: data.profile?.title ?? "",
-        location: data.profile?.location ?? "",
-        website: data.profile?.website ?? "",
-        linkedin: data.profile?.linkedin ?? "",
-        summary: data.profile?.summary ?? ""
-      });
-    } catch (err) {
-      setError(`Failed to load profile: ${err}`);
-      setEmpty(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const loadData = async () => {
+      if (!id) return;
+      const profileId = Number(id);
+      try {
+        const data = await getPublicProfile(profileId);
+
+        setEmpty(false);
+        setError("");
+        setProfile({
+          email: data.email ?? "",
+          name: data.name ?? "",
+          avatarUrl: data.profile?.avatarUrl ?? "",
+          title: data.profile?.title ?? "",
+          location: data.profile?.location ?? "",
+          website: data.profile?.website ?? "",
+          linkedin: data.profile?.linkedin ?? "",
+          summary: data.profile?.summary ?? ""
+        });
+      } catch (err) {
+        setError(`Failed to load profile: ${err}`);
+        setEmpty(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     loadData();
   }, [id]);
 
-  useEffect(() => {
-    console.log(profile);
-  }, [profile]);
-
   if (isLoading) return <LoadingState message="Loading profile..." />;
-  if (error) return <ErrorState message={error} />
-  if (empty) return <EmptyState title="No profile found" description="The requested profile could not be found." />
+  if (error) return <ErrorState message={error} />;
+  if (empty)
+    return (
+      <EmptyState
+        title="No profile found"
+        description="The requested profile could not be found."
+      />
+    );
 
   return (
     <>

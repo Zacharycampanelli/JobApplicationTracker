@@ -1,5 +1,5 @@
-import type { ApplicationSource, JobStatus, WorkMode } from "../../generated/prisma/enums.js";
-import { synchronizeApplicationMilestones } from "./synchronizeApplicationMilestones.js";
+import type { ApplicationSource, JobStatus, WorkMode } from '../../generated/prisma/enums.js';
+import { synchronizeApplicationMilestones } from './synchronizeApplicationMilestones.js';
 
 type ParsedApplicationData = {
   title: string;
@@ -33,6 +33,7 @@ const parseOptionalDate = (value: unknown, label: string) => {
 
   return { success: true as const, value: date };
 };
+
 const parseOptionalNumber = (value: unknown, label: string) => {
   if (value === undefined) return { success: true as const, value: undefined };
   if (value === null || value === '') return { success: true as const, value: null };
@@ -51,7 +52,46 @@ const toDateOnly = (value: Date | null | undefined) => {
   return value.toISOString().slice(0, 10);
 };
 
-export const parseApplicationPayload = (applicationData: any): ParseApplicationPayloadResult => {
+type ApplicationPayload = {
+  title: string;
+  company: string;
+  status: string;
+  link?: unknown;
+  source?: unknown;
+  salaryMin?: unknown;
+  salaryMax?: unknown;
+  location?: unknown;
+  notes?: unknown;
+  workMode?: unknown;
+  appliedAt?: unknown;
+  firstResponseAt?: unknown;
+  interviewAt?: unknown;
+  offerAt?: unknown;
+  rejectedAt?: unknown;
+};
+
+const isApplicationPayload = (value: unknown): value is ApplicationPayload => {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return false;
+  }
+
+  const payload = value as Record<string, unknown>;
+
+  return (
+    typeof payload.title === 'string' &&
+    payload.title.length > 0 &&
+    typeof payload.company === 'string' &&
+    payload.company.length > 0 &&
+    typeof payload.status === 'string' &&
+    payload.status.length > 0
+  );
+};
+
+export const parseApplicationPayload = (applicationData: unknown): ParseApplicationPayloadResult => {
+  if (!isApplicationPayload(applicationData)) {
+    return { success: false, error: 'Missing required fields' };
+  }
+
   const {
     title,
     company,
@@ -69,35 +109,58 @@ export const parseApplicationPayload = (applicationData: any): ParseApplicationP
     offerAt,
     rejectedAt,
   } = applicationData;
-  if (!title || !company || !status) {
-    return { success: false, error: 'Missing required fields' };
-  }
 
   const allowedStatuses = ['APPLIED', 'INTERVIEW', 'OFFER', 'REJECTED'];
+
   if (!allowedStatuses.includes(status)) {
     return { success: false, error: 'Invalid status' };
   }
 
   const allowedSources = ['LINKEDIN', 'INDEED', 'COMPANY_SITE', 'REFERRAL', 'RECRUITER', 'NETWORKING', 'OTHER'];
-  if (source && !allowedSources.includes(source)) {
-    return { success: false, error: 'Invalid source' };
+  if (
+    source !== undefined &&
+    source !== null &&
+    source !== '' &&
+    (typeof source !== 'string' || !allowedSources.includes(source))
+  ) {
+    return {
+      success: false,
+      error: 'Invalid source',
+    };
   }
 
   const allowedWorkModes = ['REMOTE', 'HYBRID', 'ONSITE'];
-  if (workMode && !allowedWorkModes.includes(workMode)) {
-    return { success: false, error: 'Invalid work mode' };
+  if (
+    workMode !== undefined &&
+    workMode !== null &&
+    workMode !== '' &&
+    (typeof workMode !== 'string' || !allowedWorkModes.includes(workMode))
+  ) {
+    return {
+      success: false,
+      error: 'Invalid work mode',
+    };
   }
 
   if (!appliedAt) {
     return { success: false, error: 'Applied date is required' };
   }
 
-  const parsedAppliedAt = new Date(appliedAt);
+  const parsedAppliedAt = new Date(String(appliedAt));
+
+  if (Number.isNaN(parsedAppliedAt.getTime())) {
+    return {
+      success: false,
+      error: 'Invalid applied date',
+    };
+  }
 
   const parsedFirstResponseAt = parseOptionalDate(firstResponseAt, 'first response');
+  
   if (!parsedFirstResponseAt.success) {
     return { success: false, error: parsedFirstResponseAt.error };
   }
+
   const normalizedFirstResponseAt = status === 'APPLIED' ? null : parsedFirstResponseAt.value;
 
   if ((status === 'INTERVIEW' || status === 'OFFER') && normalizedFirstResponseAt == null) {
@@ -111,10 +174,12 @@ export const parseApplicationPayload = (applicationData: any): ParseApplicationP
   if (!parsedInterviewAt.success) {
     return { success: false, error: parsedInterviewAt.error };
   }
+
   const parsedOfferAt = parseOptionalDate(offerAt, 'offer');
   if (!parsedOfferAt.success) {
     return { success: false, error: parsedOfferAt.error };
   }
+  
   const parsedRejectedAt = parseOptionalDate(rejectedAt, 'rejected');
   if (!parsedRejectedAt.success) {
     return { success: false, error: parsedRejectedAt.error };
@@ -179,11 +244,13 @@ export const parseApplicationPayload = (applicationData: any): ParseApplicationP
   }
 
   const parsedSalaryMin = parseOptionalNumber(salaryMin, 'minimum salary');
+
   if (!parsedSalaryMin.success) {
     return { success: false, error: parsedSalaryMin.error };
   }
 
   const parsedSalaryMax = parseOptionalNumber(salaryMax, 'maximum salary');
+
   if (!parsedSalaryMax.success) {
     return { success: false, error: parsedSalaryMax.error };
   }

@@ -22,7 +22,6 @@ import { useBreakpoint } from "../utils/useBreakpoint";
 const EditApplication = () => {
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
-  const isDesktop = useBreakpoint("xl");
   const { id } = useParams();
   const navigate = useNavigate();
 

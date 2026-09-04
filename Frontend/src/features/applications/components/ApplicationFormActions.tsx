@@ -4,7 +4,7 @@ import { useBreakpoint } from "../../../utils/useBreakpoint";
 type ApplicationFormActionsProps = {
   isSubmitting: boolean;
   newOrEdit: "new" | "edit";
-  onCancel: (isDirty: boolean) => void;
+  onCancel: () => void;
 };
 
 const ApplicationFormActions = ({
