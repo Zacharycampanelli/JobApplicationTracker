@@ -76,6 +76,7 @@ const EditApplication = () => {
       setSubmitError("");
       await updateApplication(id!, values);
       toast.success("Application updated!");
+      navigate("/applications");
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Failed to update application"
