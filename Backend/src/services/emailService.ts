@@ -1,28 +1,28 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-const testAccount = await nodemailer.createTestAccount();
+export const sendPasswordResetEmail = async (
+  recipientEmail: string,
+  resetUrl: string
+) => {
+  const apiKey = process.env.RESEND_API_KEY;
 
-const transporter = nodemailer.createTransport({
-    host: testAccount.smtp.host,
-    port: testAccount.smtp.port,
-    secure: testAccount.smtp.secure,
-    auth: {
-        user: testAccount.user,
-        pass: testAccount.pass
-    }
-})
+  if (!apiKey) {
+    throw new Error("RESEND_API_KEY is not configured");
+  }
 
-export const sendPasswordResetEmail = async( recipientEmail: string, resetUrl: string) => {
-const info = await transporter.sendMail({
-    from: '"Job Tracker" <no-reply@jobtracker.test>',
+  const resend = new Resend(apiKey);
+
+  const { data, error } = await resend.emails.send({
+    from: process.env.EMAIL_FROM ?? "Job Tracker <onboarding@resend.dev>",
     to: recipientEmail,
     subject: "Reset your password",
     text: `Reset your password: ${resetUrl}`,
     html: `<a href="${resetUrl}">Reset your password</a>`
-})
-    const previewUrl = nodemailer.getTestMessageUrl(info)
+  });
 
-    console.log("Email preview:", previewUrl)
+  if (error) {
+    throw new Error(`Failed to send password reset email: ${error.message}`);
+  }
 
-    return previewUrl
-}
+  return data;
+};
