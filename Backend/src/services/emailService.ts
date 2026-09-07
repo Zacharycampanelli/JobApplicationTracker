@@ -1,28 +1,30 @@
-import { Resend } from "resend";
+import { BrevoClient } from "@getbrevo/brevo";
 
 export const sendPasswordResetEmail = async (
   recipientEmail: string,
   resetUrl: string
 ) => {
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = process.env.BREVO_API_KEY;
+  const senderEmail = process.env.EMAIL_FROM_ADDRESS;
 
   if (!apiKey) {
-    throw new Error("RESEND_API_KEY is not configured");
+    throw new Error("BREVO_API_KEY is not configured");
   }
 
-  const resend = new Resend(apiKey);
+  if (!senderEmail) {
+    throw new Error("EMAIL_FROM_ADDRESS is not configured");
+  }
 
-  const { data, error } = await resend.emails.send({
-    from: process.env.EMAIL_FROM ?? "Job Tracker <onboarding@resend.dev>",
-    to: recipientEmail,
+  const brevo = new BrevoClient({ apiKey });
+
+  return brevo.transactionalEmails.sendTransacEmail({
+    sender: {
+      name: process.env.EMAIL_FROM_NAME ?? "Job Tracker",
+      email: senderEmail
+    },
+    to: [{ email: recipientEmail }],
     subject: "Reset your password",
-    text: `Reset your password: ${resetUrl}`,
-    html: `<a href="${resetUrl}">Reset your password</a>`
+    textContent: `Reset your password: ${resetUrl}`,
+    htmlContent: `<a href="${resetUrl}">Reset your password</a>`
   });
-
-  if (error) {
-    throw new Error(`Failed to send password reset email: ${error.message}`);
-  }
-
-  return data;
 };

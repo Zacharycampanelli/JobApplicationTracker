@@ -49,6 +49,7 @@
     "vitest": "^4.1.10"
   },
   "dependencies": {
+    "@getbrevo/brevo": "^6.0.3",
     "@prisma/adapter-pg": "^7.6.0",
     "@prisma/client": "^7.6.0",
     "@types/bcrypt": "^6.0.0",
