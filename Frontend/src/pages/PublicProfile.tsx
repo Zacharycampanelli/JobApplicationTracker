@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
+import { API_URL } from "../api/api";
 import Header from "../components/layout/Header";
 import EmptyState from "../components/shared/EmptyState";
 import ErrorState from "../components/shared/ErrorState";
@@ -38,7 +39,9 @@ const PublicProfile = () => {
         setProfile({
           email: data.email ?? "",
           name: data.name ?? "",
-          avatarUrl: data.profile?.avatarUrl ?? "",
+          avatarUrl: data.profile?.avatarUrl
+            ? `${API_URL}${data.profile.avatarUrl}`
+            : "",
           title: data.profile?.title ?? "",
           location: data.profile?.location ?? "",
           website: data.profile?.website ?? "",
