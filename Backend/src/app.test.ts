@@ -14,6 +14,8 @@ const resumeFilename = 'private-resume-test.txt';
 const avatarPath = path.join(avatarDirectory, avatarFilename);
 const resumePath = path.join(resumeDirectory, resumeFilename);
 
+const frontendUrl = process.env.FRONTEND_URL ?? "http://localhost:5173";
+
 beforeAll(async () => {
   await Promise.all([mkdir(avatarDirectory, { recursive: true }), mkdir(resumeDirectory, { recursive: true })]);
   await Promise.all([writeFile(avatarPath, 'avatar fixture'), writeFile(resumePath, 'resume fixture')]);
@@ -37,3 +39,21 @@ describe('static upload access', () => {
     expect(response.status).toBe(404);
   });
 });
+
+describe("CORS", () => {
+  it("allows requests from the configured frontend", async () => {
+    const response = await request(app)
+      .get("/cors-test")
+      .set("Origin", frontendUrl);
+
+    expect(response.headers["access-control-allow-origin"]).toBe(frontendUrl);
+  });
+
+  it("does not authorize requests from another origin", async () => {
+    const response = await request(app)
+      .get("/cors-test")
+      .set("Origin", "https://untrusted.example");
+
+    expect(response.headers['access-control-allow-origin']).toBeUndefined();
+  })
+})
