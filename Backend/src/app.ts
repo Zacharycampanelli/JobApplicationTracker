@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import helmet from "helmet";
 import path from "node:path";
 
 import { prisma } from "./lib/prisma";
@@ -8,6 +9,14 @@ import routes from "./routes";
 const frontendUrl = process.env.FRONTEND_URL ?? "http://localhost:5173";
 
 const app = express();
+
+app.use(
+  helmet({
+    crossOriginResourcePolicy: {
+      policy: "cross-origin",
+    }
+  })
+);
 
 app.use(
   cors({

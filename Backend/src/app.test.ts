@@ -57,3 +57,12 @@ describe("CORS", () => {
     expect(response.headers['access-control-allow-origin']).toBeUndefined();
   })
 })
+
+describe("security headers", () => {
+  it('adds secure HTTP headers while allowing public avatars cross-origin', async () => {
+    const response = await request(app).get('/cors-test');
+
+    expect(response.headers['x-content-type-options']).toBe('nosniff');
+    expect(response.headers['cross-origin-resource-policy']).toBe('cross-origin');
+  })
+})
