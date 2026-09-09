@@ -5,6 +5,6 @@ import { protect } from "../../middleware/authMiddleware";
 
 const router = Router();
 
-router.get('/recent', protect, getUserRecentActivities);
+router.get("/recent", protect, getUserRecentActivities);
 
 export default router;

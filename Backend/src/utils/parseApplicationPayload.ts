@@ -1,5 +1,5 @@
-import type { ApplicationSource, JobStatus, WorkMode } from '../../generated/prisma/enums.js';
-import { synchronizeApplicationMilestones } from './synchronizeApplicationMilestones.js';
+import type { ApplicationSource, JobStatus, WorkMode } from "../../generated/prisma/enums.js";
+import { synchronizeApplicationMilestones } from "./synchronizeApplicationMilestones.js";
 
 type ParsedApplicationData = {
   title: string;
@@ -23,7 +23,7 @@ type ParseApplicationPayloadResult = { success: false; error: string } | { succe
 
 const parseOptionalDate = (value: unknown, label: string) => {
   if (value === undefined) return { success: true as const, value: undefined };
-  if (value === null || value === '') return { success: true as const, value: null };
+  if (value === null || value === "") return { success: true as const, value: null };
 
   const date = new Date(String(value));
 
@@ -36,7 +36,7 @@ const parseOptionalDate = (value: unknown, label: string) => {
 
 const parseOptionalNumber = (value: unknown, label: string) => {
   if (value === undefined) return { success: true as const, value: undefined };
-  if (value === null || value === '') return { success: true as const, value: null };
+  if (value === null || value === "") return { success: true as const, value: null };
 
   const num = Number(value);
 
@@ -71,25 +71,25 @@ type ApplicationPayload = {
 };
 
 const isApplicationPayload = (value: unknown): value is ApplicationPayload => {
-  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
     return false;
   }
 
   const payload = value as Record<string, unknown>;
 
   return (
-    typeof payload.title === 'string' &&
+    typeof payload.title === "string" &&
     payload.title.length > 0 &&
-    typeof payload.company === 'string' &&
+    typeof payload.company === "string" &&
     payload.company.length > 0 &&
-    typeof payload.status === 'string' &&
+    typeof payload.status === "string" &&
     payload.status.length > 0
   );
 };
 
 export const parseApplicationPayload = (applicationData: unknown): ParseApplicationPayloadResult => {
   if (!isApplicationPayload(applicationData)) {
-    return { success: false, error: 'Missing required fields' };
+    return { success: false, error: "Missing required fields" };
   }
 
   const {
@@ -110,40 +110,40 @@ export const parseApplicationPayload = (applicationData: unknown): ParseApplicat
     rejectedAt,
   } = applicationData;
 
-  const allowedStatuses = ['APPLIED', 'INTERVIEW', 'OFFER', 'REJECTED'];
+  const allowedStatuses = ["APPLIED", "INTERVIEW", "OFFER", "REJECTED"];
 
   if (!allowedStatuses.includes(status)) {
-    return { success: false, error: 'Invalid status' };
+    return { success: false, error: "Invalid status" };
   }
 
-  const allowedSources = ['LINKEDIN', 'INDEED', 'COMPANY_SITE', 'REFERRAL', 'RECRUITER', 'NETWORKING', 'OTHER'];
+  const allowedSources = ["LINKEDIN", "INDEED", "COMPANY_SITE", "REFERRAL", "RECRUITER", "NETWORKING", "OTHER"];
   if (
     source !== undefined &&
     source !== null &&
-    source !== '' &&
-    (typeof source !== 'string' || !allowedSources.includes(source))
+    source !== "" &&
+    (typeof source !== "string" || !allowedSources.includes(source))
   ) {
     return {
       success: false,
-      error: 'Invalid source',
+      error: "Invalid source",
     };
   }
 
-  const allowedWorkModes = ['REMOTE', 'HYBRID', 'ONSITE'];
+  const allowedWorkModes = ["REMOTE", "HYBRID", "ONSITE"];
   if (
     workMode !== undefined &&
     workMode !== null &&
-    workMode !== '' &&
-    (typeof workMode !== 'string' || !allowedWorkModes.includes(workMode))
+    workMode !== "" &&
+    (typeof workMode !== "string" || !allowedWorkModes.includes(workMode))
   ) {
     return {
       success: false,
-      error: 'Invalid work mode',
+      error: "Invalid work mode",
     };
   }
 
   if (!appliedAt) {
-    return { success: false, error: 'Applied date is required' };
+    return { success: false, error: "Applied date is required" };
   }
 
   const parsedAppliedAt = new Date(String(appliedAt));
@@ -151,36 +151,36 @@ export const parseApplicationPayload = (applicationData: unknown): ParseApplicat
   if (Number.isNaN(parsedAppliedAt.getTime())) {
     return {
       success: false,
-      error: 'Invalid applied date',
+      error: "Invalid applied date",
     };
   }
 
-  const parsedFirstResponseAt = parseOptionalDate(firstResponseAt, 'first response');
-  
+  const parsedFirstResponseAt = parseOptionalDate(firstResponseAt, "first response");
+
   if (!parsedFirstResponseAt.success) {
     return { success: false, error: parsedFirstResponseAt.error };
   }
 
-  const normalizedFirstResponseAt = status === 'APPLIED' ? null : parsedFirstResponseAt.value;
+  const normalizedFirstResponseAt = status === "APPLIED" ? null : parsedFirstResponseAt.value;
 
-  if ((status === 'INTERVIEW' || status === 'OFFER') && normalizedFirstResponseAt == null) {
+  if ((status === "INTERVIEW" || status === "OFFER") && normalizedFirstResponseAt == null) {
     return {
       success: false,
-      error: 'First response date is required',
+      error: "First response date is required",
     };
   }
 
-  const parsedInterviewAt = parseOptionalDate(interviewAt, 'interview');
+  const parsedInterviewAt = parseOptionalDate(interviewAt, "interview");
   if (!parsedInterviewAt.success) {
     return { success: false, error: parsedInterviewAt.error };
   }
 
-  const parsedOfferAt = parseOptionalDate(offerAt, 'offer');
+  const parsedOfferAt = parseOptionalDate(offerAt, "offer");
   if (!parsedOfferAt.success) {
     return { success: false, error: parsedOfferAt.error };
   }
-  
-  const parsedRejectedAt = parseOptionalDate(rejectedAt, 'rejected');
+
+  const parsedRejectedAt = parseOptionalDate(rejectedAt, "rejected");
   if (!parsedRejectedAt.success) {
     return { success: false, error: parsedRejectedAt.error };
   }
@@ -202,54 +202,78 @@ export const parseApplicationPayload = (applicationData: unknown): ParseApplicat
   const rejectedDateOnly = toDateOnly(synchronizedMilestones.rejectedAt);
 
   if (firstResponseDateOnly && appliedDateOnly && firstResponseDateOnly < appliedDateOnly) {
-    return { success: false, error: 'First response cannot be before applied date' };
+    return {
+      success: false,
+      error: "First response cannot be before applied date",
+    };
   }
 
   if (
-    (status === 'INTERVIEW' || status === 'OFFER') &&
+    (status === "INTERVIEW" || status === "OFFER") &&
     interviewDateOnly &&
     appliedDateOnly &&
     interviewDateOnly < appliedDateOnly
   ) {
-    return { success: false, error: 'Interview date cannot be before applied date' };
+    return {
+      success: false,
+      error: "Interview date cannot be before applied date",
+    };
   }
 
   if (
-    (status === 'INTERVIEW' || status === 'OFFER') &&
+    (status === "INTERVIEW" || status === "OFFER") &&
     interviewDateOnly &&
     firstResponseDateOnly &&
     interviewDateOnly < firstResponseDateOnly
   ) {
-    return { success: false, error: 'Interview date cannot be before first response date' };
+    return {
+      success: false,
+      error: "Interview date cannot be before first response date",
+    };
   }
 
-  if (status === 'OFFER' && offerDateOnly && interviewDateOnly && offerDateOnly < interviewDateOnly) {
-    return { success: false, error: 'Offer date cannot be before interview date' };
+  if (status === "OFFER" && offerDateOnly && interviewDateOnly && offerDateOnly < interviewDateOnly) {
+    return {
+      success: false,
+      error: "Offer date cannot be before interview date",
+    };
   }
 
-  if (status === 'REJECTED' && rejectedDateOnly && appliedDateOnly && rejectedDateOnly < appliedDateOnly) {
-    return { success: false, error: 'Rejected date cannot be before applied date' };
+  if (status === "REJECTED" && rejectedDateOnly && appliedDateOnly && rejectedDateOnly < appliedDateOnly) {
+    return {
+      success: false,
+      error: "Rejected date cannot be before applied date",
+    };
   }
 
-  if (status === 'REJECTED' && rejectedDateOnly && firstResponseDateOnly && rejectedDateOnly < firstResponseDateOnly) {
-    return { success: false, error: 'Rejected date cannot be before first response date' };
+  if (status === "REJECTED" && rejectedDateOnly && firstResponseDateOnly && rejectedDateOnly < firstResponseDateOnly) {
+    return {
+      success: false,
+      error: "Rejected date cannot be before first response date",
+    };
   }
 
-  if (status === 'REJECTED' && rejectedDateOnly && interviewDateOnly && rejectedDateOnly < interviewDateOnly) {
-    return { success: false, error: 'Rejected date cannot be before interview date' };
+  if (status === "REJECTED" && rejectedDateOnly && interviewDateOnly && rejectedDateOnly < interviewDateOnly) {
+    return {
+      success: false,
+      error: "Rejected date cannot be before interview date",
+    };
   }
 
-  if (status === 'REJECTED' && rejectedDateOnly && offerDateOnly && rejectedDateOnly < offerDateOnly) {
-    return { success: false, error: 'Rejected date cannot be before offer date' };
+  if (status === "REJECTED" && rejectedDateOnly && offerDateOnly && rejectedDateOnly < offerDateOnly) {
+    return {
+      success: false,
+      error: "Rejected date cannot be before offer date",
+    };
   }
 
-  const parsedSalaryMin = parseOptionalNumber(salaryMin, 'minimum salary');
+  const parsedSalaryMin = parseOptionalNumber(salaryMin, "minimum salary");
 
   if (!parsedSalaryMin.success) {
     return { success: false, error: parsedSalaryMin.error };
   }
 
-  const parsedSalaryMax = parseOptionalNumber(salaryMax, 'maximum salary');
+  const parsedSalaryMax = parseOptionalNumber(salaryMax, "maximum salary");
 
   if (!parsedSalaryMax.success) {
     return { success: false, error: parsedSalaryMax.error };
@@ -262,7 +286,10 @@ export const parseApplicationPayload = (applicationData: unknown): ParseApplicat
     parsedSalaryMax.value !== null &&
     parsedSalaryMin.value >= parsedSalaryMax.value
   ) {
-    return { success: false, error: 'Minimum salary must be less than maximum salary' };
+    return {
+      success: false,
+      error: "Minimum salary must be less than maximum salary",
+    };
   }
 
   return {
@@ -271,13 +298,13 @@ export const parseApplicationPayload = (applicationData: unknown): ParseApplicat
       title,
       company,
       ...synchronizedMilestones,
-      link: typeof link === 'string' && link.trim() ? link.trim() : null,
+      link: typeof link === "string" && link.trim() ? link.trim() : null,
       salaryMin: parsedSalaryMin.value,
       salaryMax: parsedSalaryMax.value,
-      location: typeof location === 'string' && location.trim() ? location.trim() : null,
-      notes: typeof notes === 'string' && notes.trim() ? notes.trim() : null,
-      source: source === null || source === '' ? null : source ? (source as ApplicationSource) : undefined,
-      workMode: workMode === null || workMode === '' ? null : workMode ? (workMode as WorkMode) : undefined,
+      location: typeof location === "string" && location.trim() ? location.trim() : null,
+      notes: typeof notes === "string" && notes.trim() ? notes.trim() : null,
+      source: source === null || source === "" ? null : source ? (source as ApplicationSource) : undefined,
+      workMode: workMode === null || workMode === "" ? null : workMode ? (workMode as WorkMode) : undefined,
       appliedAt: parsedAppliedAt,
     },
   };

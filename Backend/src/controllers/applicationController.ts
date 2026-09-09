@@ -8,7 +8,7 @@ import { synchronizeApplicationMilestones } from "../utils/synchronizeApplicatio
 export const getAllApplications = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) {
-      return res.status(401).json({ error: 'Not authorized' });
+      return res.status(401).json({ error: "Not authorized" });
     }
     const applications = await prisma.jobApplication.findMany({
       where: { userId: req.user.userId },
@@ -32,25 +32,25 @@ export const getAllApplications = async (req: AuthRequest, res: Response) => {
         offerAt: true,
         rejectedAt: true,
       },
-      orderBy: { appliedAt: 'desc' },
+      orderBy: { appliedAt: "desc" },
     });
     res.status(200).json(applications);
   } catch (error) {
-    console.error('Error fetching applications:', error);
-    res.status(500).json({ error: 'Failed to fetch applications' });
+    console.error("Error fetching applications:", error);
+    res.status(500).json({ error: "Failed to fetch applications" });
   }
 };
 
 export const getSingleApplication = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user?.userId) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const publicId = req.params.id;
 
-    if (typeof publicId !== 'string') {
-      return res.status(400).json({ error: 'Invalid application ID' });
+    if (typeof publicId !== "string") {
+      return res.status(400).json({ error: "Invalid application ID" });
     }
 
     const application = await prisma.jobApplication.findFirst({
@@ -61,20 +61,20 @@ export const getSingleApplication = async (req: AuthRequest, res: Response) => {
     });
 
     if (!application) {
-      return res.status(404).json({ error: 'Application not found' });
+      return res.status(404).json({ error: "Application not found" });
     }
 
     res.status(200).json(application);
   } catch (error) {
-    console.error('Error fetching application:', error);
-    res.status(500).json({ error: 'Failed to fetch application' });
+    console.error("Error fetching application:", error);
+    res.status(500).json({ error: "Failed to fetch application" });
   }
 };
 
 export const getRecentApplications = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) {
-      return res.status(401).json({ error: 'Not authorized' });
+      return res.status(401).json({ error: "Not authorized" });
     }
     const applications = await prisma.jobApplication.findMany({
       where: { userId: req.user.userId },
@@ -98,20 +98,20 @@ export const getRecentApplications = async (req: AuthRequest, res: Response) => 
         offerAt: true,
         rejectedAt: true,
       },
-      orderBy: { appliedAt: 'desc' },
+      orderBy: { appliedAt: "desc" },
       take: 3,
     });
     res.status(200).json(applications);
   } catch (error) {
-    console.error('Error fetching applications:', error);
-    res.status(500).json({ error: 'Failed to fetch applications' });
+    console.error("Error fetching applications:", error);
+    res.status(500).json({ error: "Failed to fetch applications" });
   }
 };
 
 export const createApplication = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) {
-      return res.status(401).json({ error: 'Not authorized' });
+      return res.status(401).json({ error: "Not authorized" });
     }
 
     const parsed = parseApplicationPayload(req.body);
@@ -124,7 +124,7 @@ export const createApplication = async (req: AuthRequest, res: Response) => {
       const resumeId = Number(req.body.resumeId);
 
       if (Number.isNaN(resumeId)) {
-        return res.status(400).json({ error: 'Resume ID is not valid' });
+        return res.status(400).json({ error: "Resume ID is not valid" });
       }
 
       resume = await prisma.resume.findFirst({
@@ -134,7 +134,7 @@ export const createApplication = async (req: AuthRequest, res: Response) => {
         },
       });
       if (!resume) {
-        return res.status(404).json({ error: 'Resume not found' });
+        return res.status(404).json({ error: "Resume not found" });
       }
     }
 
@@ -151,7 +151,7 @@ export const createApplication = async (req: AuthRequest, res: Response) => {
 
       await tx.applicationActivity.create({
         data: {
-          type: 'CREATED',
+          type: "CREATED",
           title: app.title,
           company: app.company,
           userId,
@@ -163,21 +163,21 @@ export const createApplication = async (req: AuthRequest, res: Response) => {
 
     res.status(201).json(application);
   } catch (error) {
-    console.error('Error creating application:', error);
-    res.status(500).json({ error: 'Failed to create application' });
+    console.error("Error creating application:", error);
+    res.status(500).json({ error: "Failed to create application" });
   }
 };
 
 export const updateApplication = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) {
-      return res.status(401).json({ error: 'Not authorized' });
+      return res.status(401).json({ error: "Not authorized" });
     }
 
     const publicId = req.params.id;
 
-    if (typeof publicId !== 'string') {
-      return res.status(400).json({ error: 'Invalid application ID' });
+    if (typeof publicId !== "string") {
+      return res.status(400).json({ error: "Invalid application ID" });
     }
 
     const application = await prisma.jobApplication.findFirst({
@@ -188,7 +188,7 @@ export const updateApplication = async (req: AuthRequest, res: Response) => {
     });
 
     if (!application) {
-      return res.status(404).json({ error: 'Application not found' });
+      return res.status(404).json({ error: "Application not found" });
     }
 
     const parsed = parseApplicationPayload(req.body);
@@ -201,7 +201,7 @@ export const updateApplication = async (req: AuthRequest, res: Response) => {
       const resumeId = Number(req.body.resumeId);
 
       if (Number.isNaN(resumeId)) {
-        return res.status(400).json({ error: 'Resume ID is not valid' });
+        return res.status(400).json({ error: "Resume ID is not valid" });
       }
 
       resume = await prisma.resume.findFirst({
@@ -212,7 +212,7 @@ export const updateApplication = async (req: AuthRequest, res: Response) => {
       });
 
       if (!resume) {
-        return res.status(404).json({ error: 'Resume not found' });
+        return res.status(404).json({ error: "Resume not found" });
       }
     }
 
@@ -233,7 +233,7 @@ export const updateApplication = async (req: AuthRequest, res: Response) => {
       if (updatedApp.status !== application.status) {
         await tx.applicationActivity.create({
           data: {
-            type: 'STATUS_CHANGE',
+            type: "STATUS_CHANGE",
             title: updatedApp.title,
             company: updatedApp.company,
             userId,
@@ -245,7 +245,7 @@ export const updateApplication = async (req: AuthRequest, res: Response) => {
       } else {
         await tx.applicationActivity.create({
           data: {
-            type: 'UPDATED',
+            type: "UPDATED",
             title: updatedApp.title,
             company: updatedApp.company,
             userId,
@@ -258,29 +258,29 @@ export const updateApplication = async (req: AuthRequest, res: Response) => {
 
     res.status(200).json(updatedApplication);
   } catch (error) {
-    console.error('Error updating application:', error);
-    res.status(500).json({ error: 'Failed to update application' });
+    console.error("Error updating application:", error);
+    res.status(500).json({ error: "Failed to update application" });
   }
 };
 
 export const updateApplicationStatus = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) {
-      return res.status(401).json({ error: 'Not authorized' });
+      return res.status(401).json({ error: "Not authorized" });
     }
 
     const publicId = req.params.id;
 
-    if (typeof publicId !== 'string') {
-      return res.status(400).json({ error: 'Invalid application ID' });
+    if (typeof publicId !== "string") {
+      return res.status(400).json({ error: "Invalid application ID" });
     }
 
     const status = req.body.status;
 
-    const allowedStatuses = ['APPLIED', 'INTERVIEW', 'OFFER', 'REJECTED'];
+    const allowedStatuses = ["APPLIED", "INTERVIEW", "OFFER", "REJECTED"];
 
     if (!status || !allowedStatuses.includes(status)) {
-      return res.status(400).json({ error: 'Invalid status' });
+      return res.status(400).json({ error: "Invalid status" });
     }
 
     const application = await prisma.jobApplication.findFirst({
@@ -291,7 +291,7 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
     });
 
     if (!application) {
-      return res.status(404).json({ error: 'Application not found' });
+      return res.status(404).json({ error: "Application not found" });
     }
 
     const synchronizedData = synchronizeApplicationMilestones(application, status);
@@ -321,7 +321,7 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
       if (statusChanged) {
         await tx.applicationActivity.create({
           data: {
-            type: 'STATUS_CHANGE',
+            type: "STATUS_CHANGE",
             title: updatedApp.title,
             company: updatedApp.company,
             userId,
@@ -336,21 +336,21 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
 
     res.status(200).json(updatedApplication);
   } catch (error) {
-    console.error('Error updating application status:', error);
-    res.status(500).json({ error: 'Failed to update application status' });
+    console.error("Error updating application status:", error);
+    res.status(500).json({ error: "Failed to update application status" });
   }
 };
 
 export const deleteApplication = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user?.userId) {
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ error: "Unauthorized" });
     }
 
     const publicId = req.params.id;
 
-    if (typeof publicId !== 'string') {
-      return res.status(400).json({ error: 'Invalid application ID' });
+    if (typeof publicId !== "string") {
+      return res.status(400).json({ error: "Invalid application ID" });
     }
 
     const application = await prisma.jobApplication.findFirst({
@@ -360,7 +360,7 @@ export const deleteApplication = async (req: AuthRequest, res: Response) => {
       },
     });
     if (!application) {
-      return res.status(404).json({ error: 'Application not found' });
+      return res.status(404).json({ error: "Application not found" });
     }
 
     const userId = req.user.userId;
@@ -368,7 +368,7 @@ export const deleteApplication = async (req: AuthRequest, res: Response) => {
     await prisma.$transaction(async (tx) => {
       await tx.applicationActivity.create({
         data: {
-          type: 'DELETED',
+          type: "DELETED",
           title: application.title,
           company: application.company,
           userId,
@@ -385,7 +385,7 @@ export const deleteApplication = async (req: AuthRequest, res: Response) => {
 
     res.status(200).json(application);
   } catch (error) {
-    console.error('Error deleting application:', error);
-    res.status(500).json({ error: 'Failed to delete application' });
+    console.error("Error deleting application:", error);
+    res.status(500).json({ error: "Failed to delete application" });
   }
 };

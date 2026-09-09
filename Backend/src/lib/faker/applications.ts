@@ -1,16 +1,16 @@
 import { faker } from "@faker-js/faker";
 
-const statuses = ['APPLIED', 'INTERVIEW', 'OFFER', 'REJECTED'] as const;
+const statuses = ["APPLIED", "INTERVIEW", "OFFER", "REJECTED"] as const;
 const applicationSources = [
-  'LINKEDIN',
-  'INDEED',
-  'COMPANY_SITE',
-  'REFERRAL',
-  'RECRUITER',
-  'NETWORKING',
-  'OTHER',
+  "LINKEDIN",
+  "INDEED",
+  "COMPANY_SITE",
+  "REFERRAL",
+  "RECRUITER",
+  "NETWORKING",
+  "OTHER",
 ] as const;
-const workModes = ['REMOTE', 'HYBRID', 'ONSITE'] as const;
+const workModes = ["REMOTE", "HYBRID", "ONSITE"] as const;
 
 const daysAfter = (date: Date, minDays: number, maxDays: number) => {
   const from = new Date(date);
@@ -26,24 +26,27 @@ export const createFakeApplication = () => {
   const status = faker.helpers.arrayElement(statuses);
   const appliedAt = faker.date.recent({ days: 90 });
   const salaryMin = faker.number.int({ min: 50000, max: 200000 });
-  const salaryMax = faker.number.int({ min: salaryMin + 10000, max: salaryMin + 250000 });
+  const salaryMax = faker.number.int({
+    min: salaryMin + 10000,
+    max: salaryMin + 250000,
+  });
   let firstResponseAt: Date | null = null;
   let interviewAt: Date | null = null;
   let offerAt: Date | null = null;
   let rejectedAt: Date | null = null;
 
-  if (status === 'INTERVIEW') {
+  if (status === "INTERVIEW") {
     firstResponseAt = daysAfter(appliedAt, 1, 14);
     interviewAt = daysAfter(firstResponseAt, 2, 21);
   }
 
-  if (status === 'OFFER') {
+  if (status === "OFFER") {
     firstResponseAt = daysAfter(appliedAt, 1, 14);
     interviewAt = daysAfter(firstResponseAt, 2, 21);
     offerAt = daysAfter(interviewAt, 3, 21);
   }
 
-  if (status === 'REJECTED') {
+  if (status === "REJECTED") {
     firstResponseAt = faker.datatype.boolean() ? daysAfter(appliedAt, 1, 21) : null;
 
     rejectedAt = daysAfter(firstResponseAt ?? appliedAt, 1, 30);

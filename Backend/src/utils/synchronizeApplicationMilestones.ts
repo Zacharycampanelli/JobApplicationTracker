@@ -12,7 +12,7 @@ export const synchronizeApplicationMilestones = (
   newStatus: JobStatus,
   now: Date = new Date(),
 ) => {
-  if (newStatus === 'APPLIED') {
+  if (newStatus === "APPLIED") {
     return {
       status: newStatus,
       firstResponseAt: null,
@@ -22,7 +22,7 @@ export const synchronizeApplicationMilestones = (
     };
   }
 
-  if (newStatus === 'INTERVIEW') {
+  if (newStatus === "INTERVIEW") {
     return {
       status: newStatus,
       firstResponseAt: application.firstResponseAt ?? now,
@@ -32,7 +32,7 @@ export const synchronizeApplicationMilestones = (
     };
   }
 
-  if (newStatus === 'OFFER') {
+  if (newStatus === "OFFER") {
     return {
       status: newStatus,
       firstResponseAt: application.firstResponseAt ?? now,
@@ -42,7 +42,7 @@ export const synchronizeApplicationMilestones = (
     };
   }
 
-  if (newStatus === 'REJECTED') {
+  if (newStatus === "REJECTED") {
     return {
       status: newStatus,
       firstResponseAt: application.firstResponseAt,

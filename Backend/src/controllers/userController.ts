@@ -7,13 +7,13 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
   const userId = req.user?.userId;
 
   if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   const { name, summary, title, location, website, linkedin } = req.body;
 
   if (!name) {
-    return res.status(400).json({ error: 'Name is required' });
+    return res.status(400).json({ error: "Name is required" });
   }
 
   try {
@@ -80,7 +80,7 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
     res.json(updatedUser);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to update user' });
+    res.status(500).json({ error: "Failed to update user" });
   }
 };
 
@@ -89,11 +89,11 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
   const avatarUrl = `/uploads/avatars/${req.file?.filename}`;
 
   if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   if (!req.file) {
-    return res.status(400).json({ error: 'Avatar is required' });
+    return res.status(400).json({ error: "Avatar is required" });
   }
 
   try {
@@ -142,7 +142,7 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
     res.json(updatedUserWithAvatar);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to upload avatar' });
+    res.status(500).json({ error: "Failed to upload avatar" });
   }
 };
 
@@ -150,7 +150,7 @@ export const updateUserPreferences = async (req: AuthRequest, res: Response) => 
   const userId = req.user?.userId;
 
   if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   const { publicProfileEnabled, autoStatusUpdatesEnabled, themePreference } = req.body;
@@ -174,6 +174,6 @@ export const updateUserPreferences = async (req: AuthRequest, res: Response) => 
     res.json(updatedPreferences);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to update user preferences' });
+    res.status(500).json({ error: "Failed to update user preferences" });
   }
 };

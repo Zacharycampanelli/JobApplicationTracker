@@ -10,12 +10,14 @@ const frontendUrl = process.env.FRONTEND_URL ?? "http://localhost:5173";
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 app.use(
   helmet({
     crossOriginResourcePolicy: {
       policy: "cross-origin",
-    }
-  })
+    },
+  }),
 );
 
 app.use(
@@ -33,26 +35,23 @@ app.use(
 
 app.use(express.json());
 
-app.use(
-  '/uploads/avatars',
-  express.static(path.join(process.cwd(), 'uploads', 'avatars'))
-);
+app.use("/uploads/avatars", express.static(path.join(process.cwd(), "uploads", "avatars")));
 
 app.use(routes);
 
-app.get('/api/health', async (_req, res) => {
+app.get("/api/health", async (_req, res) => {
   try {
     await prisma.$connect();
 
     res.json({
-      status: 'ok',
-      database: 'connected',
+      status: "ok",
+      database: "connected",
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      status: 'error',
-      database: 'not connected',
+      status: "error",
+      database: "not connected",
     });
   }
 });

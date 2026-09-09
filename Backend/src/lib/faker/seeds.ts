@@ -18,12 +18,12 @@ async function seed() {
       data: {
         ...(await createFakeUser()),
         profile: {
-          create: createFakeProfile()
+          create: createFakeProfile(),
         },
         preferences: {
-          create: createFakePreferences()
-        }
-      }
+          create: createFakePreferences(),
+        },
+      },
     });
 
     const resumes = await Promise.all(

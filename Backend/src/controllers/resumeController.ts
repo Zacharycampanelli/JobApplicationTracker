@@ -7,11 +7,11 @@ import { AuthRequest } from "../middleware/authMiddleware";
 export const uploadResume = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded' });
+      return res.status(400).json({ message: "No file uploaded" });
     }
 
     if (!req.user?.userId) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const resume = await prisma.resume.create({
@@ -19,20 +19,20 @@ export const uploadResume = async (req: AuthRequest, res: Response) => {
         fileUrl: req.file.path,
         name: req.file.originalname,
         userId: req.user.userId,
-        mimeType: req.file.mimetype
+        mimeType: req.file.mimetype,
       },
     });
     res.json(resume);
   } catch (error) {
-    console.error('Failed to upload resume:', error);
-    res.status(500).json({ message: 'Failed to upload resume' });
+    console.error("Failed to upload resume:", error);
+    res.status(500).json({ message: "Failed to upload resume" });
   }
 };
 
 export const getResumes = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user?.userId) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const resumes = await prisma.resume.findMany({
@@ -42,21 +42,21 @@ export const getResumes = async (req: AuthRequest, res: Response) => {
     });
     res.json(resumes);
   } catch (error) {
-    console.error('Failed to get resumes:', error);
-    res.status(500).json({ message: 'Failed to get resumes' });
+    console.error("Failed to get resumes:", error);
+    res.status(500).json({ message: "Failed to get resumes" });
   }
 };
 
 export const deleteResume = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user?.userId) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const id = Number(req.params.id);
 
     if (isNaN(id)) {
-      return res.status(400).json({ message: 'Invalid ID' });
+      return res.status(400).json({ message: "Invalid ID" });
     }
 
     const resume = await prisma.resume.findFirst({
@@ -67,7 +67,7 @@ export const deleteResume = async (req: AuthRequest, res: Response) => {
     });
 
     if (!resume) {
-      return res.status(404).json({ message: 'Resume not found' });
+      return res.status(404).json({ message: "Resume not found" });
     }
 
     await prisma.resume.delete({
@@ -79,15 +79,15 @@ export const deleteResume = async (req: AuthRequest, res: Response) => {
     try {
       await unlink(resume.fileUrl);
     } catch (error) {
-      if (typeof error === 'object' && error !== null && 'code' in error && error.code !== 'ENOENT') {
-        console.error('Failed to delete resume file:', error);
+      if (typeof error === "object" && error !== null && "code" in error && error.code !== "ENOENT") {
+        console.error("Failed to delete resume file:", error);
       }
     }
     res.json(resume);
   } catch (error) {
-    if (error instanceof Error && error.message.includes('does not exist')) {
-      return res.status(404).json({ message: 'Resume not found' });
+    if (error instanceof Error && error.message.includes("does not exist")) {
+      return res.status(404).json({ message: "Resume not found" });
     }
-    res.status(500).json({ message: 'Failed to delete resume' });
+    res.status(500).json({ message: "Failed to delete resume" });
   }
 };

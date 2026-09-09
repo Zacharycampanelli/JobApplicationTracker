@@ -4,6 +4,6 @@ export const createFakePreferences = () => {
   return {
     publicProfileEnabled: true,
     autoStatusUpdatesEnabled: faker.datatype.boolean(),
-    themePreference: faker.helpers.arrayElement(['light', 'dark', 'system'])
+    themePreference: faker.helpers.arrayElement(["light", "dark", "system"]),
   };
 };
