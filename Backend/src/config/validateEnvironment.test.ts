@@ -17,14 +17,14 @@ describe("validateEnvironment", () => {
 
   it("reports every missing required variable", () => {
     const incompleteEnvironment: NodeJS.ProcessEnv = {
-      ...validEnvironment
-     }
-     
-     delete incompleteEnvironment.JWT_SECRET;
-     delete incompleteEnvironment.FRONTEND_URL;
+      ...validEnvironment,
+    };
 
-     expect(() => validateEnvironment(incompleteEnvironment)).toThrow(
-        "Missing required environment variables: JWT_SECRET, FRONTEND_URL"
-     );
-    });
+    delete incompleteEnvironment.JWT_SECRET;
+    delete incompleteEnvironment.FRONTEND_URL;
+
+    expect(() => validateEnvironment(incompleteEnvironment)).toThrow(
+      "Missing required environment variables: JWT_SECRET, FRONTEND_URL",
+    );
+  });
 });
