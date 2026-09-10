@@ -22,7 +22,6 @@ export const getPublicProfile = async (req: Request, res: Response) => {
       select: {
         id: true,
         name: true,
-        email: true,
         profile: {
           select: {
             summary: true,

@@ -17,7 +17,6 @@ const PublicProfile = () => {
   const { id } = useParams();
 
   const [profile, setProfile] = useState({
-    email: "",
     name: "",
     avatarUrl: "",
     title: "",
@@ -37,7 +36,6 @@ const PublicProfile = () => {
         setEmpty(false);
         setError("");
         setProfile({
-          email: data.email ?? "",
           name: data.name ?? "",
           avatarUrl: data.profile?.avatarUrl
             ? `${API_URL}${data.profile.avatarUrl}`
@@ -74,7 +72,6 @@ const PublicProfile = () => {
       <Header />
       <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 md:relative">
         <SharedProfileView
-          email={profile.email}
           name={profile.name}
           avatarUrl={profile.avatarUrl}
           title={profile.title}

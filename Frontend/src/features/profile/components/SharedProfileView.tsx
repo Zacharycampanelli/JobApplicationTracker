@@ -1,5 +1,5 @@
 type SharedProfileViewProps = {
-  email: string;
+  email?: string;
   name: string;
   avatarUrl?: string | null;
   title?: string | null;
@@ -35,12 +35,14 @@ const SharedProfileView = ({
       )}
 
       <dl className="flex flex-col gap-6 md:grid grid-cols-2 xl:grid-cols-3">
+        {email && (
         <div className="flex flex-col gap-2">
           <dt className="text-label-md text-on-surface">ACCOUNT EMAIL</dt>
           <dd className="flex min-h-10 w-full items-center rounded-control bg-surface-container-low px-3 text-body-md text-on-surface">
             {email}
           </dd>
         </div>
+        )}
         <div className="flex flex-col gap-2">
           <dt className="text-label-md text-on-surface">FULL NAME</dt>
           <dd className="flex min-h-10 w-full items-center rounded-control bg-surface-container-low px-3 text-body-md text-on-surface">
