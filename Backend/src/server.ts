@@ -1,4 +1,10 @@
-import app from "./app";
+import "dotenv/config";
+
+import { validateEnvironment } from "./config/validateEnvironment";
+
+validateEnvironment();
+
+const { default: app } = await import("./app");
 
 const PORT = process.env.PORT || 5001;
 
