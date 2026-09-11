@@ -6,6 +6,7 @@ import type { AuthRequest } from "../middleware/authMiddleware";
 import { sendPasswordResetEmail } from "../services/emailService";
 import { generateToken } from "../utils/generateToken";
 import { comparePassword, hashPassword } from "../utils/hash";
+import { normalizeEmail } from "../utils/normalizeEmail";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -19,11 +20,16 @@ export const register = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Name must be at least 2 characters long" });
     }
 
-    if (password.length < 6) {
-      return res.status(400).json({ error: "Password must be at least 6 characters long" });
+    if (password.length < 15) {
+      return res.status(400).json({ error: "Password must be at least 15 characters long" });
     }
 
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (typeof email !== "string" || !email.trim() || typeof password !== "string") {
+      return res.status(400).json({ error: "Email and password are required" });
+    }
+
+    const normalizedEmail = normalizeEmail(email);
+    const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } });
 
     if (existingUser) {
       return res.status(400).json({ error: "User already exists" });
@@ -34,7 +40,7 @@ export const register = async (req: Request, res: Response) => {
     const user = await prisma.user.create({
       data: {
         name: name.trim(),
-        email,
+        email: normalizedEmail,
         password: hashedPassword,
       },
       select: {
@@ -62,7 +68,9 @@ export const login = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Email and password are required" });
     }
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const normalizedEmail = normalizeEmail(email);
+
+    const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
 
     if (!user) {
       return res.status(401).json({ error: "Invalid credentials" });
@@ -149,20 +157,27 @@ export const getMe = async (req: AuthRequest, res: Response): Promise<void> => {
 
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
-    if (!req.body.email) {
+    const { email } = req.body;
+
+    if (!email) {
       return res.status(400).json({ error: "Email is required" });
     }
-    const { email } = req.body;
-    //normalize email
-    const normalizeEmail = email.trim().toLowerCase();
+
+    if (typeof email !== "string" || !email.trim()) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+
+    const normalizedEmail = normalizeEmail(email);
     const user = await prisma.user.findUnique({
-      where: { email: normalizeEmail },
+      where: { email: normalizedEmail },
     });
+
     if (!user) {
       return res.status(200).json({
         message: "If an account exists for that email, a reset link has been sent.",
       });
     }
+
     const resetToken = crypto.randomBytes(32).toString("hex");
     const tokenHash = crypto.createHash("sha256").update(resetToken).digest("hex");
 
@@ -194,8 +209,8 @@ export const resetPassword = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Token and password are required" });
     }
 
-    if (password.length < 6) {
-      return res.status(400).json({ error: "Password must be at least 6 characters long" });
+    if (password.length < 15) {
+      return res.status(400).json({ error: "Password must be at least 15 characters long" });
     }
 
     const tokenHash = crypto.createHash("sha256").update(token).digest("hex");

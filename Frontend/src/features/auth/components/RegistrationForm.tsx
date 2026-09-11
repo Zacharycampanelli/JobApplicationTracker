@@ -15,7 +15,7 @@ const registrationSchema = z
   .object({
     name: z.string().trim().min(2, "Name must be at least 2 characters"),
     email: z.email("Enter a valid email"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    password: z.string().min(15, "Password must be at least 15 characters"),
     confirmPassword: z.string().min(1, "Confirm password")
   })
   .refine((data) => data.password === data.confirmPassword, {
