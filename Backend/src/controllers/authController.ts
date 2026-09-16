@@ -48,10 +48,11 @@ export const register = async (req: Request, res: Response) => {
         name: true,
         email: true,
         createdAt: true,
+        sessionVersion: true,
       },
     });
 
-    const token = generateToken(user.id);
+    const token = generateToken(user.id, user.sessionVersion);
 
     return res.status(201).json({ message: "User registered successfully", user, token });
   } catch (error) {
@@ -82,7 +83,7 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const token = generateToken(user.id);
+    const token = generateToken(user.id, user.sessionVersion);
 
     res.status(200).json({
       message: "Login successful",
@@ -190,7 +191,6 @@ export const forgotPassword = async (req: Request, res: Response) => {
     });
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
-
     await sendPasswordResetEmail(user.email, resetUrl);
 
     res.status(200).json({
@@ -228,7 +228,10 @@ export const resetPassword = async (req: Request, res: Response) => {
     await prisma.$transaction([
       prisma.user.update({
         where: { id: resetRecord.userId },
-        data: { password: hashedPassword },
+        data: {
+          password: hashedPassword,
+          sessionVersion: { increment: 1 },
+        },
       }),
       prisma.passwordResetToken.deleteMany({
         where: { userId: resetRecord.userId },

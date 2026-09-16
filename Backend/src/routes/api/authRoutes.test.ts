@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import app from "../../app";
 import { prisma } from "../../lib/prisma";
 import { generateToken } from "../../utils/generateToken";
-import { comparePassword } from "../../utils/hash";
+import { comparePassword, hashPassword } from "../../utils/hash";
 
 afterEach(() => {
   vi.resetAllMocks();
@@ -20,7 +20,13 @@ vi.mock("../../lib/prisma", () => ({
   prisma: {
     user: {
       findUnique: vi.fn(),
+      update: vi.fn(),
     },
+    passwordResetToken: {
+      findUnique: vi.fn(),
+      deleteMany: vi.fn(),
+    },
+    $transaction: vi.fn(),
   },
 }));
 
@@ -33,11 +39,17 @@ vi.mock("../../utils/generateToken", () => ({
   generateToken: vi.fn(),
 }));
 
-vi.mock("jsonwebtoken", () => ({
-  default: {
-    verify: vi.fn(),
-  },
-}));
+vi.mock("jsonwebtoken", async (importOriginal) => {
+  const actual = await importOriginal<{ default: typeof jwt }>();
+
+  return {
+    ...actual,
+    default: {
+      ...actual.default,
+      verify: vi.fn(),
+    },
+  };
+});
 
 describe("Authentication payload validation", () => {
   it.each([
@@ -136,6 +148,7 @@ describe("POST /api/auth/login", () => {
       name: "User 1",
       createdAt: new Date("2026-01-01"),
       updatedAt: new Date("2026-01-01"),
+      sessionVersion: 3,
     };
 
     vi.mocked(prisma.user.findUnique).mockResolvedValue(user);
@@ -158,6 +171,7 @@ describe("POST /api/auth/login", () => {
       name: "User 1",
       createdAt: new Date("2026-01-01"),
       updatedAt: new Date("2026-01-01"),
+      sessionVersion: 3,
     };
 
     const token = "abc123";
@@ -179,7 +193,7 @@ describe("POST /api/auth/login", () => {
         createdAt: user.createdAt.toISOString(),
       },
     });
-    expect(generateToken).toHaveBeenCalledWith(user.id);
+    expect(generateToken).toHaveBeenCalledWith(user.id, user.sessionVersion);
   });
 
   it("returns 500 when the user lookup fails", async () => {
@@ -226,7 +240,7 @@ describe("GET /api/auth/me", () => {
 
   it("returns 401 when an invalid authorization token is provided", async () => {
     vi.mocked(jwt.verify).mockImplementation(() => {
-      throw new Error("jwt malformed");
+      throw new jwt.JsonWebTokenError("jwt malformed");
     });
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     const response = await request(app).get("/api/auth/me").set("Authorization", "Bearer invalid-token");
@@ -236,14 +250,14 @@ describe("GET /api/auth/me", () => {
     expect(consoleErrorSpy).toHaveBeenCalled();
   });
 
-  it("returns 404 when the authenticated user no longer exists", async () => {
-    vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1 }));
+  it("returns 401 when the authenticated user no longer exists", async () => {
+    vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1, sessionVersion: 0 }));
     vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
 
     const response = await request(app).get("/api/auth/me").set("Authorization", "Bearer valid-token");
 
-    expect(response.status).toBe(404);
-    expect(response.body).toEqual({ error: "User not found" });
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ error: "Not authorized, user not found" });
     expect(prisma.user.findUnique).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { id: 1 },
@@ -252,7 +266,7 @@ describe("GET /api/auth/me", () => {
   });
 
   it("returns the authenticated user", async () => {
-    vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1 }));
+    vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1, sessionVersion: 0 }));
     const user = {
       id: 1,
       name: "User 1",
@@ -262,7 +276,9 @@ describe("GET /api/auth/me", () => {
       profile: null,
       preferences: null,
     };
-    vi.mocked(prisma.user.findUnique).mockResolvedValue(user as never);
+    vi.mocked(prisma.user.findUnique)
+      .mockResolvedValueOnce({ sessionVersion: 0 } as never)
+      .mockResolvedValueOnce(user as never);
 
     const response = await request(app).get("/api/auth/me").set("Authorization", "Bearer valid-token");
 
@@ -280,16 +296,69 @@ describe("GET /api/auth/me", () => {
   });
 
   it("returns 500 when user lookup fails", async () => {
-    vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1 }));
+    vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1, sessionVersion: 0 }));
     const databaseError = new Error("Error fetching current user");
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
-    vi.mocked(prisma.user.findUnique).mockRejectedValue(databaseError);
+    vi.mocked(prisma.user.findUnique)
+      .mockResolvedValueOnce({ sessionVersion: 0 } as never)
+      .mockRejectedValueOnce(databaseError);
 
     const response = await request(app).get("/api/auth/me").set("Authorization", "Bearer valid-token");
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ error: "Failed to fetch user" });
     expect(consoleErrorSpy).toHaveBeenCalledWith("Error fetching current user:", databaseError);
+  });
+
+  it("returns 401 when the session version no longer matches", async () => {
+    vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1, sessionVersion: 0 }));
+    vi.mocked(prisma.user.findUnique).mockResolvedValueOnce({ sessionVersion: 1 } as never);
+
+    const response = await request(app).get("/api/auth/me").set("Authorization", "Bearer valid-token");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ error: "Not authorized, session has expired" });
+    expect(prisma.user.findUnique).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("POST /api/auth/reset-password", () => {
+  it("updates the password and increments the session version", async () => {
+    const body = {
+      token: "token-123",
+      password: "new-password-12345!",
+    };
+
+    vi.mocked(prisma.passwordResetToken.findUnique).mockResolvedValue({
+      id: 1,
+      userId: 1,
+      tokenHash: "stored-token-hash",
+      createdAt: new Date(),
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+    });
+
+    vi.mocked(hashPassword).mockResolvedValue("new-password-hash!");
+
+    vi.mocked(prisma.$transaction).mockResolvedValue([]);
+    const response = await request(app).post("/api/auth/reset-password").send(body);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ message: "Password reset successful" });
+    expect(hashPassword).toHaveBeenCalledWith(body.password);
+    expect(prisma.user.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: 1 },
+        data: {
+          password: "new-password-hash!",
+          sessionVersion: { increment: 1 },
+        },
+      }),
+    );
+    expect(prisma.passwordResetToken.deleteMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { userId: 1 },
+      }),
+    );
   });
 });
