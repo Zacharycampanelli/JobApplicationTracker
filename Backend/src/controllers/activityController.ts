@@ -5,7 +5,7 @@ import type { AuthRequest } from "../middleware/authMiddleware";
 
 export const getUserRecentActivities = async (req: AuthRequest, res: Response) => {
   if (!req.user) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   const userId = req.user.userId;
@@ -17,13 +17,13 @@ export const getUserRecentActivities = async (req: AuthRequest, res: Response) =
       },
       take: 5,
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
     });
 
     res.status(200).json(activities);
   } catch (error) {
-    console.error('Error fetching user recent activities:', error);
-    res.status(500).json({ error: 'Failed to fetch user recent activities' });
+    console.error("Error fetching user recent activities:", error);
+    res.status(500).json({ error: "Failed to fetch user recent activities" });
   }
 };

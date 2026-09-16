@@ -1,7 +1,7 @@
-import { configDefaults, defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    exclude: [...configDefaults.exclude, '**/*.database.test.{ts,js}'],
+    exclude: [...configDefaults.exclude, "**/*.database.test.{ts,js}"],
   },
 });

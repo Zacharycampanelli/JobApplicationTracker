@@ -6,7 +6,7 @@ import path from "path";
 import { AuthRequest } from "./authMiddleware";
 
 // Resume upload
-const uploadDir = path.join(process.cwd(), 'uploads', 'resumes');
+const uploadDir = path.join(process.cwd(), "uploads", "resumes");
 
 fs.mkdirSync(uploadDir, { recursive: true });
 
@@ -23,16 +23,16 @@ const storage = multer.diskStorage({
 });
 
 const allowedMimeTypes = [
-  'application/pdf',
-  'application/msword',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ];
 
 const uploadResumeFile = multer({
   storage,
   fileFilter: (_req, file, cb) => {
     if (!allowedMimeTypes.includes(file.mimetype)) {
-      return cb(new Error('Only PDF, DOC, AND DOCX files are allowed.'));
+      return cb(new Error("Only PDF, DOC, AND DOCX files are allowed."));
     }
     cb(null, true);
   },
@@ -42,7 +42,7 @@ const uploadResumeFile = multer({
 });
 
 export const handleResumeUpload = (req: AuthRequest, res: Response, next: NextFunction) => {
-  uploadResumeFile.single('resume')(req, res, (error) => {
+  uploadResumeFile.single("resume")(req, res, (error) => {
     if (error instanceof multer.MulterError) {
       return res.status(400).json({ message: error.message });
     }
@@ -54,7 +54,7 @@ export const handleResumeUpload = (req: AuthRequest, res: Response, next: NextFu
 };
 
 // Avatar upload
-const avatarUploadDir = path.join(process.cwd(), 'uploads', 'avatars')
+const avatarUploadDir = path.join(process.cwd(), "uploads", "avatars");
 
 fs.mkdirSync(avatarUploadDir, { recursive: true });
 
@@ -70,17 +70,13 @@ const avatarStorage = multer.diskStorage({
   },
 });
 
-const allowedAvatarMimeTypes = [
-  "image/jpeg",
-  "image/png",
-  "image/webp"
-]
+const allowedAvatarMimeTypes = ["image/jpeg", "image/png", "image/webp"];
 
 const uploadAvatarFile = multer({
   storage: avatarStorage,
   fileFilter: (_req, file, cb) => {
     if (!allowedAvatarMimeTypes.includes(file.mimetype)) {
-      return cb(new Error('Only JPG, PNG, and WEBP files are allowed.'));
+      return cb(new Error("Only JPG, PNG, and WEBP files are allowed."));
     }
     cb(null, true);
   },
@@ -90,7 +86,7 @@ const uploadAvatarFile = multer({
 });
 
 export const uploadAvatarMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
-  uploadAvatarFile.single('avatar')(req, res, (error) => {
+  uploadAvatarFile.single("avatar")(req, res, (error) => {
     if (error instanceof multer.MulterError) {
       return res.status(400).json({ message: error.message });
     }

@@ -10,7 +10,7 @@ import { resetPassword } from "../authApi";
 
 const resetPasswordSchema = z
   .object({
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    password: z.string().min(15, "Password must be at least 15 characters"),
     confirmPassword: z.string().min(1, "Confirm your password")
   })
   .refine((data) => data.password === data.confirmPassword, {

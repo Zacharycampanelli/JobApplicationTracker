@@ -9,11 +9,11 @@ import userRoutes from "./userRoutes";
 
 const router = Router();
 
-router.use('/auth', authRoutes);
-router.use('/applications', applicationRoutes);
-router.use('/resumes', resumeRoutes);
-router.use('/users', userRoutes);
-router.use('/public', publicProfileRoutes);
-router.use('/activities', activityRoutes);
+router.use("/auth", authRoutes);
+router.use("/applications", applicationRoutes);
+router.use("/resumes", resumeRoutes);
+router.use("/users", userRoutes);
+router.use("/public", publicProfileRoutes);
+router.use("/activities", activityRoutes);
 
 export default router;

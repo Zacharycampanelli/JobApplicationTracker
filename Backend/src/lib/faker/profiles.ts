@@ -7,6 +7,6 @@ export const createFakeProfile = () => {
     location: `${faker.location.city()}, ${faker.location.state({ abbreviated: true })}`,
     website: faker.internet.url(),
     linkedin: `https://www.linkedin.com/in/${faker.internet.username()}`,
-    avatarUrl: null
+    avatarUrl: null,
   };
 };

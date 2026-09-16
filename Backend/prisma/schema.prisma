@@ -20,6 +20,7 @@ model User {
   profile             UserProfile?
   activities          ApplicationActivity[]
   passwordResetTokens PasswordResetToken[]
+  sessionVersion      Int                  @default(0)
 }
 
 model PasswordResetToken {

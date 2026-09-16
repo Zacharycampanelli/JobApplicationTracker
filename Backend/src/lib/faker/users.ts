@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 
 import { hashPassword } from "../../utils/hash";
 
-const DEV_PASSWORD = 'password1!';
+const DEV_PASSWORD = "password1!";
 let i = 0;
 export const createFakeUser = async () => {
   return {

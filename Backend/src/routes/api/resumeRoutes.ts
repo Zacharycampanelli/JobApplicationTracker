@@ -6,8 +6,8 @@ import { handleResumeUpload } from "../../middleware/uploadMiddleware";
 
 const router = Router();
 
-router.post('/upload', protect, handleResumeUpload, uploadResume);
-router.get('/', protect, getResumes);
-router.delete('/:id', protect, deleteResume);
+router.post("/upload", protect, handleResumeUpload, uploadResume);
+router.get("/", protect, getResumes);
+router.delete("/:id", protect, deleteResume);
 
 export default router;

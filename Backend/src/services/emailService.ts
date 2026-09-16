@@ -1,9 +1,6 @@
 import { BrevoClient } from "@getbrevo/brevo";
 
-export const sendPasswordResetEmail = async (
-  recipientEmail: string,
-  resetUrl: string
-) => {
+export const sendPasswordResetEmail = async (recipientEmail: string, resetUrl: string) => {
   const apiKey = process.env.BREVO_API_KEY;
   const senderEmail = process.env.EMAIL_FROM_ADDRESS;
 
@@ -20,11 +17,11 @@ export const sendPasswordResetEmail = async (
   return brevo.transactionalEmails.sendTransacEmail({
     sender: {
       name: process.env.EMAIL_FROM_NAME ?? "Job Tracker",
-      email: senderEmail
+      email: senderEmail,
     },
     to: [{ email: recipientEmail }],
     subject: "Reset your password",
     textContent: `Reset your password: ${resetUrl}`,
-    htmlContent: `<a href="${resetUrl}">Reset your password</a>`
+    htmlContent: `<a href="${resetUrl}">Reset your password</a>`,
   });
 };

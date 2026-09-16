@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
+import { API_URL } from "../api/api";
 import Header from "../components/layout/Header";
 import EmptyState from "../components/shared/EmptyState";
 import ErrorState from "../components/shared/ErrorState";
@@ -16,7 +17,6 @@ const PublicProfile = () => {
   const { id } = useParams();
 
   const [profile, setProfile] = useState({
-    email: "",
     name: "",
     avatarUrl: "",
     title: "",
@@ -36,9 +36,10 @@ const PublicProfile = () => {
         setEmpty(false);
         setError("");
         setProfile({
-          email: data.email ?? "",
           name: data.name ?? "",
-          avatarUrl: data.profile?.avatarUrl ?? "",
+          avatarUrl: data.profile?.avatarUrl
+            ? `${API_URL}${data.profile.avatarUrl}`
+            : "",
           title: data.profile?.title ?? "",
           location: data.profile?.location ?? "",
           website: data.profile?.website ?? "",
@@ -71,7 +72,6 @@ const PublicProfile = () => {
       <Header />
       <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface md:px-6 py-4 md:relative">
         <SharedProfileView
-          email={profile.email}
           name={profile.name}
           avatarUrl={profile.avatarUrl}
           title={profile.title}
