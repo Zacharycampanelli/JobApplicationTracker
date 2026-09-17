@@ -179,6 +179,14 @@ export const forgotPassword = async (req: Request, res: Response) => {
       });
     }
 
+    await prisma.passwordResetToken.deleteMany({
+      where: {
+        expiresAt: {
+          lt: new Date(),
+        }
+      }
+    })
+
     const resetToken = crypto.randomBytes(32).toString("hex");
     const tokenHash = crypto.createHash("sha256").update(resetToken).digest("hex");
 

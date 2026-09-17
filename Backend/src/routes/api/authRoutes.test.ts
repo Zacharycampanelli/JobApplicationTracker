@@ -25,6 +25,7 @@ vi.mock("../../lib/prisma", () => ({
     passwordResetToken: {
       findUnique: vi.fn(),
       deleteMany: vi.fn(),
+      create: vi.fn(),
     },
     $transaction: vi.fn(),
   },
@@ -204,7 +205,7 @@ describe("POST /api/auth/login", () => {
 
     const databaseError = new Error("Database unavailable");
 
-    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => { });
 
     vi.mocked(prisma.user.findUnique).mockRejectedValue(databaseError);
 
@@ -242,7 +243,7 @@ describe("GET /api/auth/me", () => {
     vi.mocked(jwt.verify).mockImplementation(() => {
       throw new jwt.JsonWebTokenError("jwt malformed");
     });
-    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => { });
     const response = await request(app).get("/api/auth/me").set("Authorization", "Bearer invalid-token");
 
     expect(response.status).toBe(401);
@@ -298,7 +299,7 @@ describe("GET /api/auth/me", () => {
   it("returns 500 when user lookup fails", async () => {
     vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1, sessionVersion: 0 }));
     const databaseError = new Error("Error fetching current user");
-    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => { });
 
     vi.mocked(prisma.user.findUnique)
       .mockResolvedValueOnce({ sessionVersion: 0 } as never)
@@ -361,4 +362,33 @@ describe("POST /api/auth/reset-password", () => {
       }),
     );
   });
+});
+
+describe("POST /api/auth/forgot-password", () => {
+  it("requests cleanup of tokens that expired before now", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    const now = new Date("2026-09-17T12:00:00Z");
+    vi.setSystemTime(now);
+
+    try {
+      vi.mocked(prisma.user.findUnique).mockResolvedValue({
+        id: 1,
+        email: "user1@example.com"
+      } as never);
+
+      const response = await request(app)
+        .post("/api/auth/forgot-password")
+        .send({ email: "user1@example.com" })
+      
+        expect(response.status).toBe(200);
+        expect(prisma.passwordResetToken.deleteMany).toHaveBeenCalledWith({
+          where: {
+            expiresAt: { lt: now }
+          }
+        })
+        expect(prisma.passwordResetToken.create).toHaveBeenCalledTimes(1)
+    } finally {
+      vi.useRealTimers();
+    }
+  })
 });
