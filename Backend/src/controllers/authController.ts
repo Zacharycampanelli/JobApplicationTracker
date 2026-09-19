@@ -251,3 +251,56 @@ export const resetPassword = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Failed to reset password" });
   }
 };
+
+export const changePassword = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?.userId;
+    const { oldPassword, newPassword } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    if (!oldPassword || !newPassword) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    if (newPassword.length < 15) {
+      return res.status(400).json({ error: "Password must be at least 15 characters long" });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: req.user?.userId },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const isPasswordCorrect = await comparePassword(oldPassword, user.password);
+
+    if (!isPasswordCorrect) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const hashedPassword = await hashPassword(newPassword);
+
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id: userId },
+        data: {
+          password: hashedPassword,
+          sessionVersion: { increment: 1 },
+        },
+      }),
+      prisma.passwordResetToken.deleteMany({
+        where: { userId: userId },
+      }),
+    ]);
+
+    return res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error("Error changing password:", error);
+    return res.status(500).json({ error: "Failed to change password" });
+  }
+};

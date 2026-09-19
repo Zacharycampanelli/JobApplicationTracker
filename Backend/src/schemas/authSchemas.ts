@@ -49,3 +49,10 @@ export const resetPasswordSchema = z.object({
     .min(1, resetPasswordRequiredMessage)
     .min(15, "Password must be at least 15 characters long"),
 });
+
+const changePasswordRequiredMessage = "Password is required";
+
+export const changePasswordSchema = z.object({
+  oldPassword: z.string({ error: changePasswordRequiredMessage })
+  newPassword: z.string({ error: changePasswordRequiredMessage }).min(1, changePasswordRequiredMessage).min(15, "New password must be at least 15 characters long"),
+});

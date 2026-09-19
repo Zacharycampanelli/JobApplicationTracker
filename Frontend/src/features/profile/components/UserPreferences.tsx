@@ -7,12 +7,12 @@ import ProfileNav from "../../../assets/images/profileNav.svg?react";
 import Settings from "../../../assets/images/settings.svg?react";
 import Sun from "../../../assets/images/sun.svg?react";
 import Warning from "../../../assets/images/warning.svg?react";
-import ExpandableSection from "../../../components/shared/ExpandableSection";
 import Toggle from "../../../components/ui/Toggle";
 import { useAuthContext } from "../../../context/AuthContext";
 import type { UpdatePreferencesValues } from "../../../types/types";
 import { updateUserPreferences } from "../profileApi";
 import UserPreferenceItem from "./UserPreferenceItem";
+import ChangePasswordForm from "./ChangePasswordForm";
 
 const UserPreferences = () => {
   const { user, updateUser } = useAuthContext();
@@ -97,12 +97,16 @@ const UserPreferences = () => {
       )
     },
     {
-      preference: "Password and MFA",
+      preference: "Password",
       icon: Lock,
       mode: "dropdown",
       isDangerous: false,
       description: "",
-      children: <ExpandableSection title="">hi</ExpandableSection>
+      children: (
+        <>
+          <ChangePasswordForm />
+        </>
+      )
     },
     {
       preference: "Deactivate account",
@@ -110,7 +114,7 @@ const UserPreferences = () => {
       mode: "dropdown",
       isDangerous: true,
       description: "",
-      children: <ExpandableSection title="">hi</ExpandableSection>
+      children: <p>hi</p>
     }
   ];
 

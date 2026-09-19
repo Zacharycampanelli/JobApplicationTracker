@@ -22,7 +22,7 @@ const ExpandableSection = ({
   const contentId = `${sectionId}-content`;
 
   return (
-    <div className={className}>
+    <div className={`flex flex-col ${className}`}>
       <Button
         id={triggerId}
         variant="ghost"
