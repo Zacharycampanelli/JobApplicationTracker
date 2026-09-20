@@ -392,3 +392,60 @@ describe("POST /api/auth/forgot-password", () => {
     }
   })
 });
+
+ describe("PATCH /api/auth/change-password", () => {
+    it("does not change if an incorrect password is provided", async () => {
+      vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1, sessionVersion: 0}));
+
+      const body = {
+        oldPassword: "incorrect-password",
+        newPassword: "new-password-12345!",
+      };
+
+      vi.mocked(prisma.user.findUnique).mockResolvedValueOnce({ sessionVersion: 0} as never).mockResolvedValueOnce({ id: 1, password: "stored-password-hash"} as never)
+
+      vi.mocked(comparePassword).mockResolvedValue(false)
+
+      const response = await request(app).patch("/api/auth/change-password").set("Authorization", "Bearer token-123").send(body);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toEqual({ error: "Invalid credentials" });
+      expect(prisma.$transaction).not.toHaveBeenCalled();
+      expect(comparePassword).toHaveBeenCalledWith(body.oldPassword, "stored-password-hash")
+    });
+
+    it("updates the password and invalidates existing sessions", async () => {
+      vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1, sessionVersion: 0}));
+
+      const body = {
+        oldPassword: "current-password",
+        newPassword: "new-password-12345!",
+      };
+
+      vi.mocked(prisma.user.findUnique).mockResolvedValueOnce({ sessionVersion: 0} as never).mockResolvedValueOnce({ id: 1, password: "stored-password-hash"} as never)
+
+      vi.mocked(comparePassword).mockResolvedValue(true);
+      vi.mocked(hashPassword).mockResolvedValue("new-password-hash!");
+      vi.mocked(prisma.$transaction).mockResolvedValue([]);
+
+      const response = await request(app).patch("/api/auth/change-password").set("Authorization", "Bearer token-123").send(body);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: "Password changed successfully" });
+      expect(hashPassword).toHaveBeenCalledWith(body.newPassword);
+      expect(prisma.user.update).toHaveBeenCalledWith({
+        where: { id: 1 },
+        data: {
+          password: "new-password-hash!",
+          sessionVersion: { increment: 1 }
+        }
+     })
+     expect(prisma.passwordResetToken.deleteMany).toHaveBeenCalledWith({
+      where: {
+        userId: 1
+      }
+     })
+
+     expect(prisma.$transaction).toHaveBeenCalledTimes(1)
+    });
+  });
