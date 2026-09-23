@@ -111,6 +111,12 @@ model UserPreferences {
   user                     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model FileDeletionTask {
+  id        Int      @id @default(autoincrement())
+  filePath  String
+  createdAt DateTime @default(now())
+}
+
 enum JobStatus {
   APPLIED
   INTERVIEW
