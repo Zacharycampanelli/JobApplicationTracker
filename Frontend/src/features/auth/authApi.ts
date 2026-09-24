@@ -30,3 +30,10 @@ export const resetPassword = (data: { token: string; password: string }) => {
     body: JSON.stringify(data)
   });
 };
+
+export const deleteAccount = (data: {password: string}) => {
+  return api("api/users/me", {
+    method: "DELETE",
+    body: JSON.stringify(data)
+  })
+}

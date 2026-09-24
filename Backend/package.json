@@ -18,7 +18,8 @@
     "test:db": "dotenv -e .env.test.local -o -- vitest run --config vitest.database.config.ts",
     "build": "prisma generate && tsc --noEmit",
     "start": "tsx src/server.ts",
-    "db:migrate": "prisma migrate deploy"
+    "db:migrate": "prisma migrate deploy",
+    "cleanup:files": "tsx src/scripts/retryFileDeletions.ts"
   },
   "repository": {
     "type": "git",
