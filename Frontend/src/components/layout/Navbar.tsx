@@ -108,7 +108,7 @@ const Navbar = () => {
 
         <button
           type="button"
-          onClick={logout}
+          onClick={() => logout()}
           className={[
             desktopBaseLinkClasses,
             "mt-auto w-full",

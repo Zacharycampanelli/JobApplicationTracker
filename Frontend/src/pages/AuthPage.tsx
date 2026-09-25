@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 import background from "../assets/images/background.png";
 import Logo from "../assets/svg/Icon";
@@ -55,8 +55,10 @@ const pageContent = {
 };
 
 const AuthPage = ({ mode }: AuthPageProps) => {
+  const location = useLocation();
+  const message = location.state?.message;
   const isTabletUp = useBreakpoint("md");
-
+ 
   const isMobile = !isTabletUp;
 
   const { title, subtitle, description, linkText, linkTo, linkPrompt } =
@@ -109,6 +111,11 @@ const AuthPage = ({ mode }: AuthPageProps) => {
             {subtitle && (
               <p className="text-body-md text-on-surface-secondary mb-12">
                 {subtitle}
+              </p>
+            )}
+            {mode === "login" && typeof message === "string" && (
+              <p role="status" className="mb-4 text-body-md">
+                {message}
               </p>
             )}
             {renderForm()}

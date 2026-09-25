@@ -389,7 +389,7 @@ const Profile = () => {
           <Button
             type="button"
             variant="danger"
-            onClick={logout}
+            onClick={() => logout()}
             className="w-full px-8 py-6 text-card-title text-action"
           >
             Logout

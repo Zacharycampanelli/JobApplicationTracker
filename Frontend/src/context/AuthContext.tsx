@@ -8,7 +8,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (userData: User, token: string) => void;
-  logout: () => void;
+  logout: (message?: string) => void;
   updateUser: (userData: User) => void;
 }
 

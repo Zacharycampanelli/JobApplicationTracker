@@ -69,12 +69,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("token", token);
   };
 
-  const logout = () => {
+  const logout = (message?: string) => {
     setUser(null);
     setToken(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    navigate("/login", { replace: true });
+    navigate("/login", {
+      replace: true,
+      state: message ? { message } : null
+    });
   };
 
   const updateUser = (userData: User) => {

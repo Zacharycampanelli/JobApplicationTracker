@@ -13,6 +13,7 @@ import type { UpdatePreferencesValues } from "../../../types/types";
 import { updateUserPreferences } from "../profileApi";
 import UserPreferenceItem from "./UserPreferenceItem";
 import ChangePasswordForm from "./ChangePasswordForm";
+import DeleteAccountForm from "./DeleteAccountForm";
 
 const UserPreferences = () => {
   const { user, updateUser } = useAuthContext();
@@ -109,12 +110,12 @@ const UserPreferences = () => {
       )
     },
     {
-      preference: "Deactivate account",
+      preference: "Delete account",
       icon: Warning,
       mode: "dropdown",
       isDangerous: true,
       description: "",
-      children: <p>hi</p>
+      children: <DeleteAccountForm />
     }
   ];
 

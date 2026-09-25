@@ -26,6 +26,7 @@
   --color-error-container: #fe8983;
   --color-success: #186d54;
   --color-success-container: #d1fae5;
+  --color-danger: #EF4619;
 
   /* Fonts */
   --font-sans: "Inter", system-ui, sans-serif;
