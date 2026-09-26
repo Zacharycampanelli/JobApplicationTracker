@@ -31,6 +31,7 @@ const renderLoginForm = () => {
                 isLoading: false,
                 login: handleLogin,
                 logout: vi.fn(),
+                logoutMessage: "",
                 updateUser: vi.fn()
               }}
             >

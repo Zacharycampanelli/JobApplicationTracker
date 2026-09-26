@@ -112,7 +112,7 @@ const AuthPage = ({ mode }: AuthPageProps) => {
             {mode === "login" && typeof message === "string" && (
               <div
                 role="status"
-                className="mb-6 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-body-sm text-on-surface"
+                className="mb-6 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-body-md text-on-surface"
               >
                 {message}
               </div>
