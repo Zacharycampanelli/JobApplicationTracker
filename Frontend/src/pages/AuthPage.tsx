@@ -11,6 +11,7 @@ import LoginForm from "../features/auth/components/LoginForm";
 import PasswordResetForm from "../features/auth/components/PasswordResetForm";
 import RegistrationForm from "../features/auth/components/RegistrationForm";
 import { useBreakpoint } from "../utils/useBreakpoint";
+import { useAuthContext } from "../context/AuthContext";
 
 type AuthPageProps = {
   mode: "login" | "signup" | "forgot-password" | "reset-password";
@@ -55,10 +56,11 @@ const pageContent = {
 };
 
 const AuthPage = ({ mode }: AuthPageProps) => {
+  const { logoutMessage } = useAuthContext();
   const location = useLocation();
-  const message = location.state?.message;
+  const message = location.state?.message ?? logoutMessage;
   const isTabletUp = useBreakpoint("md");
- 
+
   const isMobile = !isTabletUp;
 
   const { title, subtitle, description, linkText, linkTo, linkPrompt } =
@@ -107,15 +109,18 @@ const AuthPage = ({ mode }: AuthPageProps) => {
           </div>
 
           <div className="min-w-0 p-6 md:col-span-7 md:p-8 xl:p-10">
+            {mode === "login" && typeof message === "string" && (
+              <div
+                role="status"
+                className="mb-6 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-body-sm text-on-surface"
+              >
+                {message}
+              </div>
+            )}
             <h2 className="mb-4 text-page-title">{title}</h2>
             {subtitle && (
               <p className="text-body-md text-on-surface-secondary mb-12">
                 {subtitle}
-              </p>
-            )}
-            {mode === "login" && typeof message === "string" && (
-              <p role="status" className="mb-4 text-body-md">
-                {message}
               </p>
             )}
             {renderForm()}

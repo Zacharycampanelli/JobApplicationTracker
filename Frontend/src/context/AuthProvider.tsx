@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return localStorage.getItem("token");
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [logoutMessage, setLogoutMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
   // Token validation helper
@@ -65,6 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (userData: User, token: string) => {
     setUser(userData);
     setToken(token);
+    setLogoutMessage(null);
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", token);
   };
@@ -72,6 +74,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = (message?: string) => {
     setUser(null);
     setToken(null);
+    setLogoutMessage(message ?? null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     navigate("/login", {
@@ -94,6 +97,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isLoading,
         login,
         logout,
+        logoutMessage,
         updateUser
       }}
     >

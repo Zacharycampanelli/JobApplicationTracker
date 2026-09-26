@@ -37,7 +37,6 @@ const DeleteAccountForm = () => {
       const result = await deleteAccount({
         password: data.password
       });
-
       logout(result.message)
     } catch (error) {
       setRequestError(
