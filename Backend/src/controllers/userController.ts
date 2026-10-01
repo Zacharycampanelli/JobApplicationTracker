@@ -1,6 +1,10 @@
 import { Response } from "express";
 import path from "node:path";
 
+import {
+  AUTH_COOKIE_NAME,
+  getAuthCookieOptions,
+} from "../config/authCookie";
 import { prisma } from "../lib/prisma";
 import type { AuthRequest } from "../middleware/authMiddleware";
 import { processFileDeletionTask } from "../services/fileCleanupService";
@@ -262,6 +266,8 @@ export const deleteAccount = async (req: AuthRequest, res: Response) => {
         console.error(`File cleanup task ${task.id} failed:`, error);
       }
     }
+
+    res.clearCookie(AUTH_COOKIE_NAME, getAuthCookieOptions());
 
     return res.status(200).json({
       message: cleanupPending ? "Account deleted. Some file cleanup is pending." : "Account deleted successfully", cleanupPending

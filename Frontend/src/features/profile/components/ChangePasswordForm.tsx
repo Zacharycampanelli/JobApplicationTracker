@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
 import { z } from "zod";
 
 import Button from "../../../components/ui/Button";
@@ -23,8 +22,7 @@ const changePasswordFormSchema = z
 type ChangePasswordFormValues = z.infer<typeof changePasswordFormSchema>;
 
 const ChangePasswordForm = () => {
-  const { logout } = useAuthContext();
-  const navigate = useNavigate();
+  const { clearAuthState } = useAuthContext();
   const [requestError, setRequestError] = useState("");
 
   const {
@@ -49,11 +47,8 @@ const ChangePasswordForm = () => {
         newPassword: data.password,
       });
 
-      logout();
-      navigate("/login", {
-        replace: true,
-        state: { message: "Your password has been changed. Please log in." }
-      });
+      clearAuthState("Your password has been changed. Please log in.");
+  
     } catch (error) {
       setRequestError(
         error instanceof Error ? error.message : "Unable to change password"

@@ -1,79 +1,41 @@
 import { type ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-import { getMe } from "../features/auth/authApi";
+import { getMe, logout as logoutRequest } from "../features/auth/authApi";
 import type { User } from "../types/types";
 import { AuthContext } from "./AuthContext";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(() => {
-    return localStorage.getItem("token");
-  });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [logoutMessage, setLogoutMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // Token validation helper
-  const isTokenValid = (token: string | null): boolean => {
-    if (!token || token === "null") return false;
+
+ useEffect(() => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  const loadUserData = async () => {
     try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      const currentTime = Date.now() / 1000;
-      return payload.exp > currentTime;
-    } catch (error) {
-      console.error(error);
-      return false;
+      const userData = await getMe();
+      setUser(userData);
+    } catch {
+      setUser(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    const loadUserData = async () => {
-      const token = localStorage.getItem("token");
-      if (!isTokenValid(token)) {
-        console.warn("🚨 Invalid or expired token found, clearing...");
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        setUser(null);
-        setToken(null);
-        setIsLoading(false);
-        return;
-      }
+  loadUserData();
+}, []);
 
-      try {
-        const userData = await getMe();
-        if (userData) {
-          setUser(userData);
-          setToken(token);
-          localStorage.setItem("user", JSON.stringify(userData));
-        } else {
-          setUser(null);
-          localStorage.removeItem("user");
-          localStorage.removeItem("token");
-        }
-      } catch (error) {
-        console.error("Error loading user data:", error);
-        setUser(null);
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    loadUserData();
-  }, []);
-
-  const login = (userData: User, token: string) => {
+  const login = (userData: User) => {
     setUser(userData);
-    setToken(token);
     setLogoutMessage(null);
-    localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("token", token);
   };
 
-  const logout = (message?: string) => {
+  const clearAuthState = (message?: string) => {
     setUser(null);
-    setToken(null);
     setLogoutMessage(message ?? null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -83,21 +45,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const logout = async (message?: string) => {
+    await logoutRequest();
+    clearAuthState(message)
+  };
+
   const updateUser = (userData: User) => {
     setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        token,
-        isAuthenticated: Boolean(token && user),
+        isAuthenticated: Boolean(user),
         isLoading,
         login,
         logout,
         logoutMessage,
+        clearAuthState,
         updateUser
       }}
     >

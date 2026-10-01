@@ -37,7 +37,7 @@ const LoginForm = () => {
     setLoginError("");
     try {
       const res = await loginUser(data);
-      login(res.user, res.token);
+      login(res.user);
       navigate("/", { replace: true });
     } catch (error) {
       setLoginError(

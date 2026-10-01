@@ -16,7 +16,7 @@ const deleteAccountFormSchema = z
 type DeleteAccountFormValues = z.infer<typeof deleteAccountFormSchema>;
 
 const DeleteAccountForm = () => {
-  const { logout } = useAuthContext();
+  const { clearAuthState } = useAuthContext();
   const [requestError, setRequestError] = useState("");
 
   const {
@@ -37,7 +37,7 @@ const DeleteAccountForm = () => {
       const result = await deleteAccount({
         password: data.password
       });
-      logout(result.message)
+      clearAuthState(result.message)
     } catch (error) {
       setRequestError(
         error instanceof Error ? error.message : "Unable to delete account"

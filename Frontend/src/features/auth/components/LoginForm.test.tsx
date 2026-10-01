@@ -26,12 +26,12 @@ const renderLoginForm = () => {
             <AuthContext.Provider
               value={{
                 user: null,
-                token: null,
                 isAuthenticated: false,
                 isLoading: false,
                 login: handleLogin,
                 logout: vi.fn(),
                 logoutMessage: "",
+                clearAuthState: vi.fn(),
                 updateUser: vi.fn()
               }}
             >
@@ -123,7 +123,7 @@ describe("LoginForm", () => {
     });
 
     expect(handleLogin).toHaveBeenCalledTimes(1);
-    expect(handleLogin).toHaveBeenCalledWith(returnedUser, "test-token");
+    expect(handleLogin).toHaveBeenCalledWith(returnedUser);
 
     const dashboardHeading = await screen.findByRole("heading", {
       name: "Dashboard"

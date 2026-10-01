@@ -389,7 +389,13 @@ const Profile = () => {
           <Button
             type="button"
             variant="danger"
-            onClick={() => logout()}
+            onClick={async () => {
+              try {
+                await logout();
+              } catch {
+                toast.error("Unable to log out. Please try again.");
+              }
+            }}
             className="w-full px-8 py-6 text-card-title text-action"
           >
             Logout

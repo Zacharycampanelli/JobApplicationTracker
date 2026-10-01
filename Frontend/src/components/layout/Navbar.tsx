@@ -1,4 +1,5 @@
 import { NavLink } from "react-router";
+import { toast } from "sonner";
 
 import AnalyticsNav from "../../assets/images/analyticsNav.svg?react";
 import AppsNav from "../../assets/images/appsNav.svg?react";
@@ -108,7 +109,13 @@ const Navbar = () => {
 
         <button
           type="button"
-          onClick={() => logout()}
+          onClick={async () => {
+            try {
+              await logout();
+            } catch {
+              toast.error("Unable to log out. Please try again.");
+            }
+          }}
           className={[
             desktopBaseLinkClasses,
             "mt-auto w-full",

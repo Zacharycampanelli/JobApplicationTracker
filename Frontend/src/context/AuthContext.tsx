@@ -4,12 +4,12 @@ import type { User } from "../types/types";
 
 interface AuthContextType {
   user: User | null;
-  token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (userData: User, token: string) => void;
-  logout: (message?: string) => void;
+  login: (userData: User) => void;
+  logout: (message?: string) => Promise<void>;
   logoutMessage: string | null;
+  clearAuthState: (message?: string) => void;
   updateUser: (userData: User) => void;
 }
 
