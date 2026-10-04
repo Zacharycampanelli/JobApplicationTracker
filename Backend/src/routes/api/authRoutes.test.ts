@@ -1,15 +1,20 @@
 import jwt from "jsonwebtoken";
 import request from "supertest";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import app from "../../app";
 import { prisma } from "../../lib/prisma";
 import { generateToken } from "../../utils/generateToken";
 import { comparePassword, hashPassword } from "../../utils/hash";
 
+beforeEach(() => {
+  vi.stubEnv("FRONTEND_URL", "http://localhost:5173")
+})
+
 afterEach(() => {
   vi.resetAllMocks();
   vi.restoreAllMocks();
+  vi.unstubAllEnvs();
 });
 
 vi.mock("../../services/emailService", () => ({
@@ -79,7 +84,7 @@ describe("Authentication payload validation", () => {
       expectedError: "Token and password are required",
     },
   ])("returns 400 for $description", async ({ endpoint, body, expectedError }) => {
-    const response = await request(app).post(endpoint).send(body);
+    const response = await request(app).post(endpoint).set("Origin", "http://localhost:5173").send(body);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ error: expectedError });
@@ -91,7 +96,7 @@ describe("POST /api/auth/register", () => {
   it("Expects a password with minimum length of 15 characters", async () => {
     const body = { name: "Test User", email: "user1@example.com", password: "shortat14chars" };
 
-    const response = await request(app).post("/api/auth/register").send(body);
+    const response = await request(app).post("/api/auth/register").set("Origin", "http://localhost:5173").send(body);
 
     expect(response.status).toBe(400);
     expect(prisma.user.findUnique).not.toHaveBeenCalled();
@@ -114,7 +119,7 @@ describe("POST /api/auth/login", () => {
       body: { password: "password1!" },
     },
   ])("returns 400 for $description", async ({ body }) => {
-    const response = await request(app).post("/api/auth/login").send(body);
+    const response = await request(app).post("/api/auth/login").set("Origin", "http://localhost:5173").send(body);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ error: "Email and password are required" });
@@ -128,7 +133,7 @@ describe("POST /api/auth/login", () => {
 
     vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
 
-    const response = await request(app).post("/api/auth/login").send(body);
+    const response = await request(app).post("/api/auth/login").set("Origin", "http://localhost:5173").send(body);
 
     expect(response.status).toBe(401);
     expect(response.body).toEqual({ error: "Invalid credentials" });
@@ -155,78 +160,104 @@ describe("POST /api/auth/login", () => {
     vi.mocked(prisma.user.findUnique).mockResolvedValue(user);
     vi.mocked(comparePassword).mockResolvedValue(false);
 
-    const response = await request(app).post("/api/auth/login").send(body);
+    const response = await request(app).post("/api/auth/login").set("Origin", "http://localhost:5173").send(body);
 
     expect(response.status).toBe(401);
     expect(response.body).toEqual({ error: "Invalid credentials" });
     expect(comparePassword).toHaveBeenCalledWith(body.password, user.password);
   });
 
-  it("returns the authenticated user and token for valid credentials", async () => {
-    const body = { email: "user1@example.com", password: "password1!" };
+  it.each([
+    { environment: "test", secure: false },
+    { environment: "production", secure: true },
+  ])(
+    "sets the correct cookie security in $environment",
+    async ({ environment, secure }) => {
+      vi.stubEnv("NODE_ENV", environment);
+      const body = { email: "user1@example.com", password: "password1!" };
 
-    const user = {
-      id: 1,
-      email: "user1@example.com",
-      password: "password1!",
-      name: "User 1",
-      createdAt: new Date("2026-01-01"),
-      updatedAt: new Date("2026-01-01"),
-      sessionVersion: 3,
-    };
+      const user = {
+        id: 1,
+        email: "user1@example.com",
+        password: "password1!",
+        name: "User 1",
+        createdAt: new Date("2026-01-01"),
+        updatedAt: new Date("2026-01-01"),
+        sessionVersion: 3,
+      };
 
-    const token = "abc123";
+      const token = "abc123";
 
-    vi.mocked(prisma.user.findUnique).mockResolvedValue(user);
-    vi.mocked(comparePassword).mockResolvedValue(true);
-    vi.mocked(generateToken).mockReturnValue(token);
+      vi.mocked(prisma.user.findUnique).mockResolvedValue(user);
+      vi.mocked(comparePassword).mockResolvedValue(true);
+      vi.mocked(generateToken).mockReturnValue(token);
 
-    const response = await request(app).post("/api/auth/login").send(body);
+      const response = await request(app).post("/api/auth/login").set("Origin", "http://localhost:5173").send(body);
 
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      message: "Login successful",
-      token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: user.createdAt.toISOString(),
-      },
-    });
-    expect(generateToken).toHaveBeenCalledWith(user.id, user.sessionVersion);
-  });
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        message: "Login successful",
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          createdAt: user.createdAt.toISOString(),
+        },
+      });
+      expect(generateToken).toHaveBeenCalledWith(user.id, user.sessionVersion);
+      expect(response.body).not.toHaveProperty("token");
 
-  it("returns 500 when the user lookup fails", async () => {
-    const body = {
-      email: "user1@example.com",
-      password: "password1!",
-    };
+      expect(response.headers["set-cookie"]).toEqual(
+        expect.arrayContaining([
+          expect.stringContaining(`authToken=${token}`),
+        ]),
+      );
 
-    const databaseError = new Error("Database unavailable");
+      const cookies = response.headers["set-cookie"] as unknown as string[];
+      const authCookie = cookies.find((cookie) =>
+        cookie.startsWith("authToken="),
+      );
 
-    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => { });
+      expect(authCookie).toContain("HttpOnly");
+      expect(authCookie).toContain("SameSite=Lax");
+      expect(authCookie).toContain("Path=/api");
+      expect(authCookie).toContain("Max-Age=604800");
 
-    vi.mocked(prisma.user.findUnique).mockRejectedValue(databaseError);
+      expect(authCookie?.split("; ").includes("Secure")).toBe(secure);
+    },
+  );
 
-    const response = await request(app).post("/api/auth/login").send(body);
 
-    expect(response.status).toBe(500);
-    expect(response.body).toEqual({ error: "Failed to login" });
-    expect(consoleErrorSpy).toHaveBeenCalledWith("Error logging in:", databaseError);
-  });
+it("returns 500 when the user lookup fails", async () => {
+  const body = {
+    email: "user1@example.com",
+    password: "password1!",
+  };
 
-  it("normalizes email with uppercase before logging in", async () => {
-    const body = { email: " User1@Example.Com ", password: "password1!" };
+  const databaseError = new Error("Database unavailable");
 
-    vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
+  const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => { });
 
-    const response = await request(app).post("/api/auth/login").send(body);
+  vi.mocked(prisma.user.findUnique).mockRejectedValue(databaseError);
 
-    expect(response.status).toBe(401);
-    expect(response.body).toEqual({ error: "Invalid credentials" });
-    expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email: "user1@example.com" } });
-  });
+  const response = await request(app).post("/api/auth/login").set("Origin", "http://localhost:5173").send(body);
+
+  expect(response.status).toBe(500);
+  expect(response.body).toEqual({ error: "Failed to login" });
+  expect(consoleErrorSpy).toHaveBeenCalledWith("Error logging in:", databaseError);
+});
+
+it("normalizes email with uppercase before logging in", async () => {
+  const body = { email: " User1@Example.Com ", password: "password1!" };
+
+  vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
+
+  const response = await request(app).post("/api/auth/login").set("Origin", "http://localhost:5173").send(body);
+
+  expect(response.status).toBe(401);
+  expect(response.body).toEqual({ error: "Invalid credentials" });
+  expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email: "user1@example.com" } });
+});
 });
 
 describe("GET /api/auth/me", () => {
@@ -244,7 +275,7 @@ describe("GET /api/auth/me", () => {
       throw new jwt.JsonWebTokenError("jwt malformed");
     });
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => { });
-    const response = await request(app).get("/api/auth/me").set("Authorization", "Bearer invalid-token");
+    const response = await request(app).get("/api/auth/me").set("Cookie", "authToken=invalid-token")
 
     expect(response.status).toBe(401);
     expect(response.body).toEqual({ error: "Not authorized, token failed" });
@@ -255,7 +286,7 @@ describe("GET /api/auth/me", () => {
     vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1, sessionVersion: 0 }));
     vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
 
-    const response = await request(app).get("/api/auth/me").set("Authorization", "Bearer valid-token");
+    const response = await request(app).get("/api/auth/me").set("Cookie", "authToken=valid-token");
 
     expect(response.status).toBe(401);
     expect(response.body).toEqual({ error: "Not authorized, user not found" });
@@ -281,7 +312,7 @@ describe("GET /api/auth/me", () => {
       .mockResolvedValueOnce({ sessionVersion: 0 } as never)
       .mockResolvedValueOnce(user as never);
 
-    const response = await request(app).get("/api/auth/me").set("Authorization", "Bearer valid-token");
+    const response = await request(app).get("/api/auth/me").set("Cookie", "authToken=valid-token");
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
@@ -305,7 +336,7 @@ describe("GET /api/auth/me", () => {
       .mockResolvedValueOnce({ sessionVersion: 0 } as never)
       .mockRejectedValueOnce(databaseError);
 
-    const response = await request(app).get("/api/auth/me").set("Authorization", "Bearer valid-token");
+    const response = await request(app).get("/api/auth/me").set("Cookie", "authToken=valid-token");
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ error: "Failed to fetch user" });
@@ -316,7 +347,7 @@ describe("GET /api/auth/me", () => {
     vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1, sessionVersion: 0 }));
     vi.mocked(prisma.user.findUnique).mockResolvedValueOnce({ sessionVersion: 1 } as never);
 
-    const response = await request(app).get("/api/auth/me").set("Authorization", "Bearer valid-token");
+    const response = await request(app).get("/api/auth/me").set("Cookie", "authToken=valid-token");
 
     expect(response.status).toBe(401);
     expect(response.body).toEqual({ error: "Not authorized, session has expired" });
@@ -342,7 +373,7 @@ describe("POST /api/auth/reset-password", () => {
     vi.mocked(hashPassword).mockResolvedValue("new-password-hash!");
 
     vi.mocked(prisma.$transaction).mockResolvedValue([]);
-    const response = await request(app).post("/api/auth/reset-password").send(body);
+    const response = await request(app).post("/api/auth/reset-password").set("Origin", "http://localhost:5173").send(body);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ message: "Password reset successful" });
@@ -378,74 +409,100 @@ describe("POST /api/auth/forgot-password", () => {
 
       const response = await request(app)
         .post("/api/auth/forgot-password")
+        .set("Origin", "http://localhost:5173")
         .send({ email: "user1@example.com" })
-      
-        expect(response.status).toBe(200);
-        expect(prisma.passwordResetToken.deleteMany).toHaveBeenCalledWith({
-          where: {
-            expiresAt: { lt: now }
-          }
-        })
-        expect(prisma.passwordResetToken.create).toHaveBeenCalledTimes(1)
+
+      expect(response.status).toBe(200);
+      expect(prisma.passwordResetToken.deleteMany).toHaveBeenCalledWith({
+        where: {
+          expiresAt: { lt: now }
+        }
+      })
+      expect(prisma.passwordResetToken.create).toHaveBeenCalledTimes(1)
     } finally {
       vi.useRealTimers();
     }
   })
 });
 
- describe("PATCH /api/auth/change-password", () => {
-    it("does not change if an incorrect password is provided", async () => {
-      vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1, sessionVersion: 0}));
+describe("PATCH /api/auth/change-password", () => {
+  it("does not change if an incorrect password is provided", async () => {
+    vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1, sessionVersion: 0 }));
 
-      const body = {
-        oldPassword: "incorrect-password",
-        newPassword: "new-password-12345!",
-      };
+    const body = {
+      oldPassword: "incorrect-password",
+      newPassword: "new-password-12345!",
+    };
 
-      vi.mocked(prisma.user.findUnique).mockResolvedValueOnce({ sessionVersion: 0} as never).mockResolvedValueOnce({ id: 1, password: "stored-password-hash"} as never)
+    vi.mocked(prisma.user.findUnique).mockResolvedValueOnce({ sessionVersion: 0 } as never).mockResolvedValueOnce({ id: 1, password: "stored-password-hash" } as never)
 
-      vi.mocked(comparePassword).mockResolvedValue(false)
+    vi.mocked(comparePassword).mockResolvedValue(false)
 
-      const response = await request(app).patch("/api/auth/change-password").set("Authorization", "Bearer token-123").send(body);
+    const response = await request(app).patch("/api/auth/change-password").set("Origin", "http://localhost:5173").set("Cookie", "authToken=token-123").send(body);
 
-      expect(response.status).toBe(401);
-      expect(response.body).toEqual({ error: "Invalid credentials" });
-      expect(prisma.$transaction).not.toHaveBeenCalled();
-      expect(comparePassword).toHaveBeenCalledWith(body.oldPassword, "stored-password-hash")
-    });
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ error: "Invalid credentials" });
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+    expect(comparePassword).toHaveBeenCalledWith(body.oldPassword, "stored-password-hash")
+  });
 
-    it("updates the password and invalidates existing sessions", async () => {
-      vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1, sessionVersion: 0}));
+  it("updates the password and invalidates existing sessions", async () => {
+    vi.mocked(jwt.verify).mockImplementation(() => ({ userId: 1, sessionVersion: 0 }));
 
-      const body = {
-        oldPassword: "current-password",
-        newPassword: "new-password-12345!",
-      };
+    const body = {
+      oldPassword: "current-password",
+      newPassword: "new-password-12345!",
+    };
 
-      vi.mocked(prisma.user.findUnique).mockResolvedValueOnce({ sessionVersion: 0} as never).mockResolvedValueOnce({ id: 1, password: "stored-password-hash"} as never)
+    vi.mocked(prisma.user.findUnique).mockResolvedValueOnce({ sessionVersion: 0 } as never).mockResolvedValueOnce({ id: 1, password: "stored-password-hash" } as never)
 
-      vi.mocked(comparePassword).mockResolvedValue(true);
-      vi.mocked(hashPassword).mockResolvedValue("new-password-hash!");
-      vi.mocked(prisma.$transaction).mockResolvedValue([]);
+    vi.mocked(comparePassword).mockResolvedValue(true);
+    vi.mocked(hashPassword).mockResolvedValue("new-password-hash!");
+    vi.mocked(prisma.$transaction).mockResolvedValue([]);
 
-      const response = await request(app).patch("/api/auth/change-password").set("Authorization", "Bearer token-123").send(body);
+    const response = await request(app).patch("/api/auth/change-password").set("Origin", "http://localhost:5173").set("Cookie", "authToken=token-123").send(body);
 
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual({ message: "Password changed successfully" });
-      expect(hashPassword).toHaveBeenCalledWith(body.newPassword);
-      expect(prisma.user.update).toHaveBeenCalledWith({
-        where: { id: 1 },
-        data: {
-          password: "new-password-hash!",
-          sessionVersion: { increment: 1 }
-        }
-     })
-     expect(prisma.passwordResetToken.deleteMany).toHaveBeenCalledWith({
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ message: "Password changed successfully" });
+    expect(hashPassword).toHaveBeenCalledWith(body.newPassword);
+    expect(prisma.user.update).toHaveBeenCalledWith({
+      where: { id: 1 },
+      data: {
+        password: "new-password-hash!",
+        sessionVersion: { increment: 1 }
+      }
+    })
+    expect(prisma.passwordResetToken.deleteMany).toHaveBeenCalledWith({
       where: {
         userId: 1
       }
-     })
+    })
 
-     expect(prisma.$transaction).toHaveBeenCalledTimes(1)
-    });
+    expect(prisma.$transaction).toHaveBeenCalledTimes(1)
   });
+});
+
+describe("POST /api/auth/logout", () => {
+  it("clears the auth cookie without requiring a valid session", async () => {
+    const response = await request(app)
+      .post("/api/auth/logout")
+      .set("Origin", "http://localhost:5173");
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      message: "Logged out successfully",
+    });
+
+    const cookies = response.headers["set-cookie"] as unknown as string[];
+    const authCookie = cookies.find((cookie) =>
+      cookie.startsWith("authToken="),
+    );
+
+    expect(authCookie).toContain("authToken=;");
+    expect(authCookie).toContain("Path=/api");
+    expect(authCookie).toContain(
+      "Expires=Thu, 01 Jan 1970 00:00:00 GMT",
+    );
+    expect(jwt.verify).not.toHaveBeenCalled();
+  });
+});
