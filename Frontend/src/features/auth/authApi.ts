@@ -13,6 +13,10 @@ export const login = (data: LoginValues) => {
   return api("api/auth/login", { method: "POST", body: JSON.stringify(data) });
 };
 
+export const logout = () => {
+  return api("api/auth/logout", { method: "POST"});
+}
+
 export const getMe = () => {
   return api("api/auth/me");
 };
@@ -30,3 +34,10 @@ export const resetPassword = (data: { token: string; password: string }) => {
     body: JSON.stringify(data)
   });
 };
+
+export const deleteAccount = (data: {password: string}) => {
+  return api("api/users/me", {
+    method: "DELETE",
+    body: JSON.stringify(data)
+  })
+}

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma";
+import { AUTH_COOKIE_NAME } from "../config/authCookie";
 
 interface JwtPayload {
   userId: number;
@@ -13,13 +14,11 @@ export interface AuthRequest extends Request {
 
 export const protect = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const authHeader = req.headers.authorization;
+    const token = req.cookies?.[AUTH_COOKIE_NAME];
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if(typeof token !== "string" || token.length === 0) {
       return res.status(401).json({ error: "Not authorized, no token provided" });
     }
-
-    const token = authHeader.split(" ")[1];
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
 

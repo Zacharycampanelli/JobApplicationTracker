@@ -46,7 +46,7 @@ const RegistrationForm = () => {
   const onSubmit = async (data: RegistrationValues) => {
     try {
       const res = await registerUser(data);
-      login(res.user, res.token);
+      login(res.user);
       navigate("/", { replace: true });
     } catch (error) {
       console.error(error);

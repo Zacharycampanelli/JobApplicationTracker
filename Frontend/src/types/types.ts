@@ -91,6 +91,20 @@ export type UserPreferences = {
   updatedAt: string;
 };
 
+export type UpdateProfileValues = {
+  name: string;
+  summary?: string;
+  title?: string;
+  location?: string;
+  website?: string | null;
+  linkedin?: string | null;
+};
+
+export type UpdatePasswordValues = {
+  oldPassword: string;
+  newPassword: string;
+};
+
 export type UpdatePreferencesValues = {
   publicProfileEnabled: boolean;
   autoStatusUpdatesEnabled: boolean;

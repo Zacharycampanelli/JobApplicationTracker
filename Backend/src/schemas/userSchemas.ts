@@ -20,3 +20,7 @@ export const updatePreferencesSchema = z.object({
     error: "Theme preference must be light, dark, or system",
   }),
 });
+
+export const deleteAccountSchema = z.object({
+  password: z.string().min(1, "Password is required"),
+});
