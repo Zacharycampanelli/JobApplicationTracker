@@ -5,6 +5,8 @@ import { prisma } from "../lib/prisma";
 import { AuthRequest } from "../middleware/authMiddleware";
 
 export const uploadResume = async (req: AuthRequest, res: Response) => {
+  let resumeSaved = false;
+
   try {
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
@@ -22,9 +24,19 @@ export const uploadResume = async (req: AuthRequest, res: Response) => {
         mimeType: req.file.mimetype,
       },
     });
+    resumeSaved = true;
     res.json(resume);
   } catch (error) {
     console.error("Failed to upload resume:", error);
+
+    if (req.file && !resumeSaved) {
+      try {
+        await unlink(req.file.path);
+      } catch (cleanupError) {
+        console.error("Failed to remove unsaved resume file:", cleanupError);
+      }
+    }
+    
     res.status(500).json({ message: "Failed to upload resume" });
   }
 };
