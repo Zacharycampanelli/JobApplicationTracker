@@ -1,4 +1,5 @@
 import { Response } from "express";
+import { unlink } from "node:fs/promises";
 import path from "node:path";
 import { unlink } from "node:fs/promises";
 import {
@@ -153,6 +154,15 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
     res.json(updatedUserWithAvatar);
   } catch (error) {
     console.error(error);
+
+    if (!avatarSaved) {
+      try {
+        await unlink(req.file.path);
+      } catch (cleanupError) {
+        console.error("Failed to remove unsaved avatar file:", cleanupError);
+      }
+    }
+    
     res.status(500).json({ error: "Failed to upload avatar" });
   }
 };
