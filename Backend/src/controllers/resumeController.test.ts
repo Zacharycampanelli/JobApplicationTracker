@@ -8,7 +8,7 @@ import { uploadResume } from "./resumeController";
 
 vi.mock("fs/promises", () => ({
     unlink: vi.fn(),
-}))
+}))  
 
 vi.mock("../lib/prisma", () => ({
     prisma: {

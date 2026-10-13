@@ -1,6 +1,6 @@
 import { Response } from "express";
 import path from "node:path";
-
+import { unlink } from "node:fs/promises";
 import {
   AUTH_COOKIE_NAME,
   getAuthCookieOptions,
@@ -103,12 +103,16 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
     return res.status(400).json({ error: "Avatar is required" });
   }
 
+  let avatarSaved = false;
+
   try {
     await prisma.userProfile.upsert({
       where: { userId },
       update: { avatarUrl },
       create: { userId, avatarUrl },
     });
+
+    avatarSaved = true;
 
     const updatedUserWithAvatar = await prisma.user.findUnique({
       where: { id: userId },
