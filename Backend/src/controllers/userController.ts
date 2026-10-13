@@ -1,4 +1,5 @@
 import { Response } from "express";
+import { unlink } from "node:fs/promises";
 import path from "node:path";
 
 import {
@@ -103,12 +104,16 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
     return res.status(400).json({ error: "Avatar is required" });
   }
 
+  let avatarSaved = false;
+
   try {
     await prisma.userProfile.upsert({
       where: { userId },
       update: { avatarUrl },
       create: { userId, avatarUrl },
     });
+
+    avatarSaved = true;
 
     const updatedUserWithAvatar = await prisma.user.findUnique({
       where: { id: userId },
@@ -149,6 +154,15 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
     res.json(updatedUserWithAvatar);
   } catch (error) {
     console.error(error);
+
+    if (!avatarSaved) {
+      try {
+        await unlink(req.file.path);
+      } catch (cleanupError) {
+        console.error("Failed to remove unsaved avatar file:", cleanupError);
+      }
+    }
+    
     res.status(500).json({ error: "Failed to upload avatar" });
   }
 };
