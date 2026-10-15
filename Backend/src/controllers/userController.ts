@@ -1,7 +1,6 @@
 import { Response } from "express";
 import { unlink } from "node:fs/promises";
 import path from "node:path";
-import { unlink } from "node:fs/promises";
 import {
   AUTH_COOKIE_NAME,
   getAuthCookieOptions,
@@ -107,6 +106,11 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
   let avatarSaved = false;
 
   try {
+      const existingProfile = await prisma.userProfile.findUnique({
+      where: { userId },
+      select: { avatarUrl: true}
+    });
+
     await prisma.userProfile.upsert({
       where: { userId },
       update: { avatarUrl },
@@ -114,6 +118,16 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
     });
 
     avatarSaved = true;
+
+    if (existingProfile?.avatarUrl) {
+      const oldAvatarPath = path.join(process.cwd(), "uploads", "avatars", path.basename(existingProfile.avatarUrl))
+
+      try {
+        await unlink(oldAvatarPath);
+      } catch (cleanupError) {
+        console.error("Failed to remove old avatar file:", cleanupError);
+      }
+    }
 
     const updatedUserWithAvatar = await prisma.user.findUnique({
       where: { id: userId },
@@ -162,7 +176,7 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
         console.error("Failed to remove unsaved avatar file:", cleanupError);
       }
     }
-    
+
     res.status(500).json({ error: "Failed to upload avatar" });
   }
 };
@@ -177,6 +191,7 @@ export const updateUserPreferences = async (req: AuthRequest, res: Response) => 
   const { publicProfileEnabled, autoStatusUpdatesEnabled, themePreference } = req.body;
 
   try {
+
     const updatedPreferences = await prisma.userPreferences.upsert({
       where: { userId },
       update: {
@@ -244,7 +259,7 @@ export const deleteAccount = async (req: AuthRequest, res: Response) => {
     const avatarPath = avatarUrl ? path.join(process.cwd(), "uploads", "avatars", path.basename(avatarUrl),) : null;
 
     const filePaths = [...resumePaths];
-  
+
     if (avatarPath) {
       filePaths.push(avatarPath);
     }
@@ -253,7 +268,7 @@ export const deleteAccount = async (req: AuthRequest, res: Response) => {
       const tasks = [];
 
       for (const filePath of filePaths) {
-        
+
         const task = await tx.fileDeletionTask.create({
           data: {
             filePath
