@@ -7,9 +7,6 @@ Frontend/node_modules
 .vscode
 Frontend/.env
 Backend/.env
-package-lock.json
-Frontend/package-lock.json
-Backend/package-lock.json
 Backend/uploads/resumes
 Backend/uploads/avatars
 
