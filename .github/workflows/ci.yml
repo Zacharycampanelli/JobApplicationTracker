@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/job_tracker_ci
+      DIRECT_URL: postgresql://ci:ci@localhost:5432/job_tracker_ci
+      JWT_SECRET: ci-only-placeholder-secret
+      FRONTEND_URL: http://localhost:5173
+      BREVO_API_KEY: ci-only-placeholder
+      EMAIL_FROM_ADDRESS: ci@example.test
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install frontend dependencies
+        run: npm ci --prefix Frontend
+
+      - name: Install backend dependencies
+        run: npm ci --prefix Backend
+
+      - name: Build backend
+        run: npm --prefix Backend run build
+
+      - name: Run lint, frontend build, and fast tests
+        run: npm run check
