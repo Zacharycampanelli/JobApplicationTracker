@@ -48,7 +48,7 @@ describe("POST /api/auth/login with PostgreSQL", () => {
       password: "any-password",
     };
 
-    const response = await request(app).post("/api/auth/login").send(body);
+    const response = await request(app).post("/api/auth/login").set("Origin", process.env.FRONTEND_URL!).send(body);
 
     expect(response.status).toBe(401);
     expect(response.body).toEqual({
@@ -68,7 +68,7 @@ describe("POST /api/auth/login with PostgreSQL", () => {
       },
     });
 
-    const response = await request(app).post("/api/auth/login").send({
+    const response = await request(app).post("/api/auth/login").set("Origin", process.env.FRONTEND_URL!).send({
       email: testEmail,
       password,
     });
@@ -76,7 +76,6 @@ describe("POST /api/auth/login with PostgreSQL", () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       message: "Login successful",
-      token: expect.any(String),
       user: {
         id: user.id,
         name: user.name,
@@ -84,5 +83,9 @@ describe("POST /api/auth/login with PostgreSQL", () => {
         createdAt: user.createdAt.toISOString(),
       },
     });
+    expect(response.headers["set-cookie"]).toEqual(
+    expect.arrayContaining([
+      expect.stringMatching(/^authToken=.+;.*HttpOnly/i)
+    ]))
   });
 });

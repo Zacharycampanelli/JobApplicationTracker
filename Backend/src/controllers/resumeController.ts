@@ -36,7 +36,7 @@ export const uploadResume = async (req: AuthRequest, res: Response) => {
         console.error("Failed to remove unsaved resume file:", cleanupError);
       }
     }
-    
+
     res.status(500).json({ message: "Failed to upload resume" });
   }
 };
@@ -103,3 +103,44 @@ export const deleteResume = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ message: "Failed to delete resume" });
   }
 };
+
+export const downloadResume = async (req: AuthRequest, res: Response) => {
+  try {
+    if(!req.user?.userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const id = Number(req.params.id);
+
+    if(isNaN(id)) {
+      return res.status(400).json({ message: "Invalid ID" });
+    }
+
+    const resume = await prisma.resume.findFirst({
+      where: {
+        id,
+        userId: req.user.userId,
+      },
+    });
+
+    if(!resume) {
+      return res.status(404).json({ message: "Resume not found" });
+    }
+
+    res.download(resume.fileUrl, resume.name, (error) => {
+      if(!error) return;
+
+      if(res.headersSent) return;
+
+      if("code" in error && error.code === "ENOENT") {
+        return res.status(404).json({ message: "Resume file not found" });
+      }
+
+      console.error("Failed to send resume file:", error);
+      res.status(500).json({ message: "Failed to download resume"})
+    });
+  } catch (error) {
+    console.error("Failed to download resume:", error);
+    res.status(500).json({ message: "Failed to download resume" });
+  }
+}

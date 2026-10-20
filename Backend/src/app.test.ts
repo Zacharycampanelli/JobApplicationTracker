@@ -62,3 +62,35 @@ describe("security headers", () => {
     expect(response.headers["cross-origin-resource-policy"]).toBe("cross-origin");
   });
 });
+
+describe("resume authentication", () => {
+  it("rejects listing resumes without an authentication cookie", async () => {
+    const response = await request(app).get("/api/resumes");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ error: "Not authorized, no token provided" })
+  })
+
+  it("rejects deleting a resume without an authentication cookie", async () => {
+    const response = await request(app).delete("/api/resumes/42")
+    .set("Origin", frontendUrl);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ error: "Not authorized, no token provided" });
+  })
+
+  it("rejects creating a resume without an authentication cookie", async () => {
+    const response = await request(app).post("/api/resumes/upload")
+    .set("Origin", frontendUrl);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ error: "Not authorized, no token provided" });
+  })
+  
+  it("rejects downloading a resume without an authentication cookie", async () => {
+    const response = await request(app).get("/api/resumes/42/download")
+
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ error: "Not authorized, no token provided" });
+  })
+})

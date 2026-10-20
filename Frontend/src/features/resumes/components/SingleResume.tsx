@@ -2,11 +2,12 @@ import type React from "react";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
+import { API_URL } from "../../../api/api";
+import DownloadIcon from "../../../assets/images/download.svg?react";
 import SelectedInput from "../../../assets/images/selectedInput.svg?react";
 import SelectInput from "../../../assets/images/selectInput.svg?react";
 import type { Resume } from "../../../types/types";
 import { deleteResume } from "../resumeApi";
-
 type SingleResumeProps = {
   resume: Resume;
   selected: boolean;
@@ -79,24 +80,33 @@ const SingleResume = ({
           </span>
         </span>
       </button>
-      {deletable && (
-        <button
-          onClick={handleDelete}
-          type="button"
-          aria-label={`Delete ${resume.name}`}
-          className="
-            flex size-9 shrink-0 items-center justify-center rounded-control
-            text-xl text-on-surface-secondary
-            transition-colors duration-150
-            hover:bg-error-container/30 hover:text-error
-            focus-visible:outline-none
-            focus-visible:ring-2
-            focus-visible:ring-error
-          "
+      <div className="flex flex-col-reverse">
+        <a
+          href={`${API_URL}/api/resumes/${resume.id}/download`}
+          aria-label={`Download ${resume.name}`}
+          className="flex size-9 shrink-0 items-center justify-center rounded-control text-primary hover:bg-surface-container-high focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
-          <span aria-hidden="true">×</span>
-        </button>
-      )}
+          <DownloadIcon aria-hidden="true" />
+        </a>
+        {deletable && (
+          <button
+            onClick={handleDelete}
+            type="button"
+            aria-label={`Delete ${resume.name}`}
+            className="
+        flex size-9 shrink-0 items-center justify-center rounded-control
+        text-xl text-on-surface-secondary
+        transition-colors duration-150
+        hover:bg-error-container/30 hover:text-error
+        focus-visible:outline-none
+        focus-visible:ring-2
+        focus-visible:ring-error
+        "
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        )}
+      </div>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import app from "../../app";
 import { prisma } from "../../lib/prisma";
 import { generateToken } from "../../utils/generateToken";
 import { comparePassword, hashPassword } from "../../utils/hash";
+import { sendPasswordResetEmail } from "../../services/emailService";
 
 beforeEach(() => {
   vi.stubEnv("FRONTEND_URL", "http://localhost:5173")
@@ -228,36 +229,36 @@ describe("POST /api/auth/login", () => {
   );
 
 
-it("returns 500 when the user lookup fails", async () => {
-  const body = {
-    email: "user1@example.com",
-    password: "password1!",
-  };
+  it("returns 500 when the user lookup fails", async () => {
+    const body = {
+      email: "user1@example.com",
+      password: "password1!",
+    };
 
-  const databaseError = new Error("Database unavailable");
+    const databaseError = new Error("Database unavailable");
 
-  const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => { });
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => { });
 
-  vi.mocked(prisma.user.findUnique).mockRejectedValue(databaseError);
+    vi.mocked(prisma.user.findUnique).mockRejectedValue(databaseError);
 
-  const response = await request(app).post("/api/auth/login").set("Origin", "http://localhost:5173").send(body);
+    const response = await request(app).post("/api/auth/login").set("Origin", "http://localhost:5173").send(body);
 
-  expect(response.status).toBe(500);
-  expect(response.body).toEqual({ error: "Failed to login" });
-  expect(consoleErrorSpy).toHaveBeenCalledWith("Error logging in:", databaseError);
-});
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ error: "Failed to login" });
+    expect(consoleErrorSpy).toHaveBeenCalledWith("Error logging in:", databaseError);
+  });
 
-it("normalizes email with uppercase before logging in", async () => {
-  const body = { email: " User1@Example.Com ", password: "password1!" };
+  it("normalizes email with uppercase before logging in", async () => {
+    const body = { email: " User1@Example.Com ", password: "password1!" };
 
-  vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
+    vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
 
-  const response = await request(app).post("/api/auth/login").set("Origin", "http://localhost:5173").send(body);
+    const response = await request(app).post("/api/auth/login").set("Origin", "http://localhost:5173").send(body);
 
-  expect(response.status).toBe(401);
-  expect(response.body).toEqual({ error: "Invalid credentials" });
-  expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email: "user1@example.com" } });
-});
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ error: "Invalid credentials" });
+    expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email: "user1@example.com" } });
+  });
 });
 
 describe("GET /api/auth/me", () => {
@@ -422,6 +423,38 @@ describe("POST /api/auth/forgot-password", () => {
     } finally {
       vi.useRealTimers();
     }
+  })
+
+  it("allows a retry after the reset email fails", async () => {
+    vi.mocked(prisma.user.findUnique).mockResolvedValue({
+      id: 1,
+      email: "user1@example.com",
+    } as never)
+
+    vi.mocked(sendPasswordResetEmail).mockRejectedValueOnce(
+      new Error("Email provider unavailable")
+    );
+
+    const response = await request(app)
+      .post("/api/auth/forgot-password")
+      .set("Origin", "http://localhost:5173")
+      .send({ email: "user1@example.com" })
+
+    expect(sendPasswordResetEmail).toHaveBeenCalledTimes(1);
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ error: "Failed to request password reset" })
+
+    vi.mocked(sendPasswordResetEmail).mockResolvedValueOnce({})
+    const retryResponse = await request(app)
+      .post("/api/auth/forgot-password")
+      .set("Origin", "http://localhost:5173")
+      .send({ email: "user1@example.com" })
+
+    expect(sendPasswordResetEmail).toHaveBeenCalledTimes(2)
+    expect(retryResponse.status).toBe(200)
+    expect(retryResponse.body).toEqual({
+      message: "If an account exists for that email, a reset link has been sent.",
+    })
   })
 });
 
