@@ -87,6 +87,8 @@ Press Ctrl+C in the terminal to stop both servers.
 
 Run these commands from the project root.
 
+Use the [release checklist and known limitations](docs/release-checklist.md) before substantial deployments. File and database recovery steps are in [backup and restore](docs/backup-and-restore.md).
+
 ### Fast checks
 
 ```sh
