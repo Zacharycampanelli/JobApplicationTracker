@@ -4,10 +4,12 @@ import { twMerge } from "tailwind-merge";
 
 import { API_URL } from "../../../api/api";
 import DownloadIcon from "../../../assets/images/download.svg?react";
+import PreviewIcon from "../../../assets/images/preview.svg?react";
 import SelectedInput from "../../../assets/images/selectedInput.svg?react";
 import SelectInput from "../../../assets/images/selectInput.svg?react";
 import type { Resume } from "../../../types/types";
 import { deleteResume } from "../resumeApi";
+
 type SingleResumeProps = {
   resume: Resume;
   selected: boolean;
@@ -87,6 +89,15 @@ const SingleResume = ({
           className="flex size-9 shrink-0 items-center justify-center rounded-control text-primary hover:bg-surface-container-high focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
           <DownloadIcon aria-hidden="true" />
+        </a>
+        <a
+          href={`${API_URL}/api/resumes/${resume.id}/preview`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Preview ${resume.name}`}
+          className="flex size-9 shrink-0 items-center justify-center rounded-control text-primary hover:bg-surface-container-high focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          <PreviewIcon aria-hidden="true" />
         </a>
         {deletable && (
           <button
