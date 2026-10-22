@@ -13,6 +13,8 @@ type ModalProps = {
   closeText?: string;
   titleClassName?: string;
   footer?: ReactNode;
+  width?: string;
+  height?: string;
 };
 
 const Modal = ({
@@ -23,7 +25,9 @@ const Modal = ({
   closeAction,
   closeText = "Close",
   titleClassName = "",
-  footer
+  footer,
+  width,
+  height
 }: ModalProps) => {
   const navigate = useNavigate();
   const titleId = useId();
@@ -45,10 +49,10 @@ const Modal = ({
         handleClose();
       }
     }}>
-      <Card role="dialog" aria-modal="true" aria-labelledby={titleId} className="w-full max-w-md bg-surface-container-lowest">
-        <div className="mb-6 flex items-start justify-between gap-4">
+      <Card role="dialog" aria-modal="true" aria-labelledby={titleId} className={`flex flex-col max-h-[90dvh] overflow-hidden w-full bg-surface-container-lowest ${width ? width : "max-w-md"} ${height ? height : ""}`}>
+        <div className="mb-6 flex items-start justify-between gap-4 shrink-0">
           <h2
-            className={`text-card-title ${titleClassName || "text-on-surface"}`}
+            className={`min-w-0 flex-1 wrap-anywhere text-card-title ${titleClassName || "text-on-surface"}`}
             id={titleId}
           >
             {title}
@@ -65,9 +69,9 @@ const Modal = ({
             <span aria-hidden="true">×</span>
           </Button>
         </div>
-        <div className="text-body-md text-on-surface-secondary">{children}</div>
+        <div className="min-h-0 flex-1 overflow-auto text-body-md text-on-surface-secondary ">{children}</div>
 
-        <div className="mt-6 flex justify-end gap-3">
+        <div className="mt-6 flex justify-end gap-3 shrink-0">
           {footer ?? (
             <Button onClick={handleClose}>
               {closeText}

@@ -9,6 +9,11 @@ import SelectedInput from "../../../assets/images/selectedInput.svg?react";
 import SelectInput from "../../../assets/images/selectInput.svg?react";
 import type { Resume } from "../../../types/types";
 import { deleteResume } from "../resumeApi";
+import Modal from "../../../components/ui/Modal";
+import { useState } from "react";
+import ResumePreview from "./ResumePreview";
+import Button from "../../../components/ui/Button";
+import Card from "../../../components/ui/Card";
 
 type SingleResumeProps = {
   resume: Resume;
@@ -32,6 +37,12 @@ const SingleResume = ({
   deletable = false,
   onDeleteSuccess
 }: SingleResumeProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     try {
@@ -46,7 +57,7 @@ const SingleResume = ({
   };
 
   return (
-    <div
+    <Card
       className={twMerge(
         "flex w-full items-center gap-4 rounded-card",
         "bg-surface-container-lowest px-4 py-4 text-left shadow-menu",
@@ -63,7 +74,7 @@ const SingleResume = ({
         aria-pressed={selected}
         aria-label={`Select ${resume.name}`}
         className="
-          flex flex-1 items-center gap-4 rounded-control text-left
+          flex min-w-0 flex-1 items-center gap-4 rounded-control text-left
           transition-colors duration-150
           focus-visible:outline-none
           focus-visible:ring-2
@@ -74,7 +85,7 @@ const SingleResume = ({
           {selected ? <SelectedInput /> : <SelectInput />}
         </span>
         <span className="flex min-w-0 flex-col">
-          <span className="text-body-md font-semibold text-on-surface">
+          <span className="truncate text-body-md font-semibold text-on-surface" title={resume.name}>
             {resume.name}
           </span>
           <span className="text-label-md text-on-surface-secondary">
@@ -82,7 +93,7 @@ const SingleResume = ({
           </span>
         </span>
       </button>
-      <div className="flex flex-col-reverse">
+      <div className="flex shrink-0 flex-col-reverse">
         <a
           href={`${API_URL}/api/resumes/${resume.id}/download`}
           aria-label={`Download ${resume.name}`}
@@ -90,15 +101,18 @@ const SingleResume = ({
         >
           <DownloadIcon aria-hidden="true" />
         </a>
-        <a
-          href={`${API_URL}/api/resumes/${resume.id}/preview`}
-          target="_blank"
-          rel="noopener noreferrer"
+        {resume.mimeType === "application/pdf" && (
+
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={() => setIsModalOpen(true)}
           aria-label={`Preview ${resume.name}`}
-          className="flex size-9 shrink-0 items-center justify-center rounded-control text-primary hover:bg-surface-container-high focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="flex p-0 size-9 shrink-0 items-center justify-center rounded-control text-primary hover:bg-surface-container-high focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
-          <PreviewIcon aria-hidden="true" />
-        </a>
+          <PreviewIcon aria-hidden="true" className="size-5 shrink-0" />
+        </Button>
+        )}
         {deletable && (
           <button
             onClick={handleDelete}
@@ -118,7 +132,16 @@ const SingleResume = ({
           </button>
         )}
       </div>
-    </div>
+      <Modal
+        title={resume.name}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        width="max-w-5xl"
+        height="h-[90dvh]"
+      >
+        <ResumePreview resumeId={resume.id}/>
+      </Modal>
+            </Card>
   );
 };
 
