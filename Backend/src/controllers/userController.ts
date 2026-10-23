@@ -77,6 +77,7 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
             publicProfileEnabled: true,
             autoStatusUpdatesEnabled: true,
             themePreference: true,
+            defaultResumeId: true,
             createdAt: true,
             updatedAt: true,
           },
@@ -106,9 +107,9 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
   let avatarSaved = false;
 
   try {
-      const existingProfile = await prisma.userProfile.findUnique({
+    const existingProfile = await prisma.userProfile.findUnique({
       where: { userId },
-      select: { avatarUrl: true}
+      select: { avatarUrl: true }
     });
 
     await prisma.userProfile.upsert({
@@ -158,6 +159,7 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
             publicProfileEnabled: true,
             autoStatusUpdatesEnabled: true,
             themePreference: true,
+            defaultResumeId: true,
             createdAt: true,
             updatedAt: true,
           },
@@ -213,6 +215,49 @@ export const updateUserPreferences = async (req: AuthRequest, res: Response) => 
     res.status(500).json({ error: "Failed to update user preferences" });
   }
 };
+
+export const updateDefaultResume = async (req: AuthRequest, res: Response) => {
+  const userId = req.user?.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const { resumeId } = req.body;
+
+  try {
+
+    if (resumeId !== null) {
+      const resume = await prisma.resume.findFirst({
+        where: {
+          id: resumeId,
+          userId
+        }
+      })
+
+      if (!resume) {
+        return res.status(404).json({ error: "Resume not found" });
+      }
+
+    };
+
+    const updatedPreferences = await prisma.userPreferences.upsert({
+      where: { userId },
+      update: {
+        defaultResumeId: resumeId,
+      },
+      create: {
+        userId,
+        defaultResumeId: resumeId,
+      },
+    })
+
+    return res.json(updatedPreferences)
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to update default resume" });
+  }
+}
 
 export const deleteAccount = async (req: AuthRequest, res: Response) => {
   const userId = req.user?.userId;

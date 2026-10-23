@@ -24,3 +24,7 @@ export const updatePreferencesSchema = z.object({
 export const deleteAccountSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
+
+export const updateDefaultResumeSchema = z.object({
+  resumeId: z.number().int().positive().nullable()
+})

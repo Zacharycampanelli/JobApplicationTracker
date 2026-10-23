@@ -153,6 +153,7 @@ export const getMe = async (req: AuthRequest, res: Response): Promise<void> => {
             publicProfileEnabled: true,
             autoStatusUpdatesEnabled: true,
             themePreference: true,
+            defaultResumeId: true,
             createdAt: true,
             updatedAt: true,
           },
