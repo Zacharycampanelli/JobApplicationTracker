@@ -11,6 +11,13 @@ export const uploadResume = (formData: FormData) => {
   });
 };
 
+export const updateDefaultResume = (resumeId: number | null) => {
+  return api(`api/users/me/default-resume`, {
+    method: "PATCH",
+    body: JSON.stringify({ resumeId })
+  });
+};
+
 export const deleteResume = (id: number) => {
   return api(`api/resumes/${id}`, {
     method: "DELETE"

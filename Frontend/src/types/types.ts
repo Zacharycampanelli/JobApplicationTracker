@@ -87,6 +87,7 @@ export type UserPreferences = {
   publicProfileEnabled: boolean;
   autoStatusUpdatesEnabled: boolean;
   themePreference: "light" | "dark" | "system";
+  defaultResumeId: number | null;
   createdAt: string;
   updatedAt: string;
 };

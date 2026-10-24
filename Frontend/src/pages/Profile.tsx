@@ -14,6 +14,7 @@ import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import Textarea from "../components/ui/Textarea";
 import { useAuthContext } from "../context/AuthContext";
+import { getMe } from "../features/auth/authApi";
 import AccountOwnerDetails from "../features/profile/components/AccountOwnerDetails";
 import SharedProfileView from "../features/profile/components/SharedProfileView";
 import UserPreferences from "../features/profile/components/UserPreferences";
@@ -22,7 +23,7 @@ import {
   uploadProfileImage
 } from "../features/profile/profileApi";
 import ResumeManager from "../features/resumes/components/ResumeManager";
-import { getAllResumes } from "../features/resumes/resumeApi";
+import { getAllResumes, updateDefaultResume } from "../features/resumes/resumeApi";
 import type { Resume } from "../types/types";
 import { useBreakpoint } from "../utils/useBreakpoint";
 import { optionalNumber, optionalText, optionalUrl } from "../utils/zodUtils";
@@ -97,6 +98,39 @@ const Profile = () => {
       resumeId: undefined
     });
   }, [user, reset]);
+
+
+  const handleResumesChanged = async () => {
+    await loadResumes();
+
+    try {
+      const updatedUser = await getMe();
+      updateUser(updatedUser);
+    } catch {
+      toast.error("Unable to refresh your account. Please reload the page.");
+    }
+  }
+
+  const handleDefaultResumeChange = async (resumeId: number) => {
+    if(!user) return;
+
+    const nextResumePId = user.preferences?.defaultResumeId === resumeId ? null : resumeId
+
+    try {
+      const preferences = await updateDefaultResume(nextResumePId);
+  
+      updateUser({
+        ...user,
+        preferences
+      })
+
+      toast.success(nextResumePId === null ? "Default resume cleared!" : "Default resume updated!");
+    } catch(error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to update default resume"
+      );
+    }
+  }
 
   const onSubmit = async (data: ProfileValues) => {
     try {
@@ -381,7 +415,9 @@ const Profile = () => {
           isLoading={isLoading}
           error={error}
           empty={empty}
-          onResumesChanged={loadResumes}
+          onResumesChanged={handleResumesChanged}
+          selectedResumeId={user?.preferences?.defaultResumeId ?? undefined}
+          onSelectResume={handleDefaultResumeChange}
         />
 
         <UserPreferences />

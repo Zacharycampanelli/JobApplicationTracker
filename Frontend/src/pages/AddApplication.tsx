@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 import Header from "../components/layout/Header";
 import CancelModal from "../components/shared/CancelModal";
+import { useAuthContext } from "../context/AuthContext";
 import { createApplication } from "../features/applications/applicationApi";
 import ApplicationForm, {
   type ApplicationValues
@@ -13,6 +14,7 @@ import type { Resume } from "../types/types";
 import { useBreakpoint } from "../utils/useBreakpoint";
 
 const AddApplication = () => {
+  const { user } = useAuthContext();
   const isTabletUp = useBreakpoint("md");
   const isMobile = !isTabletUp;
   const navigate = useNavigate();
@@ -89,7 +91,8 @@ const AddApplication = () => {
             status: "APPLIED",
             appliedAt: new Date().toISOString().slice(0, 10),
             notes: "",
-            link: ""
+            link: "",
+            resumeId: user?.preferences?.defaultResumeId ?? undefined,
           }}
         />
       </main>
