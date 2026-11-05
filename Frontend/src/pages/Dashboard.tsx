@@ -79,7 +79,7 @@ const Dashboard = () => {
         </header>
 
         <div className="w-full">
-          <div className="flex flex-col gap-6 items-center md:grid md:grid-cols-[repeat(2,13.5rem)] lg:grid-cols-[repeat(2,17.5rem)] xl:grid-cols-[repeat(4,13.5rem)] md:justify-between">
+          <div className="flex flex-col gap-6 items-center md:grid md:grid-cols-[repeat(2,13.5rem)] lg:grid-cols-[repeat(2,17.5rem)] xl:grid-cols-[repeat(4,13.5rem)] md:justify-around">
             {stats.map((stat, index) => (
               <StatCard
                 key={index}
@@ -127,11 +127,11 @@ const Dashboard = () => {
         </div>
         {isMobile && <RecentActivity />}
         <div className="hidden md:flex md:gap-8 md:w-full">
-        <div className="grow-1 min-w-[25%]">
+        <div className="shrink-1 min-w-[25%]">
 
           <RecentApplications />
         </div>
-          <div className="flex flex-col gap-4 items-center grow-0">
+          <div className="flex flex-col gap-4 items-center grow">
             <DailyInsight />
             <RecentActivity />
 

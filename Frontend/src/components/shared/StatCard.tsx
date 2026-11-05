@@ -44,7 +44,7 @@ const StatCard = ({
     >
       <div className="flex justify-between">
         <h4
-          className={`${primaryCard ? "text-primary" : "text-on-surface"} text-body-lg`}
+          className={`${primaryCard ? "text-primary" : "text-on-surface"} text-body-lg max-w-[60%]`}
         >
           {statName}
         </h4>

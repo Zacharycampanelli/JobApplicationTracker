@@ -3,6 +3,7 @@ import type { ChartData, ChartOptions } from "chart.js";
 import HorizontalBarChart from "../../../components/charts/HorizontalBarChart";
 import Card from "../../../components/ui/Card";
 import type { SourceBreakdownItem } from "../../../utils/getAnalyticsData";
+import { useChartTextColor } from "../../../utils/useChartTextColor";
 
 type SourceBreakdownChartProps = {
   data: SourceBreakdownItem[];
@@ -13,6 +14,8 @@ const SourceBreakdownChart = ({
   data,
   className
 }: SourceBreakdownChartProps) => {
+  const textColor = useChartTextColor();
+
   const chartData: ChartData<"bar"> = {
     labels: data.map((item) => item.label),
     datasets: [
@@ -34,13 +37,17 @@ const SourceBreakdownChart = ({
       x: {
         beginAtZero: true,
         ticks: {
-          precision: 0
+          precision: 0,
+          color: textColor
         },
         grid: {
           display: false
         }
       },
       y: {
+        ticks: {
+          color: textColor
+        },  
         grid: {
           display: false
         }

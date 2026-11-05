@@ -93,14 +93,14 @@ const AuthPage = ({ mode }: AuthPageProps) => {
                 <div className="flex flex-col gap-6 px-10 py-12">
                   <div className="flex items-center gap-2">
                     <Logo fill="#ffffff" />
-                    <h2 className="text-brand text-surface font-normal!">
+                    <h2 className="text-brand text-white font-normal!">
                       Architectural Ledger
                     </h2>
                   </div>
-                  <h2 className="text-auth-hero text-surface font-normal!">
+                  <h2 className="text-auth-hero text-white font-normal!">
                     {subtitle}
                   </h2>
-                  <p className="text-body-md text-surface leading-[29.3px]!">
+                  <p className="text-body-md text-white leading-[29.3px]!">
                     {description}
                   </p>
                 </div>
@@ -126,7 +126,7 @@ const AuthPage = ({ mode }: AuthPageProps) => {
             {renderForm()}
             <p className="text-body-md text-on-surface-secondary mt-10 text-center">
               {linkPrompt}{" "}
-              <Link to={linkTo} className="text-primary hover:underline">
+              <Link to={linkTo} className="text-link hover:underline">
                 {linkText}
               </Link>
             </p>

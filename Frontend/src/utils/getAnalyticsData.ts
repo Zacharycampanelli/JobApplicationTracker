@@ -56,13 +56,13 @@ const sourceLabels: Record<string, string> = {
 };
 
 const sourceColors: Record<string, string> = {
-  LINKEDIN: "#4c56af",
-  INDEED: "#8b92d6",
-  COMPANY_SITE: "#404a99",
-  REFERRAL: "#186d54",
-  RECRUITER: "#66757d",
-  NETWORKING: "#a9b4b9",
-  OTHER: "#9f403d"
+  LINKEDIN: "#6f7bd9",
+  INDEED: "#9690dc",
+  COMPANY_SITE: "#4c97c9",
+  REFERRAL: "#38a887",
+  RECRUITER: "#859aa8",
+  NETWORKING: "#c39a45",
+  OTHER: "#d77976"
 };
 
 const dayLabels = [
@@ -211,22 +211,22 @@ export const getAnalyticsData = (
       {
         label: "Applied",
         value: applied,
-        color: "#4c56af"
+        color: "#6f7bd9"
       },
       {
         label: "Interview",
         value: interviews,
-        color: "#8b92d6"
+        color: "#9690dc"
       },
       {
         label: "Offer",
         value: offers,
-        color: "#186d54"
+        color: "#38a887"
       },
       {
         label: "Rejected",
         value: rejected,
-        color: "#9f403d"
+        color: "#d77976"
       }
     ],
     applicationVelocity: getApplicationVelocity(applications),

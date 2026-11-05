@@ -60,7 +60,7 @@ const ForgotPasswordForm = () => {
         error={errors.email?.message}
       />
       {message && (
-        <p className="text-label-md text-primary" role="status">
+        <p className="text-label-md text-link" role="status">
           {message}
         </p>
       )}

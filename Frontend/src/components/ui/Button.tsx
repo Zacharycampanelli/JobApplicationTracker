@@ -6,12 +6,12 @@ import {
 import { twMerge } from "tailwind-merge";
 
 const variantStyles = {
-  primary: "text-surface-container-lowest",
+  primary: "text-white",
   secondary:
     "bg-surface-container-high text-on-surface enabled:hover:bg-surface-container-lowest",
   ghost: "text-on-surface-variant enabled:hover:bg-surface-container-high",
   danger:
-    "bg-error-container text-on-surface enabled:hover:bg-error enabled:hover:text-surface-bright"
+    "bg-error-container text-[#3b0907] enabled:hover:bg-error enabled:hover:text-white"
 };
 
 const sizeStyles = {

@@ -70,7 +70,7 @@ const LoginForm = () => {
       <div className="flex justify-end">
         <Link
           to="/forgot-password"
-          className="text-label-md text-primary hover:underline"
+          className="text-label-md text-link hover:underline"
         >
           Forgot your password?
         </Link>

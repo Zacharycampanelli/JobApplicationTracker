@@ -7,6 +7,7 @@ import ProfileNav from "../../../assets/images/profileNav.svg?react";
 import Settings from "../../../assets/images/settings.svg?react";
 import Sun from "../../../assets/images/sun.svg?react";
 import Warning from "../../../assets/images/warning.svg?react";
+import Select from "../../../components/ui/Select";
 import Toggle from "../../../components/ui/Toggle";
 import { useAuthContext } from "../../../context/AuthContext";
 import type { UpdatePreferencesValues } from "../../../types/types";
@@ -83,17 +84,32 @@ const UserPreferences = () => {
       )
     },
     {
-      preference: "Dark mode",
+      preference: "Appearance",
       icon: Sun,
-      mode: "toggle",
+      mode: "dropdown",
       isDangerous: false,
       description: "",
       children: (
-        <Toggle
-          id="darkMode"
-          checked={user?.preferences?.themePreference === "dark"}
-          onChange={() => {}}
-          disabled={true}
+        <Select
+          id="themePreference"
+          label="Theme"
+          value={user?.preferences?.themePreference ?? "system"}
+          options={[
+            { label: "Light", value: "light" },
+            { label: "Dark", value: "dark" },
+            { label: "System", value: "system" }
+          ]}
+          onChange={(event) =>{
+            const themePreference = event.target.value;
+
+            if(
+              themePreference === "light" ||
+              themePreference === "dark" ||
+              themePreference === "system"
+            ) {
+              handlePreferenceChange({ themePreference });
+            }
+          }}
         />
       )
     },
@@ -135,8 +151,7 @@ const UserPreferences = () => {
             isDangerous={option.isDangerous}
             children={option.children}
             className={
-              option.preference === "Automatic status updates" ||
-              option.preference === "Dark mode"
+              option.preference === "Automatic status updates"
                 ? "coming-soon"
                 : undefined
             }

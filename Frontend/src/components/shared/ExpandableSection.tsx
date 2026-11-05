@@ -32,7 +32,7 @@ const ExpandableSection = ({
         aria-controls={contentId}
         className={`
         w-full justify-between
-        ${isOpen ? "bg-surface-container-high text-primary" : ""}
+        ${isOpen ? "bg-surface-container-high text-on-surface" : ""}
       `}
       >
         <span>{title}</span>

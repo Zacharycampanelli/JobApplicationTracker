@@ -376,7 +376,7 @@ const Profile = () => {
                   icon={<Save />}
                   type="submit"
                   disabled={isSubmitting}
-                  className="md:w-48 xl:w-56"
+                  className="md:w-48 xl:w-56 text-white"
                 >
                   Save Changes
                 </Button>

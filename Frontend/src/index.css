@@ -26,7 +26,7 @@
   --color-error-container: #fe8983;
   --color-success: #186d54;
   --color-success-container: #d1fae5;
-  --color-danger: #EF4619;
+  --color-danger: #ef4619;
 
   /* Fonts */
   --font-sans: "Inter", system-ui, sans-serif;
@@ -100,6 +100,32 @@
   /* Shadows */
   --shadow-raised: 0 18px 40px -28px rgba(42, 52, 57, 0.35);
   --shadow-menu: 0 16px 32px -18px rgba(42, 52, 57, 0.45);
+
+  --color-navigation: #f0f4f7;
+  --color-link: #4c56af;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --color-surface: #14161e;
+  --color-surface-container-low: #272c3a;
+  --color-surface-container: #303647;
+  --color-surface-container-high: #3a4154;
+  --color-surface-container-lowest: #1c1f2a;
+  --color-surface-bright: #454d62;
+
+  /* Text */
+  --color-on-surface: #e5e7ef;
+  --color-on-surface-variant: #b1b8ca;
+  --color-on-surface-secondary: #bfc5d4;
+
+  /* Borders */
+  --color-outline-variant: #697386;
+
+  --color-navigation: #0e1017;
+  --color-link: #b8bfff;
 }
 
 .text-brand {

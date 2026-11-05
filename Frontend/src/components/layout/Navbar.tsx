@@ -45,7 +45,7 @@ const Navbar = () => {
   return (
     <>
       {/* Mobile Bottom Navbar */}
-      <nav className="fixed inset-x-0 bottom-0 z-50 bg-surface-container-lowest/80 backdrop-blur-xl md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-50 bg-navigation backdrop-blur-xl md:hidden">
         <div className="mx-auto grid max-w-md grid-cols-4 gap-1 px-2 py-2">
           {navItems.map(({ to, mobileLabel, icon: Icon }) => (
             <NavLink
@@ -70,7 +70,7 @@ const Navbar = () => {
       </nav>
 
       {/* Desktop / Tablet Side Navbar */}
-      <aside className="hidden md:flex md:w-56 md:shrink-0 md:flex-col md:bg-surface-container-low md:px-4 md:py-6 xl:w-72">
+      <aside className="hidden md:flex md:w-56 md:shrink-0 md:flex-col md:bg-navigation md:px-4 md:py-6 xl:w-72">
         <div className="mb-8 px-3">
           <div className="flex flex-row items-center">
             <Icon width={56} height={56} />
@@ -81,7 +81,7 @@ const Navbar = () => {
               Architectural Ledger
             </h1>
           </div>
-          <p className="mt-1 text-label-md mt-4 text-on-surface-variant">
+          <p className="text-label-md mt-4 text-on-surface-variant">
             Track your applications
           </p>
         </div>

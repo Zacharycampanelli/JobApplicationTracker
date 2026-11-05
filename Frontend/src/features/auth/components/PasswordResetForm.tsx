@@ -67,7 +67,7 @@ const PasswordResetForm = () => {
           This password reset link is missing its token.
         </p>
 
-        <Link to="/forgot-password" className="text-primary hover:underline">
+        <Link to="/forgot-password" className="text-link hover:underline">
           Request another reset link
         </Link>
       </div>

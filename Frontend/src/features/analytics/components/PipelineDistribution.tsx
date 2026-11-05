@@ -5,6 +5,7 @@ import HorizontalBarChart from "../../../components/charts/HorizontalBarChart";
 import Card from "../../../components/ui/Card";
 import type { PipelineDistributionItem } from "../../../utils/getAnalyticsData";
 import { useBreakpoint } from "../../../utils/useBreakpoint";
+import { useChartTextColor } from "../../../utils/useChartTextColor";
 
 type PipelineDistributionProps = {
   data: PipelineDistributionItem[];
@@ -15,6 +16,7 @@ const PipelineDistribution = ({
   data,
   className
 }: PipelineDistributionProps) => {
+  const textColor = useChartTextColor();  
   const isTabletUp = useBreakpoint("md");
 
   const chartData: ChartData<"doughnut" | "bar"> = {
@@ -46,11 +48,17 @@ const PipelineDistribution = ({
     },
     scales: {
       x: {
-        display: false
+        display: false,
+        ticks: {
+          color: textColor
+        }
       },
       y: {
         grid: {
           display: false
+        },
+        ticks: {
+          color: textColor
         }
       }
     }

@@ -3,6 +3,7 @@ import type { ChartData, ChartOptions } from "chart.js";
 import VerticalBarChart from "../../../components/charts/VerticalBarChart";
 import Card from "../../../components/ui/Card";
 import type { ApplicationVelocityItem } from "../../../utils/getAnalyticsData";
+import { useChartTextColor } from "../../../utils/useChartTextColor";
 
 type ApplicationVelocityChartProps = {
   data: ApplicationVelocityItem[];
@@ -13,6 +14,8 @@ export const ApplicationVelocityChart = ({
   data,
   className
 }: ApplicationVelocityChartProps) => {
+  const textColor = useChartTextColor()
+
   const hasVelocityData = data.some((item) => item.value > 0);
 
   const chartData: ChartData<"bar"> = {
@@ -20,7 +23,7 @@ export const ApplicationVelocityChart = ({
     datasets: [
       {
         data: data.map((item) => item.value),
-        backgroundColor: "#4c56af",
+        backgroundColor: "#6f7bd9",
         borderRadius: 0
       }
     ]
@@ -34,6 +37,9 @@ export const ApplicationVelocityChart = ({
     },
     scales: {
       x: {
+        ticks: {
+          color: textColor
+        },
         grid: {
           display: false
         }
@@ -41,7 +47,8 @@ export const ApplicationVelocityChart = ({
       y: {
         beginAtZero: true,
         ticks: {
-          precision: 1
+          precision: 1,
+          color: textColor
         }
       }
     }
