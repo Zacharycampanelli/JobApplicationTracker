@@ -4,7 +4,7 @@ import { MemoryRouter, Route, Routes } from "react-router";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { AuthContext } from "../../../context/AuthContext";
-import { login as loginUser } from "../authApi";
+import { getMe, login as loginUser } from "../authApi";
 import LoginForm from "./LoginForm";
 
 vi.mock("../authApi", () => ({
@@ -13,6 +13,7 @@ vi.mock("../authApi", () => ({
 }));
 
 const mockedLoginUser = vi.mocked(loginUser);
+const mockedGetMe = vi.mocked(getMe);
 
 const renderLoginForm = () => {
   const handleLogin = vi.fn();
@@ -98,6 +99,8 @@ describe("LoginForm", () => {
       token: "test-token"
     });
 
+    mockedGetMe.mockResolvedValue(returnedUser)
+
     const { handleLogin } = renderLoginForm();
 
     const emailInput = screen.getByRole("textbox", {
@@ -121,7 +124,7 @@ describe("LoginForm", () => {
       email: "user@example.com",
       password: "password123"
     });
-
+    expect(mockedGetMe).toHaveBeenCalledTimes(1)
     expect(handleLogin).toHaveBeenCalledTimes(1);
     expect(handleLogin).toHaveBeenCalledWith(returnedUser);
 

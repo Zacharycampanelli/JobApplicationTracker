@@ -8,7 +8,7 @@ import Email from "../../../assets/images/email.svg?react";
 import Button from "../../../components/ui/Button";
 import Input from "../../../components/ui/Input";
 import { useAuthContext } from "../../../context/AuthContext";
-import { login as loginUser } from "../authApi";
+import { getMe, login as loginUser } from "../authApi";
 
 const loginSchema = z.object({
   email: z.email("Enter a valid email"),
@@ -36,8 +36,9 @@ const LoginForm = () => {
   const onSubmit = async (data: LoginValues) => {
     setLoginError("");
     try {
-      const res = await loginUser(data);
-      login(res.user);
+      await loginUser(data);
+      const user = await getMe();
+      login(user);
       navigate("/", { replace: true });
     } catch (error) {
       setLoginError(
