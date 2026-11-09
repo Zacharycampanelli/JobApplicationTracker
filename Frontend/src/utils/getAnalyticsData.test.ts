@@ -16,22 +16,22 @@ describe("getAnalyticsData", () => {
       {
         label: "Applied",
         value: 0,
-        color: "#4c56af"
+        color: "#6f7bd9"
       },
       {
         label: "Interview",
         value: 0,
-        color: "#8b92d6"
+        color: "#9690dc"
       },
       {
         label: "Offer",
         value: 0,
-        color: "#186d54"
+        color: "#38a887"
       },
       {
         label: "Rejected",
         value: 0,
-        color: "#9f403d"
+        color: "#d77976"
       }
     ]);
     expect(result.sourceBreakdown).toEqual([]);
@@ -134,37 +134,37 @@ describe("getAnalyticsData", () => {
       {
         label: "LinkedIn",
         value: 2,
-        color: "#4c56af"
+        color: "#6f7bd9"
       },
       {
         label: "Indeed",
         value: 1,
-        color: "#8b92d6"
+        color: "#9690dc"
       },
       {
         label: "Company Site",
         value: 1,
-        color: "#404a99"
+        color: "#4c97c9"
       },
       {
         label: "Referral",
         value: 1,
-        color: "#186d54"
+        color: "#38a887"
       },
       {
         label: "Recruiter",
         value: 1,
-        color: "#66757d"
+        color: "#859aa8"
       },
       {
         label: "Networking",
         value: 1,
-        color: "#a9b4b9"
+        color: "#c39a45"
       },
       {
         label: "Other",
         value: 2,
-        color: "#9f403d"
+        color: "#d77976"
       }
     ]);
 
@@ -192,7 +192,7 @@ describe("getAnalyticsData", () => {
       {
         label: "Other",
         value: 2,
-        color: "#9f403d"
+        color: "#d77976"
       }
     ]);
   });
