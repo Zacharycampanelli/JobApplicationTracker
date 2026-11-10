@@ -42,7 +42,7 @@ const ActivityItem = ({ activity }: { activity: ApplicationActivity }) => {
         {getActivityIcon(activity.type)}
       </div>
         </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col text-">
         <h3 className="text-action">{activity.company}</h3>
         <p className="text-body-md">{message}</p>
       </div>

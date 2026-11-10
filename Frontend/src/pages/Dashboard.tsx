@@ -13,7 +13,7 @@ import Button from "../components/ui/Button";
 import { useAuthContext } from "../context/AuthContext";
 import RecentActivity from "../features/activity/components/RecentActivity";
 import RecentApplications from "../features/applications/components/RecentApplications";
-import DailyInsight from "../features/dashboard/DailyInsight";
+import DailyInsight from "../features/dashboard/components/DailyInsights";
 import {
   applicationCount,
   interviewRate,
@@ -22,6 +22,7 @@ import {
 } from "../utils/getStats";
 import { useApplications } from "../utils/useApplications";
 import { useBreakpoint } from "../utils/useBreakpoint";
+import DashboardResourceLinks from "../features/dashboard/components/DashboardResourceLinks";
 
 const stats = [
   {
@@ -120,10 +121,10 @@ const Dashboard = () => {
             </Button>
           </div>
           {isMobile && (
-            <p className="mt-4 text-body-lg text-on-surface-secondary">
-              Recent activity - coming soon daily insights - coming soon
-            </p>
-          )}
+  <div className="mt-6">
+    <DailyInsight />
+  </div>
+)}
         </div>
         {isMobile && <RecentActivity />}
         <div className="hidden md:flex md:gap-8 md:w-full">
@@ -136,7 +137,7 @@ const Dashboard = () => {
             <RecentActivity />
 
             <p>market outlook</p>
-            <p>quick resources</p>
+            <DashboardResourceLinks />
           </div>
         </div>
       </main>
