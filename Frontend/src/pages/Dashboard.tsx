@@ -91,7 +91,7 @@ const Dashboard = () => {
                 primaryCard={stat.primaryCard}
                 index={index}
                 suffix={stat.suffix}
-                className={`${stat.className} w-54 lg:w-70 xl:w-54 h-48`}
+                className={`${stat.className} w-full lg:w-70 xl:w-54 h-48`}
               />
             ))}
           </div>
@@ -127,6 +127,7 @@ const Dashboard = () => {
 )}
         </div>
         {isMobile && <RecentActivity />}
+        {isMobile && <DashboardResourceLinks />}
         <div className="hidden md:flex md:gap-8 md:w-full">
         <div className="shrink-1 min-w-[25%]">
 
@@ -135,8 +136,6 @@ const Dashboard = () => {
           <div className="flex flex-col gap-4 items-center grow">
             <DailyInsight />
             <RecentActivity />
-
-            <p>market outlook</p>
             <DashboardResourceLinks />
           </div>
         </div>

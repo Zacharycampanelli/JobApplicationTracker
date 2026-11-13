@@ -27,6 +27,7 @@ import { getAllResumes, updateDefaultResume } from "../features/resumes/resumeAp
 import type { Resume } from "../types/types";
 import { useBreakpoint } from "../utils/useBreakpoint";
 import { optionalNumber, optionalText, optionalUrl } from "../utils/zodUtils";
+import ProfileSharing from "../features/profile/components/ProfileSharing";
 
 const profileSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
@@ -421,6 +422,7 @@ const Profile = () => {
         />
 
         <UserPreferences />
+        <ProfileSharing />
         {isMobile && (
           <Button
             type="button"

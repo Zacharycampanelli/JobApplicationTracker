@@ -28,12 +28,12 @@ const DashboardResourceLinks = () => {
         Useful resources
       </h2>
       {resourceLinks.map((resource) => (
-        <>
-          <a href={resource.url} key={resource.url} className="text-action underline hover:cursor-pointer">
+        <div className="flex flex-col gap-1" key={resource.url}>
+          <a href={resource.url} target="_blank" rel="noopener noreferrer" className="text-action text-link underline hover:cursor-pointer">
             {resource.label}
           </a>
-          <span className="text-balance">{resource.description}</span>
-        </>
+          <p className="text-body-md text-on-surface-secondary">{resource.description}</p>
+        </div>
       ))}
     </div>
   );
