@@ -23,6 +23,7 @@ app.use(
 
 app.use(
   cors({
+    credentials: true,
     origin: (origin, callback) => {
       if (!origin || origin === frontendUrl) {
         callback(null, true);

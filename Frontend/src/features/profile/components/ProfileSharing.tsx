@@ -20,29 +20,23 @@ const ProfileSharing = () => {
     }
   };
 
-  //   const handleShareVia = (method: "email" | "twitter" | "linkedin") => {
-  //     const subject = `Check out my profile - ${user.name || "Job Tracker User"}`;
-  //     const body = `Hi! I wanted to share my professional profile with you. You can view it here:\n\n${profileUrl}`;
+  const shareText = `View my professional profile - ${user.name}`;
+  const emailBody = `${shareText}\n\n${profileUrl}`;
 
-  //     switch (method) {
-  //         case "email":
-  //             window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  //             break;
-  //         case "twitter":
-  //             window.open(
-  //                 `https://twitter.com/intent/tweet?text=${encodeURIComponent(subject)}&url=${encodeURIComponent(profileUrl)}`,
-  //                 "_blank"
-  //             );
-  //             break;
-  //         case "linkedin":
-  //             window.open(
-  //                 `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(profileUrl)}&title=${encodeURIComponent(subject)}&summary=${encodeURIComponent(body)}`,
-  //                 "_blank"
-  //             );
-  //             break;
-  //     }
-  //     toast.success(`Sharing via ${method.toUpperCase()}...`);
-  //   };
+  const shareLinks = [
+    {
+      label: "LinkedIn",
+      href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(profileUrl)}`
+    },
+    {
+      label: "X",
+      href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(profileUrl)}`
+    },
+    {
+      label: "Email",
+      href: `mailto:?subject=${encodeURIComponent(shareText)}&body=${encodeURIComponent(emailBody)}`
+    }
+  ];
 
   return (
     <section className="rounded-card bg-surface-container p-6">
@@ -61,25 +55,60 @@ const ProfileSharing = () => {
       </p>
 
       {isPublic && (
-        <div className="mt-4 flex flex-col gap-4">
-          <p className="break-all text-body-md text-on-surface">{profileUrl}</p>
-          <a
-            href={profileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-fit rounded-control text-action text-link underline focus-visible:outline-2 focus-visible:outline-offset-4"
-          >
-            View Public Profile
-            <span className="sr-only">(opens in a new tab)</span>
-          </a>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={handleCopyLink}
-            className="w-fit"
-          >
-            Copy link
-          </Button>
+        <div className="mt-5 flex flex-col gap-4">
+          <div className="rounded-control bg-surface-container-lowest p-4">
+            <p className="mb-2 text-label-md text-on-surface-secondary">
+              YOUR PROFILE LINK
+            </p>
+            <p className="break-all text-body-md text-on-surface">
+              {profileUrl}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Button
+              type="button"
+              variant="primary"
+              onClick={handleCopyLink}
+              className="w-full sm:w-auto"
+            >
+              Copy link
+            </Button>
+
+            <a
+              href={profileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-control px-3 py-2 text-center text-action text-link underline focus-visible:outline-2 focus-visible:outline-offset-4"
+            >
+              View public profile
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </div>
+          <div className="border-t border-outline-variant pt-4">
+            <p className="mb-2 text-label-md text-on-surface-secondary">
+              SHARE VIA
+            </p>
+
+            <div className="flex flex-wrap gap-3">
+              {shareLinks.map((link) => (
+                <a
+                  key={link.label}
+                  className="rounded-control px-3 py-2 text-action text-link underline focus-visible:outline-2 focus-visible:outline-offset-4"
+                  href={link.href}
+                  target={link.label === "Email" ? undefined : "_blank"}
+                  rel="noopener noreferrer"
+                >
+                  {link.label}
+                  <span className="sr-only">
+                    {link.label === "Email"
+                      ? " (opens your email app)"
+                      : " s(opens in a new tab)"}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </section>

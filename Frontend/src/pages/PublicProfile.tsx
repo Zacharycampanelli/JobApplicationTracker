@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
-import { API_URL } from "../api/api";
+import { API_URL, ApiError } from "../api/api";
 import Header from "../components/layout/Header";
 import EmptyState from "../components/shared/EmptyState";
 import ErrorState from "../components/shared/ErrorState";
@@ -28,8 +28,17 @@ const PublicProfile = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      if (!id) return;
       const profileId = Number(id);
+      setIsLoading(true);
+      setError("");
+      setEmpty(false);
+
+      if (!Number.isInteger(profileId) || profileId <= 0) {
+        setEmpty(true);
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const data = await getPublicProfile(profileId);
 
@@ -47,8 +56,11 @@ const PublicProfile = () => {
           summary: data.profile?.summary ?? ""
         });
       } catch (err) {
-        setError(`Failed to load profile: ${err}`);
-        setEmpty(false);
+        if (err instanceof ApiError && err.status === 404) {
+          setEmpty(true);
+        } else {
+          setError("Unable to load this profile. Please try again later.");
+        }
       } finally {
         setIsLoading(false);
       }
@@ -62,9 +74,9 @@ const PublicProfile = () => {
   if (empty)
     return (
       <EmptyState
-        title="No profile found"
-        description="The requested profile could not be found."
-      />
+        title="Profile unavailable"
+        description="This profile doesn’t exist or isn’t currently shared."
+        />
     );
 
   return (
