@@ -2,6 +2,9 @@ import { toast } from "sonner";
 
 import { useAuthContext } from "../../../context/AuthContext";
 import Button from "../../../components/ui/Button";
+import LinkedinIcon from "../../../assets/images/linkedin.svg?react";
+import XIcon from "../../../assets/images/x.svg?react";
+import EmailIcon from "../../../assets/images/email.svg?react";
 
 const ProfileSharing = () => {
   const { user } = useAuthContext();
@@ -26,14 +29,17 @@ const ProfileSharing = () => {
   const shareLinks = [
     {
       label: "LinkedIn",
+      icon: <LinkedinIcon className="size-5 shrink-0" aria-hidden="true" />,
       href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(profileUrl)}`
     },
     {
       label: "X",
+      icon: <XIcon className="size-5 shrink-0" aria-hidden="true" />,
       href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(profileUrl)}`
     },
     {
       label: "Email",
+      icon: <EmailIcon className="size-5 shrink-0 [&_path]:fill-current" aria-hidden="true" />,
       href: `mailto:?subject=${encodeURIComponent(shareText)}&body=${encodeURIComponent(emailBody)}`
     }
   ];
@@ -94,17 +100,17 @@ const ProfileSharing = () => {
               {shareLinks.map((link) => (
                 <a
                   key={link.label}
-                  className="rounded-control px-3 py-2 text-action text-link underline focus-visible:outline-2 focus-visible:outline-offset-4"
+                  className="inline-flex items-center justify-center rounded-control px-3 py-2 text-action text-link underline focus-visible:outline-2 focus-visible:outline-offset-4"
                   href={link.href}
                   target={link.label === "Email" ? undefined : "_blank"}
                   rel="noopener noreferrer"
-                >
-                  {link.label}
-                  <span className="sr-only">
-                    {link.label === "Email"
+                  aria-label={`Share via ${link.label}${
+                    link.label === "Email"
                       ? " (opens your email app)"
-                      : " s(opens in a new tab)"}
-                  </span>
+                      : " (opens in a new tab)"
+                  }`}
+                >
+                  {link.icon}
                 </a>
               ))}
             </div>
