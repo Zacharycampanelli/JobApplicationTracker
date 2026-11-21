@@ -1,6 +1,7 @@
-import { Response } from "express";
 import { unlink } from "fs/promises";
 import path from "node:path";
+
+import { Response } from "express";
 
 import { prisma } from "../lib/prisma";
 import { AuthRequest } from "../middleware/authMiddleware";

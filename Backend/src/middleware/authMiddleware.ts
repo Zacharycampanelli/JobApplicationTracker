@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { prisma } from "../lib/prisma";
+
 import { AUTH_COOKIE_NAME } from "../config/authCookie";
+import { prisma } from "../lib/prisma";
 
 interface JwtPayload {
   userId: number;

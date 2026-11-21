@@ -1,8 +1,6 @@
 import { api } from "../../api/api";
 import type { UpdatePasswordValues, UpdatePreferencesValues, UpdateProfileValues } from "../../types/types";
 
-
-
 export const updateProfile = (data: UpdateProfileValues) => {
   return api("api/users/me", {
     method: "PATCH",

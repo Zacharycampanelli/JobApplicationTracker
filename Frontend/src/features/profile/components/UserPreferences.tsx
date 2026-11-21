@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+
 import Lock from "../../../assets/images/lock.svg?react";
 import ProfileNav from "../../../assets/images/profileNav.svg?react";
 import Settings from "../../../assets/images/settings.svg?react";
@@ -9,9 +10,9 @@ import Toggle from "../../../components/ui/Toggle";
 import { useAuthContext } from "../../../context/AuthContext";
 import type { UpdatePreferencesValues } from "../../../types/types";
 import { updateUserPreferences } from "../profileApi";
-import UserPreferenceItem from "./UserPreferenceItem";
 import ChangePasswordForm from "./ChangePasswordForm";
 import DeleteAccountForm from "./DeleteAccountForm";
+import UserPreferenceItem from "./UserPreferenceItem";
 
 const UserPreferences = () => {
   const { user, updateUser } = useAuthContext();

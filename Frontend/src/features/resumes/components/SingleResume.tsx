@@ -1,19 +1,19 @@
 import type React from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
 import { API_URL } from "../../../api/api";
 import DownloadIcon from "../../../assets/images/download.svg?react";
 import PreviewIcon from "../../../assets/images/preview.svg?react";
-import SelectedInput from "../../../assets/images/selectedInput.svg?react";
 import SelectInput from "../../../assets/images/selectInput.svg?react";
-import type { Resume } from "../../../types/types";
-import { deleteResume } from "../resumeApi";
-import Modal from "../../../components/ui/Modal";
-import { useState } from "react";
-import ResumePreview from "./ResumePreview";
+import SelectedInput from "../../../assets/images/selectedInput.svg?react";
 import Button from "../../../components/ui/Button";
 import Card from "../../../components/ui/Card";
+import Modal from "../../../components/ui/Modal";
+import type { Resume } from "../../../types/types";
+import { deleteResume } from "../resumeApi";
+import ResumePreview from "./ResumePreview";
 
 type SingleResumeProps = {
   resume: Resume;

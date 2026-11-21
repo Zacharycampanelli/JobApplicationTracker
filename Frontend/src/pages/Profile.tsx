@@ -16,6 +16,7 @@ import Textarea from "../components/ui/Textarea";
 import { useAuthContext } from "../context/AuthContext";
 import { getMe } from "../features/auth/authApi";
 import AccountOwnerDetails from "../features/profile/components/AccountOwnerDetails";
+import ProfileSharing from "../features/profile/components/ProfileSharing";
 import SharedProfileView from "../features/profile/components/SharedProfileView";
 import UserPreferences from "../features/profile/components/UserPreferences";
 import {
@@ -27,7 +28,6 @@ import { getAllResumes, updateDefaultResume } from "../features/resumes/resumeAp
 import type { Resume } from "../types/types";
 import { useBreakpoint } from "../utils/useBreakpoint";
 import { optionalNumber, optionalText, optionalUrl } from "../utils/zodUtils";
-import ProfileSharing from "../features/profile/components/ProfileSharing";
 
 const profileSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
@@ -99,7 +99,6 @@ const Profile = () => {
       resumeId: undefined
     });
   }, [user, reset]);
-
 
   const handleResumesChanged = async () => {
     await loadResumes();

@@ -28,7 +28,6 @@ export const retryPendingFileDeletions = async () => {
     });
     for (const task of tasks) {
         try {
-
             await processFileDeletionTask(task)
 
         } catch (error) {

@@ -1,5 +1,6 @@
-import { Request, Response } from "express";
 import crypto from "node:crypto";
+
+import { Request, Response } from "express";
 
 import { AUTH_COOKIE_NAME, getAuthCookieOptions } from "../config/authCookie";
 import { prisma } from "../lib/prisma";

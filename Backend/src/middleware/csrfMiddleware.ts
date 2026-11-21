@@ -5,7 +5,6 @@ export const csrfProtection = (
     res: Response,
     next: NextFunction
 ) => {
-    
     if (["GET", "HEAD", "OPTIONS"].includes(req.method)) {
         return next();
     }

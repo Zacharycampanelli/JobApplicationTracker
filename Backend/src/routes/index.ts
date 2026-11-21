@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import apiRoutes from "./api";
 import { csrfProtection } from "../middleware/csrfMiddleware";
+import apiRoutes from "./api";
 
 const router = Router();
 

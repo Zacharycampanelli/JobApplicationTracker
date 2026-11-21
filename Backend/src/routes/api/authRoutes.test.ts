@@ -4,9 +4,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import app from "../../app";
 import { prisma } from "../../lib/prisma";
+import { sendPasswordResetEmail } from "../../services/emailService";
 import { generateToken } from "../../utils/generateToken";
 import { comparePassword, hashPassword } from "../../utils/hash";
-import { sendPasswordResetEmail } from "../../services/emailService";
 
 beforeEach(() => {
   vi.stubEnv("FRONTEND_URL", "http://localhost:5173")
@@ -227,7 +227,6 @@ describe("POST /api/auth/login", () => {
       expect(authCookie?.split("; ").includes("Secure")).toBe(secure);
     },
   );
-
 
   it("returns 500 when the user lookup fails", async () => {
     const body = {

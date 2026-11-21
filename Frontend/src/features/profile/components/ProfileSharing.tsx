@@ -1,10 +1,10 @@
 import { toast } from "sonner";
 
-import { useAuthContext } from "../../../context/AuthContext";
-import Button from "../../../components/ui/Button";
+import EmailIcon from "../../../assets/images/email.svg?react";
 import LinkedinIcon from "../../../assets/images/linkedin.svg?react";
 import XIcon from "../../../assets/images/x.svg?react";
-import EmailIcon from "../../../assets/images/email.svg?react";
+import Button from "../../../components/ui/Button";
+import { useAuthContext } from "../../../context/AuthContext";
 
 const ProfileSharing = () => {
   const { user } = useAuthContext();

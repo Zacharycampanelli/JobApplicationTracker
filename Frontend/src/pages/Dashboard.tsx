@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 
-import Add from "../assets/images/add.svg?react";
 import careerPlanning from "../assets/images/CareerPlanning.png";
+import Add from "../assets/images/add.svg?react";
 import Medal from "../assets/images/medal.svg?react";
 import Resume from "../assets/images/resume.svg?react";
 import SuccessApp from "../assets/images/successApp.svg?react";
@@ -14,6 +14,7 @@ import { useAuthContext } from "../context/AuthContext";
 import RecentActivity from "../features/activity/components/RecentActivity";
 import RecentApplications from "../features/applications/components/RecentApplications";
 import DailyInsight from "../features/dashboard/components/DailyInsights";
+import DashboardResourceLinks from "../features/dashboard/components/DashboardResourceLinks";
 import {
   applicationCount,
   interviewRate,
@@ -22,7 +23,6 @@ import {
 } from "../utils/getStats";
 import { useApplications } from "../utils/useApplications";
 import { useBreakpoint } from "../utils/useBreakpoint";
-import DashboardResourceLinks from "../features/dashboard/components/DashboardResourceLinks";
 
 const stats = [
   {

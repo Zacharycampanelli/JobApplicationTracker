@@ -1,6 +1,8 @@
-import { Response } from "express";
 import { unlink } from "node:fs/promises";
 import path from "node:path";
+
+import { Response } from "express";
+
 import {
   AUTH_COOKIE_NAME,
   getAuthCookieOptions,
@@ -193,7 +195,6 @@ export const updateUserPreferences = async (req: AuthRequest, res: Response) => 
   const { publicProfileEnabled, autoStatusUpdatesEnabled, themePreference } = req.body;
 
   try {
-
     const updatedPreferences = await prisma.userPreferences.upsert({
       where: { userId },
       update: {
@@ -226,7 +227,6 @@ export const updateDefaultResume = async (req: AuthRequest, res: Response) => {
   const { resumeId } = req.body;
 
   try {
-
     if (resumeId !== null) {
       const resume = await prisma.resume.findFirst({
         where: {
@@ -313,7 +313,6 @@ export const deleteAccount = async (req: AuthRequest, res: Response) => {
       const tasks = [];
 
       for (const filePath of filePaths) {
-
         const task = await tx.fileDeletionTask.create({
           data: {
             filePath

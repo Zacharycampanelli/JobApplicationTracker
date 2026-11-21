@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 
+import ThemeSync from "./components/ThemeSync";
 import AppWrapper from "./components/layout/AppWrapper";
 import AuthWrapper from "./components/layout/AuthWrapper";
-import ThemeSync from "./components/ThemeSync";
 import { AuthProvider } from "./context/AuthProvider";
 import AddApplication from "./pages/AddApplication";
 import Analytics from "./pages/Analytics";

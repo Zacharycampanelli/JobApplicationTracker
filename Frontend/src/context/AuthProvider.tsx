@@ -11,7 +11,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [logoutMessage, setLogoutMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
-
  useEffect(() => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");

@@ -6,12 +6,12 @@ import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
 import Card from "../components/ui/Card";
 import ColorOverlay from "../components/ui/ColorOverlay";
+import { useAuthContext } from "../context/AuthContext";
 import ForgotPasswordForm from "../features/auth/components/ForgotPasswordForm";
 import LoginForm from "../features/auth/components/LoginForm";
 import PasswordResetForm from "../features/auth/components/PasswordResetForm";
 import RegistrationForm from "../features/auth/components/RegistrationForm";
 import { useBreakpoint } from "../utils/useBreakpoint";
-import { useAuthContext } from "../context/AuthContext";
 
 type AuthPageProps = {
   mode: "login" | "signup" | "forgot-password" | "reset-password";
