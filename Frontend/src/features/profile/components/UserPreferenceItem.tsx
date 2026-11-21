@@ -20,7 +20,6 @@ const UserPreferenceItem = ({
   preference,
   icon: Icon,
   mode,
-
   children,
   className
 }: UserPreferenceItemProps) => {

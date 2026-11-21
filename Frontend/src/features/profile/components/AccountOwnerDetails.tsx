@@ -20,7 +20,7 @@ const AccountOwnerDetails = ({
 
   return (
     <div className="flex flex-col py-4 gap-4 mb-4">
-      <span className="flex text-on-surface-variant text-status items-center text-start gap-4 text-card-title px-8">
+      <span className="flex text-on-surface-variant text-status items-center text-start gap-4 text-card-title py-4">
         <Account />
         <h3 className="text-card-title text-on-surface-variant">
           Account Details:

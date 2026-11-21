@@ -225,7 +225,7 @@ const Profile = () => {
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col bg-surface py-4 md:relative md:px-6">
       {isMobile && <Header />}
 
-      <main className="flex flex-col gap-6 pb-10 md:gap-8">
+      <main className="flex flex-col gap-4 pb-10">
         <header className="mt-6 flex flex-col gap-3">
           <h1 className="text-page-title text-on-surface">
             Professional Portfolio

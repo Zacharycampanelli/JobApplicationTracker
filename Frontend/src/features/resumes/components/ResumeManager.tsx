@@ -86,43 +86,45 @@ const ResumeManager = ({
   );
 
   return (
-    <Card className="bg-surface-container md:col-span-2">
-      <div className="flex flex-col gap-5">
-        <span className="flex items-center gap-2 text-primary">
-          <ResumeIcon fill="#66757d" />
-          <h2 className="text-card-title text-on-surface-variant">
-            Resume Library
-          </h2>
-        </span>
-        {isLoading ? (
-          <LoadingState message="Loading resumes..." compact />
-        ) : error ? (
-          <ErrorState message={error} compact />
-        ) : empty ? (
-          <EmptyState
-            title="No resumes uploaded"
-            description="Upload your first resume to begin tracking your applications."
-            action={uploadButton}
-            compact={true}
-          />
-        ) : (
-          <div className="flex flex-col gap-4 md:grid md:grid-cols-2 xl:grid-cols-3">
-            {resumes &&
-              resumes.map((resume) => (
-                <SingleResume
-                  key={resume.id}
-                  resume={resume}
-                  selected={selectedResumeId === resume.id}
-                  onClick={() => onSelectResume?.(resume.id)}
-                  deletable
-                  onDeleteSuccess={onResumesChanged}
-                />
-              ))}
-            {uploadButton}
-          </div>
-        )}
-      </div>
-    </Card>
+    <>
+      <span className="flex text-on-surface-variant text-status items-center text-start gap-4 text-card-title py-4">
+        <ResumeIcon fill="#66757d" />
+        <h3 className="text-card-title text-on-surface-variant">
+          Resume Library
+        </h3>
+      </span>
+      <Card className="bg-surface-container md:col-span-2">
+        <div className="flex flex-col gap-5">
+          {isLoading ? (
+            <LoadingState message="Loading resumes..." compact />
+          ) : error ? (
+            <ErrorState message={error} compact />
+          ) : empty ? (
+            <EmptyState
+              title="No resumes uploaded"
+              description="Upload your first resume to begin tracking your applications."
+              action={uploadButton}
+              compact={true}
+            />
+          ) : (
+            <div className="flex flex-col gap-4 md:grid md:grid-cols-2 xl:grid-cols-3">
+              {resumes &&
+                resumes.map((resume) => (
+                  <SingleResume
+                    key={resume.id}
+                    resume={resume}
+                    selected={selectedResumeId === resume.id}
+                    onClick={() => onSelectResume?.(resume.id)}
+                    deletable
+                    onDeleteSuccess={onResumesChanged}
+                  />
+                ))}
+              {uploadButton}
+            </div>
+          )}
+        </div>
+      </Card>
+    </>
   );
 };
 

@@ -1,7 +1,4 @@
-import { Tooltip } from "react-tooltip";
 import { toast } from "sonner";
-
-import Edit from "../../../assets/images/edit.svg?react";
 import Lock from "../../../assets/images/lock.svg?react";
 import ProfileNav from "../../../assets/images/profileNav.svg?react";
 import Settings from "../../../assets/images/settings.svg?react";
@@ -68,21 +65,21 @@ const UserPreferences = () => {
         />
       )
     },
-    {
-      preference: "Automatic status updates",
-      icon: Edit,
-      mode: "toggle",
-      isDangerous: false,
-      description: "",
-      children: (
-        <Toggle
-          id="automaticStatusUpdates"
-          checked={user?.preferences?.autoStatusUpdatesEnabled ?? false}
-          onChange={() => {}}
-          disabled={true}
-        />
-      )
-    },
+    // {
+    //   preference: "Automatic status updates",
+    //   icon: Edit,
+    //   mode: "toggle",
+    //   isDangerous: false,
+    //   description: "",
+    //   children: (
+    //     <Toggle
+    //       id="automaticStatusUpdates"
+    //       checked={user?.preferences?.autoStatusUpdatesEnabled ?? false}
+    //       onChange={() => {}}
+    //       disabled={true}
+    //     />
+    //   )
+    // },
     {
       preference: "Appearance",
       icon: Sun,
@@ -136,8 +133,8 @@ const UserPreferences = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-4 w-full mt-8 rounded-xl overflow-hidden">
-      <span className="flex text-on-surface-variant text-status items-center text-start gap-4 text-card-title px-8">
+    <div className="flex flex-col gap-4 w-full my-8 rounded-xl overflow-hidden">
+      <span className="flex text-on-surface-variant text-status items-center text-start gap-4 text-card-title py-4">
         <Settings fill="#66757d" />
         <h3 className="">Account Preferences</h3>
       </span>
@@ -157,11 +154,6 @@ const UserPreferences = () => {
             }
           />
         ))}
-        <Tooltip
-          anchorSelect=".coming-soon"
-          place="top"
-          content="Coming soon!"
-        />
       </div>
     </div>
   );
